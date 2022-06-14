@@ -4,10 +4,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exadel.Forecast.ConsoleApp", "ConsoleApp\Exadel.Forecast.ConsoleApp.csproj", "{A8541576-6D2C-4541-8731-953E8CC25971}"
+	ProjectSection(ProjectDependencies) = postProject
+		{83746A0A-96D7-49F3-9744-4BCDBDF1C00D} = {83746A0A-96D7-49F3-9744-4BCDBDF1C00D}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exadel.Forecast.DAL", "DAL\Exadel.Forecast.DAL.csproj", "{73F856AB-1F9B-44EE-AF8A-138D32D5FCC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exadel.Forecast.BL", "BL\Exadel.Forecast.BL.csproj", "{83746A0A-96D7-49F3-9744-4BCDBDF1C00D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exadel.Forecast.BL", "BL\Exadel.Forecast.BL.csproj", "{83746A0A-96D7-49F3-9744-4BCDBDF1C00D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{73F856AB-1F9B-44EE-AF8A-138D32D5FCC3} = {73F856AB-1F9B-44EE-AF8A-138D32D5FCC3}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
