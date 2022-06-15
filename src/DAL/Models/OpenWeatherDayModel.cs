@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Exadel.Forecast.DAL
+namespace Exadel.Forecast.DAL.Models
 {
-    public class DayForecastModel
+    public class OpenWeatherDayModel
     {
         public Coord coord { get; set; }
         public Weather[] weather { get; set; }
@@ -23,23 +23,23 @@ namespace Exadel.Forecast.DAL
 
     public class Coord
     {
-        public float lon { get; set; }
-        public float lat { get; set; }
+        public double lon { get; set; }
+        public double lat { get; set; }
     }
 
     public class Main
     {
-        public float temp { get; set; }
-        public float feels_like { get; set; }
-        public float temp_min { get; set; }
-        public float temp_max { get; set; }
+        public double temp { get; set; }
+        public double feels_like { get; set; }
+        public double temp_min { get; set; }
+        public double temp_max { get; set; }
         public int pressure { get; set; }
         public int humidity { get; set; }
     }
 
     public class Wind
     {
-        public float speed { get; set; }
+        public double speed { get; set; }
         public int deg { get; set; }
     }
 

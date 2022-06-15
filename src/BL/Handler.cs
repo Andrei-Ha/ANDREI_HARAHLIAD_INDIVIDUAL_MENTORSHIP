@@ -1,44 +1,32 @@
-﻿using Exadel.Forecast.DAL;
+﻿using Exadel.Forecast.BL.Interfaces;
+using Exadel.Forecast.BL.Validators;
+using Exadel.Forecast.Models.Configuration;
 using System;
 
 namespace Exadel.Forecast.BL
 {
-    public static class Handler
+    public class Handler
     {
-        public static string GetWeatherByName(string city)
+        private readonly Configuration _configuration;
+        private readonly IValidator<string> _validator;
+        private readonly ResponseBuilder _responseBuilder;
+
+        public Handler(Configuration configuration, IValidator<string> validator, ResponseBuilder responseBuilder)
         {
-            if (string.IsNullOrEmpty(city))
+            _configuration = configuration;
+            _validator = validator;
+            _responseBuilder = responseBuilder;
+        }
+
+        public string GetWeatherByName(string city)
+        {
+            if (!_validator.IsValid(city))
             {
                 return "You need to type name of the city!";
             }
 
-            float temperature = OpenWeather.GetTemperature(city).Result;
-            string comment;
-            if (temperature == -273)
-            {
-                return "There is no forecast for your city!";
-            }
-
-            switch (temperature)
-            {
-                case float i when i < 0:
-                    comment = "Dress warmly";
-                    break;
-                case float i when i >= 0 && i <20:
-                    comment = "It's fresh";
-                    break;
-                case float i when i >= 20 && i <30:
-                    comment = "Good weather";
-                    break;
-                case float i when i >= 30:
-                    comment = "It's time to go to the beach";
-                    break;
-                default:
-                    comment = "something went wrong...";
-                    break;
-            }
-
-            return $"In {city} {temperature} °C. {comment}";
+            double temperature = _configuration.GetDefaultForecastApi().GetTempByName(city);
+            return _responseBuilder.WeatherStringByTemp(city, temperature);
         }
     }
 }

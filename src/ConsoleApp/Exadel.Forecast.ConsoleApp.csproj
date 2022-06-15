@@ -136,6 +136,10 @@
       <Project>{83746a0a-96d7-49f3-9744-4bcdbdf1c00d}</Project>
       <Name>Exadel.Forecast.BL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Models\Exadel.Forecast.Models.csproj">
+      <Project>{5e4d0b8e-6c37-4c62-a4df-d1b32e9aecb7}</Project>
+      <Name>Exadel.Forecast.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets" Condition="Exists('..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets')" />
