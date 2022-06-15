@@ -7,10 +7,16 @@ namespace Exadel.Forecast.BL
 {
     public class ResponseBuilder
     {
+        private readonly TemperatureValidator _temperatureValidator;
+        public ResponseBuilder(TemperatureValidator temperatureValidator)
+        {
+            _temperatureValidator = temperatureValidator;
+        }
+
         public string WeatherStringByTemp(string city, double temperature)
         {
             string comment;
-            if (!new TemperatureValidator().IsValid(temperature))
+            if (!_temperatureValidator.IsValid(temperature))
             {
                 return "There is no forecast for your city!";
             }

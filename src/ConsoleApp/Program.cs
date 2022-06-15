@@ -17,7 +17,7 @@ namespace Exadel.Forecast.ConsoleApp
         {
             InitConfiguration();
             ChoosingWeatherProvider();
-            Handler handler = new Handler(_configuration, new CityValidator(), new ResponseBuilder());
+            Handler handler = new Handler(_configuration, new CityValidator(), new ResponseBuilder(new TemperatureValidator()));
             string strFromUser = string.Empty;
             while (strFromUser != "q")
             {

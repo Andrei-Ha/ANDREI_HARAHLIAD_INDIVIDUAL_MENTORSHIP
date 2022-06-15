@@ -35,10 +35,4 @@ namespace Exadel.Forecast.Models.Configuration
 
         public IWebApiRepository GetDefaultForecastApi() => _defaultRepository;
     }
-
-    public enum ForecastApi
-    {
-        OpenWeather,
-        WeatherApi
-    }
 }

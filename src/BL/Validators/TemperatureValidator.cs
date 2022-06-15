@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Exadel.Forecast.BL.Validators
 {
-    internal class TemperatureValidator : IValidator<double>
+    public class TemperatureValidator : IValidator<double>
     {
         public bool IsValid(double value)
         {
