@@ -1,14 +1,15 @@
-﻿using Exadel.Forecast.BL.Validators;
+﻿using Exadel.Forecast.BL.Interfaces;
+using Exadel.Forecast.BL.Validators;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Exadel.Forecast.BL
-{
+{   
     public class ResponseBuilder
     {
-        private readonly TemperatureValidator _temperatureValidator;
-        public ResponseBuilder(TemperatureValidator temperatureValidator)
+        private readonly IValidator<double> _temperatureValidator;
+        public ResponseBuilder(IValidator<double> temperatureValidator)
         {
             _temperatureValidator = temperatureValidator;
         }

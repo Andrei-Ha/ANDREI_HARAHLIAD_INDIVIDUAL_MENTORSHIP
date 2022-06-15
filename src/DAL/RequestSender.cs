@@ -10,19 +10,15 @@ namespace Exadel.Forecast.DAL
 {
     public class RequestSender<T>
     {
-        static readonly HttpClient _httpClient = new HttpClient();
-        public static async Task<T> GetModel(string webUrl)
+        private readonly HttpClient _httpClient = new HttpClient();
+        public async Task<T> GetModel(string webUrl)
         {
             try
             {
                 HttpResponseMessage response = await _httpClient.GetAsync(webUrl);
                 response.EnsureSuccessStatusCode();
-                using (var responseStream = await response.Content.ReadAsStreamAsync())
-                {
-                    StreamReader reader = new StreamReader(responseStream);
-                    //Console.WriteLine(reader.ReadToEnd());
-                    return JsonConvert.DeserializeObject<T>(reader.ReadToEnd());
-                }
+                string strModel = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<T>(strModel);
             }
             catch (HttpRequestException e)
             {

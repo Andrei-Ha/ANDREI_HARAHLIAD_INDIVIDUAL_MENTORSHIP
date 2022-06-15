@@ -1,5 +1,5 @@
 ﻿using Exadel.Forecast.DAL.Interfaces;
-using Exadel.Forecast.DAL.Models;
+using Exadel.Forecast.DAL.Models.Weatherapi;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,10 +22,11 @@ namespace Exadel.Forecast.DAL.Repositories
         public double GetTempByName(string cityName)
         {
             string webUrl = $"http://api.weatherapi.com/v1/current.json?key={_apiKey}&q={cityName}";
-            WeatherapiDayModel model = RequestSender<WeatherapiDayModel>.GetModel(webUrl).Result;
+            var requestSender = new RequestSender<WeatherapiDayModel>();
+            var model = requestSender.GetModel(webUrl).Result;
             if (model != null)
             {
-                return model.current.temp_c;
+                return model.Current.Temp_c;
             }
 
             return -273;

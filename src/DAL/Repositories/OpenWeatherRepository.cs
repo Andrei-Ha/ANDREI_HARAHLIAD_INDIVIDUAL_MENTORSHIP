@@ -1,5 +1,5 @@
 ﻿using Exadel.Forecast.DAL.Interfaces;
-using Exadel.Forecast.DAL.Models;
+using Exadel.Forecast.DAL.Models.OpenWeather;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,10 +24,11 @@ namespace Exadel.Forecast.DAL.Repositories
         public double GetTempByName(string cityName)
         {
             string webUrl = $"https://api.openweathermap.org/data/2.5/weather?q={cityName}&APPID={_apiKey}&units=metric";
-            OpenWeatherDayModel model = RequestSender<OpenWeatherDayModel>.GetModel(webUrl).Result;
+            var requestSender = new RequestSender<OpenWeatherDayModel>();
+            var model = requestSender.GetModel(webUrl).Result;
             if (model != null)
             {
-                return model.main.temp;
+                return model.Main.Temp;
             }
 
             return -273;
