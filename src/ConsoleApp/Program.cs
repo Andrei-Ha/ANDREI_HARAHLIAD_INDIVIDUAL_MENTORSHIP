@@ -42,8 +42,8 @@ namespace Exadel.Forecast.ConsoleApp
         {
             _configuration = new Configuration()
             {
-                OpenWeatherKey = System.Configuration.ConfigurationManager.AppSettings["OPENWEATHER_API_KEY"],
-                WeatherApiKey = System.Configuration.ConfigurationManager.AppSettings["WEATHERAPI_API_KEY"]
+                OpenWeatherKey = Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY"),
+                WeatherApiKey = Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY")
             };
         }
 
