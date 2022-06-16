@@ -1,8 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <Nullable>enable</Nullable>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DAL\Exadel.Forecast.DAL.csproj" />
+    <ProjectReference Include="..\Models\Exadel.Forecast.Models.csproj" />
+  </ItemGroup>
 
 </Project>
