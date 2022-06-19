@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Exadel.Forecast.BL
 {   
-    public class ResponseBuilder
+    public class ResponseBuilder : IResponseBuilder
     {
         private readonly IValidator<double> _temperatureValidator;
         public ResponseBuilder(IValidator<double> temperatureValidator)

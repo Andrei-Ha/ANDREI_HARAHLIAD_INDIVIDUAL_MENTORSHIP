@@ -1,17 +1,17 @@
 ﻿using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.BL.Validators;
-using Exadel.Forecast.Models.Configuration;
+using Exadel.Forecast.Models.Interfaces;
 using System;
 
 namespace Exadel.Forecast.BL
 {
     public class Handler
     {
-        private readonly Configuration _configuration;
+        private readonly IConfiguration _configuration;
         private readonly IValidator<string> _validator;
-        private readonly ResponseBuilder _responseBuilder;
+        private readonly IResponseBuilder _responseBuilder;
 
-        public Handler(Configuration configuration, IValidator<string> validator, ResponseBuilder responseBuilder)
+        public Handler(IConfiguration configuration, IValidator<string> validator, IResponseBuilder responseBuilder)
         {
             _configuration = configuration;
             _validator = validator;
