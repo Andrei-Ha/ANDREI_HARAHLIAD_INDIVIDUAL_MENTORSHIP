@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exadel.Forecast.BL", "BL\Ex
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exadel.Forecast.Models", "Models\Exadel.Forecast.Models.csproj", "{5E4D0B8E-6C37-4C62-A4DF-D1B32E9AECB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exadel.Forecast.BL.Tests", "Exadel.Forecast.BL.Tests\Exadel.Forecast.BL.Tests.csproj", "{01FD5B7E-4DBD-48DE-89EE-3B6200069179}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exadel.Forecast.BL.Tests", "Exadel.Forecast.BL.Tests\Exadel.Forecast.BL.Tests.csproj", "{01FD5B7E-4DBD-48DE-89EE-3B6200069179}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exadel.Forecast.IntegrationTests", "Exadel.Forecast.IntegrationTests\Exadel.Forecast.IntegrationTests.csproj", "{37F2CFD3-C613-4E09-9C7F-709A4A615085}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{01FD5B7E-4DBD-48DE-89EE-3B6200069179}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01FD5B7E-4DBD-48DE-89EE-3B6200069179}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01FD5B7E-4DBD-48DE-89EE-3B6200069179}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37F2CFD3-C613-4E09-9C7F-709A4A615085}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37F2CFD3-C613-4E09-9C7F-709A4A615085}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37F2CFD3-C613-4E09-9C7F-709A4A615085}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37F2CFD3-C613-4E09-9C7F-709A4A615085}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
