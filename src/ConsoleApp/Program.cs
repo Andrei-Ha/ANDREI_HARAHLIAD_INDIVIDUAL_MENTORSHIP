@@ -115,7 +115,8 @@ namespace Exadel.Forecast.ConsoleApp
             _configuration = new Configuration()
             {
                 OpenWeatherKey = Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY"),
-                WeatherApiKey = Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY")
+                WeatherApiKey = Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY"),
+                WeatherBitKey = Environment.GetEnvironmentVariable("WEATHERBIT_API_KEY")
             };
 
             _configuration.SetDefaultForecastApi(ForecastApi.WeatherBit);

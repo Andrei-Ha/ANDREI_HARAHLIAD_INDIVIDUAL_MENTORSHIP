@@ -17,10 +17,9 @@ namespace Exadel.Forecast.Models.Configuration
             } 
         }
 
-        public string WeatherApiKey
-        {
-            set; private get;
-        }
+        public string WeatherApiKey { private get; set; }
+
+        public string WeatherBitKey { private get; set; }
 
         public void SetDefaultForecastApi(ForecastApi forecastApi)
         {
@@ -31,6 +30,10 @@ namespace Exadel.Forecast.Models.Configuration
             else if(forecastApi == ForecastApi.WeatherApi)
             {
                 _defaultRepository = new WeatherapiRepository(WeatherApiKey);
+            }
+            else if(forecastApi == ForecastApi.WeatherBit)
+            {
+                _defaultRepository = new WeatherBitRepository(WeatherBitKey);
             }
         }
 

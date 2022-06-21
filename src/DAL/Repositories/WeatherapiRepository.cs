@@ -15,6 +15,11 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
+        public double[] GetForecastByName(string cityName)
+        {
+            return null;
+        }
+
         /// <summary>
         /// Method return the temperature by the city name
         /// </summary>

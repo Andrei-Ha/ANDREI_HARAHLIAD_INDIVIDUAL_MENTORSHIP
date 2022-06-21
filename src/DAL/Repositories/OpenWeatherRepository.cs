@@ -33,5 +33,10 @@ namespace Exadel.Forecast.DAL.Repositories
 
             return -273;
         }
+
+        public double[] GetForecastByName(string cityName)
+        {
+            return null;
+        }
     }
 }

@@ -23,8 +23,6 @@
         public double Vis_km { get; set; }
         public double Vis_miles { get; set; }
         public double Uv { get; set; }
-        public double Gust_mph { get; set; }
-        public double Gust_kph { get; set; }
     }
 
 }
