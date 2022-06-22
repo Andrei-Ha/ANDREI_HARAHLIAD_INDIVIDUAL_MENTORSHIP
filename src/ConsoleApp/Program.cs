@@ -76,6 +76,7 @@ namespace Exadel.Forecast.ConsoleApp
 
         private static void WeatherForecast() 
         {
+            _configuration.SetDefaultForecastApi(ForecastApi.WeatherBit);
             string minValue = System.Configuration.ConfigurationManager.AppSettings["MinValue"];
             string maxValue = System.Configuration.ConfigurationManager.AppSettings["MaxValue"];
             string input = string.Empty;
@@ -118,8 +119,6 @@ namespace Exadel.Forecast.ConsoleApp
                 WeatherApiKey = Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY"),
                 WeatherBitKey = Environment.GetEnvironmentVariable("WEATHERBIT_API_KEY")
             };
-
-            _configuration.SetDefaultForecastApi(ForecastApi.WeatherBit);
         }
 
         private static void ChoosingWeatherProvider()
