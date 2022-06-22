@@ -9,6 +9,7 @@ namespace Exadel.Forecast.DAL.Repositories
     public class WeatherapiRepository : IWebApiRepository
     {
         private readonly string _apiKey;
+
         public WeatherapiRepository(string apiKey)
         {
             _apiKey = apiKey;

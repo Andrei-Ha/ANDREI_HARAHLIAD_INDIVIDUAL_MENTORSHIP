@@ -4,6 +4,14 @@ namespace Exadel.Forecast.BL.Tests
 {
     public class ResponseBuilderTests
     {
+        private readonly Mock<IValidator<double>> _mockTemperatureValidator;
+
+        public ResponseBuilderTests()
+        {
+            _mockTemperatureValidator = new Mock<IValidator<double>>();
+            _mockTemperatureValidator.Setup(x => x.IsValid(It.IsAny<double>())).Returns(true);
+        }
+
         [Theory]
         [InlineData("London", -20)]
         [InlineData("Brest", -0.01)]
@@ -11,9 +19,7 @@ namespace Exadel.Forecast.BL.Tests
         public void WeatherStringByTemp_ForLessThanZero_ReturnDressWarmly(string city, double temperature)
         {
             // Arrange
-            var mock = new Mock<IValidator<double>>();
-            mock.Setup(validator => validator.IsValid(temperature)).Returns(true);
-            var responseBuilder = new ResponseBuilder(mock.Object);
+            var responseBuilder = new ResponseBuilder(_mockTemperatureValidator.Object);
 
             // Act
             var result = responseBuilder.WeatherStringByTemp(city, temperature);
@@ -29,9 +35,7 @@ namespace Exadel.Forecast.BL.Tests
         public void WeatherStringByTemp_From0To19_ReturnFresh(string city, double temperature)
         {
             // Arrange
-            var mock = new Mock<IValidator<double>>();
-            mock.Setup(validator => validator.IsValid(temperature)).Returns(true);
-            var responseBuilder = new ResponseBuilder(mock.Object);
+            var responseBuilder = new ResponseBuilder(_mockTemperatureValidator.Object);
 
             // Act
             var result = responseBuilder.WeatherStringByTemp(city, temperature);
@@ -47,9 +51,7 @@ namespace Exadel.Forecast.BL.Tests
         public void WeatherStringByTemp_From20To30_ReturnGoodWeather(string city, double temperature)
         {
             // Arrange
-            var mock = new Mock<IValidator<double>>();
-            mock.Setup(validator => validator.IsValid(temperature)).Returns(true);
-            var responseBuilder = new ResponseBuilder(mock.Object);
+            var responseBuilder = new ResponseBuilder(_mockTemperatureValidator.Object);
 
             // Act
             var result = responseBuilder.WeatherStringByTemp(city, temperature);
@@ -65,9 +67,7 @@ namespace Exadel.Forecast.BL.Tests
         public void WeatherStringByTemp_ForAboveThan30_ReturnGoToTheBeach(string city, double temperature)
         {
             // Arrange
-            var mock = new Mock<IValidator<double>>();
-            mock.Setup(validator => validator.IsValid(temperature)).Returns(true);
-            var responseBuilder = new ResponseBuilder(mock.Object);
+            var responseBuilder = new ResponseBuilder(_mockTemperatureValidator.Object);
 
             // Act
             var result = responseBuilder.WeatherStringByTemp(city, temperature);
