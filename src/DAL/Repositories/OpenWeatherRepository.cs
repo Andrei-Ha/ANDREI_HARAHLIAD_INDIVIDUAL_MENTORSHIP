@@ -10,10 +10,10 @@ namespace Exadel.Forecast.DAL.Repositories
     public class OpenWeatherRepository : IWebApiRepository
     {
         private readonly string _apiKey;
-        public OpenWeatherRepository(string apiKey)/*from Exadel.Forecast.Models*///Configuration config)
+
+        public OpenWeatherRepository(string apiKey)
         {
             _apiKey = apiKey;
-            //_apiKey = config.OpenWeatherKey;
         }
 
         /// <summary>

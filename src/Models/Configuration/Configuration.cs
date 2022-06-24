@@ -1,10 +1,11 @@
 ﻿using Exadel.Forecast.DAL.Interfaces;
 using Exadel.Forecast.DAL.Repositories;
+using Exadel.Forecast.Models.Interfaces;
 using System;
 
 namespace Exadel.Forecast.Models.Configuration
 {
-    public class Configuration
+    public class Configuration : IConfiguration
     {
         private IWebApiRepository _defaultRepository;
         private string _openWeatherKey;        

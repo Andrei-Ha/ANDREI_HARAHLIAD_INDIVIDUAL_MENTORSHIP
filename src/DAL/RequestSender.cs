@@ -11,6 +11,7 @@ namespace Exadel.Forecast.DAL
     public class RequestSender<T>
     {
         private readonly HttpClient _httpClient = new HttpClient();
+
         public async Task<T> GetModel(string webUrl)
         {
             try
