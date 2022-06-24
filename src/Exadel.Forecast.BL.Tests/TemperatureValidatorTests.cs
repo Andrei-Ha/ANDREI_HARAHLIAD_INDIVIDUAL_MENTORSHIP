@@ -4,6 +4,13 @@ namespace Exadel.Forecast.BL.Tests
 {
     public class TemperatureValidatorTests
     {
+        private readonly TemperatureValidator _temperatureValidator;
+
+        public TemperatureValidatorTests()
+        {
+            _temperatureValidator = new TemperatureValidator();
+        }
+
         [Theory]
         [InlineData(double.MinValue)]
         [InlineData(-273)]
@@ -11,11 +18,8 @@ namespace Exadel.Forecast.BL.Tests
         [InlineData(-4000)]
         public void IsValid_ForUnrealTemperature_ReturnFalse(double value)
         {
-            // Arrange
-            var temperatureValidator = new TemperatureValidator();
-
             // Act
-            var result = temperatureValidator.IsValid(value);
+            var result = _temperatureValidator.IsValid(value);
 
             // Assert
             Assert.False(result);
@@ -29,11 +33,8 @@ namespace Exadel.Forecast.BL.Tests
         [InlineData(double.MaxValue)]
         public void IsValid_ForRealTemperature_ReturnTrue(double value)
         {
-            // Arrange
-            var temperatureValidator = new TemperatureValidator();
-
             // Act
-            var result = temperatureValidator.IsValid(value);
+            var result = _temperatureValidator.IsValid(value);
 
             // Assert
             Assert.True(result);

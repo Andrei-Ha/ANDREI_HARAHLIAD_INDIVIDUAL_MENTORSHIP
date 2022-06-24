@@ -4,16 +4,19 @@ namespace Exadel.Forecast.BL.Tests
 {
     public class CityValidatorTests
     {
+        private readonly CityValidator _cityValidator;
+
+        public CityValidatorTests()
+        {
+            _cityValidator = new CityValidator();
+        }
         [Theory]
         [InlineData(default(string))]
         [InlineData("")]
         public void IsValid_ForNullOrEmpty_ReturnFalse(string value)
         {
-            // Arrange
-            var validator = new CityValidator();
-
             // Act
-            var result = validator.IsValid(value);
+            var result = _cityValidator.IsValid(value);
 
             // Assert
             Assert.False(result);
@@ -26,11 +29,8 @@ namespace Exadel.Forecast.BL.Tests
         [InlineData("Tashkent")]
         public void IsValid_ForNotEmptyString_ReturnTrue(string value)
         {
-            // Arrange
-            var validator = new CityValidator();
-
             // Act
-            var result = validator.IsValid(value);
+            var result = _cityValidator.IsValid(value);
 
             // Assert
             Assert.True(result);
