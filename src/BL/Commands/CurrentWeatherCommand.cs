@@ -13,6 +13,7 @@ namespace Exadel.Forecast.BL.Commands
         private readonly IValidator<double> _temperatureValidator;
         private readonly IResponseBuilder _responseBuilder;
         private readonly string _cityName;
+
         public CurrentWeatherCommand
             (
                 string cityName,

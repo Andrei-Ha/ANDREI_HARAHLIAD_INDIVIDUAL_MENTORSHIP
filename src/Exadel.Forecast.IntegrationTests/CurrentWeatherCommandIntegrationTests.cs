@@ -1,15 +1,16 @@
 using Exadel.Forecast.BL;
+using Exadel.Forecast.BL.Commands;
 using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.BL.Validators;
 using Exadel.Forecast.Models.Configuration;
 
 namespace Exadel.Forecast.IntegrationTests
 {
-    public class HandlerIntegrationTests
+    public class CurrentWeatherCommandIntegrationTests
     {
         private readonly Configuration _configuration;
 
-        public HandlerIntegrationTests() 
+        public CurrentWeatherCommandIntegrationTests() 
         {
             _configuration = new Configuration();
         }
@@ -22,10 +23,10 @@ namespace Exadel.Forecast.IntegrationTests
             // Arrange
             _configuration.OpenWeatherKey = Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY");
             _configuration.SetDefaultForecastApi(ForecastApi.OpenWeather);
-            var handler = new Handler(_configuration, new CityValidator(), new ResponseBuilder(new TemperatureValidator()));
+            var command = new CurrentWeatherCommand(city, _configuration, new CityValidator(), new TemperatureValidator(), new ResponseBuilder());
 
             // Act
-            var result = handler.GetWeatherByName(city);
+            var result = command.GetResult();
 
             // Assert
             Assert.StartsWith($"In {city}", result);
@@ -39,10 +40,10 @@ namespace Exadel.Forecast.IntegrationTests
             // Arrange
             _configuration.WeatherApiKey = Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY");
             _configuration.SetDefaultForecastApi(ForecastApi.WeatherApi);
-            var handler = new Handler(_configuration, new CityValidator(), new ResponseBuilder(new TemperatureValidator()));
+            var command = new CurrentWeatherCommand(city, _configuration, new CityValidator(), new TemperatureValidator(), new ResponseBuilder());
 
             // Act
-            var result = handler.GetWeatherByName(city);
+            var result = command.GetResult();
 
             // Assert
             Assert.StartsWith($"In {city}", result);

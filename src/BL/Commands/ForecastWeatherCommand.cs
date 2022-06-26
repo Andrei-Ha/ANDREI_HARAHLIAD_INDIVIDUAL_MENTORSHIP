@@ -13,6 +13,7 @@ namespace Exadel.Forecast.BL.Commands
         private readonly IConfiguration _configuration;
         private readonly IValidator<string> _cityValidator;
         private readonly IResponseBuilder _responseBuilder;
+
         public ForecastWeatherCommand(string cityName, int forecastDays, IConfiguration configuration, IValidator<string> cityValidator, IResponseBuilder responseBuilder)
         {
             _cityName = cityName;
