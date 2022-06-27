@@ -1,4 +1,5 @@
 ﻿using Exadel.Forecast.BL.Interfaces;
+using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.Models.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -31,8 +32,8 @@ namespace Exadel.Forecast.BL.Commands
             }
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
-            double[] temps = forecastRepository.GetForecastByName(_cityName);
-            if (temps == null)
+            ForecastResponseModel[] models = forecastRepository.GetForecastByName(_cityName);
+            if (models == null)
             {
                 return "no data";
             }
@@ -40,10 +41,10 @@ namespace Exadel.Forecast.BL.Commands
             var sb = new StringBuilder();
             sb.AppendLine($"{_cityName} weather forecast:");
             int i = 1;
-            foreach (var temp in temps) if (i <= _forecastDays)
+            foreach (var model in models) if (i <= _forecastDays)
             {
-                sb.Append($"Day {i++}: ");
-                sb.AppendLine(_responseBuilder.WeatherStringByTemp(_cityName, temp));
+                sb.Append($"Day {i++} ({model.date:dd.MM.yyyy}): ");
+                sb.AppendLine(_responseBuilder.WeatherStringByTemp(_cityName, model.temperature));
             }
             return sb.ToString();
         }

@@ -1,4 +1,5 @@
 ﻿using Exadel.Forecast.DAL.Interfaces;
+using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.DAL.Models.OpenWeather;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace Exadel.Forecast.DAL.Repositories
             return -273;
         }
 
-        public double[] GetForecastByName(string cityName)
+        public ForecastResponseModel[] GetForecastByName(string cityName)
         {
             throw new NotImplementedException();
         }

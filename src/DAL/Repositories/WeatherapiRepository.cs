@@ -1,4 +1,5 @@
 ﻿using Exadel.Forecast.DAL.Interfaces;
+using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.DAL.Models.Weatherapi;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public double[] GetForecastByName(string cityName)
+        public ForecastResponseModel[] GetForecastByName(string cityName)
         {
             throw new NotImplementedException();
         }
