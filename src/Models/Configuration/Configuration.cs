@@ -23,17 +23,19 @@ namespace Exadel.Forecast.Models.Configuration
 
         public void SetDefaultForecastApi(ForecastApi forecastApi)
         {
-            if (forecastApi == ForecastApi.OpenWeather)
+            switch (forecastApi)
             {
-                _defaultRepository = new OpenWeatherRepository(_openWeatherKey);
-            }
-            else if(forecastApi == ForecastApi.WeatherApi)
-            {
-                _defaultRepository = new WeatherapiRepository(WeatherApiKey);
-            }
-            else if(forecastApi == ForecastApi.WeatherBit)
-            {
-                _defaultRepository = new WeatherBitRepository(WeatherBitKey);
+                case ForecastApi.OpenWeather:
+                    _defaultRepository = new OpenWeatherRepository(_openWeatherKey);
+                    break;
+                case ForecastApi.WeatherApi:
+                    _defaultRepository = new WeatherapiRepository(WeatherApiKey);
+                    break;
+                case ForecastApi.WeatherBit:
+                    _defaultRepository = new WeatherBitRepository(WeatherBitKey);
+                    break;
+                default:
+                    break;
             }
         }
 
