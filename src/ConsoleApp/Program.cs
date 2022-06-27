@@ -23,7 +23,7 @@ namespace Exadel.Forecast.ConsoleApp
             string input = string.Empty;
             while (input != "0")
             {
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new StringBuilder($" --- Menu --- {Environment.NewLine}");
                 sb.AppendLine("1 - Current weather");
                 sb.AppendLine("2 - Weather forecast");
                 sb.AppendLine("0 - Close application");
@@ -32,56 +32,40 @@ namespace Exadel.Forecast.ConsoleApp
                 switch (input)
                 {
                     case "1":
-                        CurrentWeather();
+                        _command = CurrentWeather();
                         break;
                     case "2":
-                        WeatherForecast();
+                        _command = WeatherForecast();
                         break;
                     case "0":
+                        _command = new StringCommand("Bye!");
                         break;
                     default:
-                        Console.WriteLine("Wrong input!");
+                        _command = new StringCommand("Wrong input!");
                         break;
                 }
+
+                Console.WriteLine(_command.GetResult());
             }
         }
 
-        private static void CurrentWeather()
+        private static ICommand CurrentWeather()
         {
-            string input = string.Empty;
             ChoosingWeatherProvider();
-
-            while (input != "0")
-            {
-                string invitation = $"Type the name of city to get the forecast, please{Environment.NewLine}";
-                invitation += " To quit type \"0\", or \"c\" to change weather provider";
-                Console.WriteLine(invitation);
-                input = Console.ReadLine();
-                if(input == "c")
-                {
-                    ChoosingWeatherProvider();
-                }
-                else if(input == "0")
-                {
-                    return;
-                }
-                else
-                {
-                    _command = new CurrentWeatherCommand(input, _configuration, new CityValidator(), new TemperatureValidator(), new ResponseBuilder());
-                    var str = _command.GetResult();
-                    Console.WriteLine(str);
-                }
-            }
+            string invitation = $"Type the name of city to get the forecast, please";
+            Console.WriteLine(invitation);
+            string input = Console.ReadLine();
+            return new CurrentWeatherCommand(input, _configuration, new CityValidator(), new TemperatureValidator(), new ResponseBuilder());
         }
 
-        private static void WeatherForecast() 
+        private static ICommand WeatherForecast() 
         {
             _configuration.SetDefaultForecastApi(ForecastApi.WeatherBit);
             string minValue = System.Configuration.ConfigurationManager.AppSettings["MinValue"];
             string maxValue = System.Configuration.ConfigurationManager.AppSettings["MaxValue"];
-            string input = string.Empty;
             int daysNumber = 0;
-            while(input != "0")
+            string input;
+            while (true)
             {
                 if (daysNumber == 0)
                 {
@@ -102,13 +86,13 @@ namespace Exadel.Forecast.ConsoleApp
                 }
                 else
                 {
-                    Console.WriteLine($"Type the name of city to get the forecast, please!  \"0\" - return to previous menu");
+                    Console.WriteLine($"Type the name of city to get the forecast, please!");
                     input = Console.ReadLine();
-                    _command = new ForecastWeatherCommand(input, daysNumber, _configuration, new CityValidator(), new ResponseBuilder());
-                    var str = _command.GetResult();
-                    Console.WriteLine(str);
+                    break;
                 }
             }
+
+            return new ForecastWeatherCommand(input, daysNumber, _configuration, new CityValidator(), new ResponseBuilder());
         }
 
         private static void InitConfiguration()
@@ -136,7 +120,7 @@ namespace Exadel.Forecast.ConsoleApp
                     Console.WriteLine("You have chosen an OpenWeather provider.");
                     return;
                 }
-                if(provider == 2)
+                if (provider == 2)
                 {
                     _configuration.SetDefaultForecastApi(ForecastApi.WeatherApi);
                     Console.WriteLine("You have chosen a WeatherApi provider.");

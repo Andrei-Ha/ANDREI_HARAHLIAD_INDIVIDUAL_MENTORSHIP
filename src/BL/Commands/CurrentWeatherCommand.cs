@@ -34,10 +34,12 @@ namespace Exadel.Forecast.BL.Commands
         {
             if (!_cityValidator.IsValid(_cityName))
             {
-                return "You need to type name of the city!";
+                return "An invalid city name was entered!";
             }
+
             var forecastRepository = _configuration.GetDefaultForecastApi();
             double temperature = forecastRepository.GetTempByName(_cityName);
+
             if (!_temperatureValidator.IsValid(temperature))
             {
                 return "There is no forecast for your city!";
