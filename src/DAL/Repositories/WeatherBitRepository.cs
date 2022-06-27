@@ -16,7 +16,7 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        double[] IWebApiRepository.GetForecastByName(string cityName)
+        public double[] GetForecastByName(string cityName)
         {
             string webUrl = $"https://api.weatherbit.io/v2.0/forecast/daily?key={_apiKey}&city={cityName}";
             var requestSender = new RequestSender<WeatherBitForecastModel>();
@@ -29,9 +29,9 @@ namespace Exadel.Forecast.DAL.Repositories
             return null;
         }
 
-        double IWebApiRepository.GetTempByName(string cityName)
+        public double GetTempByName(string cityName)
         {
-            return -273;
+            throw new NotImplementedException();
         }
     }
 }

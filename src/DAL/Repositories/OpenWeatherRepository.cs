@@ -36,7 +36,7 @@ namespace Exadel.Forecast.DAL.Repositories
 
         public double[] GetForecastByName(string cityName)
         {
-            return null;
+            throw new NotImplementedException();
         }
     }
 }
