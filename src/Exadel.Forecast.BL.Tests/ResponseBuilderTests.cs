@@ -4,14 +4,11 @@ namespace Exadel.Forecast.BL.Tests
 {
     public class ResponseBuilderTests
     {
-        private readonly Mock<IValidator<double>> _mockTemperatureValidator;
         private ResponseBuilder _responseBuilder;
 
         public ResponseBuilderTests()
         {
-            _mockTemperatureValidator = new Mock<IValidator<double>>();
-            _mockTemperatureValidator.Setup(x => x.IsValid(It.IsAny<double>())).Returns(true);
-            _responseBuilder = new ResponseBuilder(_mockTemperatureValidator.Object);
+            _responseBuilder = new ResponseBuilder();
         }
 
         [Theory]

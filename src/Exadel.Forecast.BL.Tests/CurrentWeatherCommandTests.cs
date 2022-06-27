@@ -1,0 +1,41 @@
+﻿using Exadel.Forecast.BL.Commands;
+using Exadel.Forecast.BL.Interfaces;
+using Exadel.Forecast.Models.Interfaces;
+using Moq;
+
+namespace Exadel.Forecast.BL.Tests
+{
+    public class CurrentWeatherCommandTests
+    {
+        [Theory]
+        [InlineData("London", -30)]
+        [InlineData("Paris", -1)]
+        [InlineData("Berlin", 0)]
+        public void GetWeatherByName_ForCityName_ReturnActualWeather(string city, double temperature)
+        {
+            //Arrange
+            var mockCityValidator = new Mock<IValidator<string>>();
+            mockCityValidator.Setup(x => x.IsValid(city)).Returns(true);
+
+            var mockTempValidator = new Mock<IValidator<double>>();
+            mockTempValidator.Setup(x => x.IsValid(temperature)).Returns(true);
+
+            var mockResponseBuilder = new Mock<IResponseBuilder>();
+            mockResponseBuilder.Setup(b => b.WeatherStringByTemp(It.IsAny<string>(), It.IsAny<double>())).Returns($"In {city} {temperature} °C.It's fresh");
+
+            var mockConfiguration = new Mock<IConfiguration>();
+            mockConfiguration.Setup(x => x.GetDefaultForecastApi().GetTempByName(city)).Returns(temperature);
+
+            var command = new CurrentWeatherCommand
+                (
+                    city, mockConfiguration.Object, mockCityValidator.Object, mockTempValidator.Object, mockResponseBuilder.Object
+                );
+
+            //Act
+            var result = command.GetResult();
+
+            //Assert
+            Assert.Equal($"In {city} {temperature} °C.It's fresh", result);
+        }
+    }
+}

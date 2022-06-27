@@ -8,21 +8,9 @@ namespace Exadel.Forecast.BL
 {   
     public class ResponseBuilder : IResponseBuilder
     {
-        private readonly IValidator<double> _temperatureValidator;
-
-        public ResponseBuilder(IValidator<double> temperatureValidator)
-        {
-            _temperatureValidator = temperatureValidator;
-        }
-
         public string WeatherStringByTemp(string city, double temperature)
         {
             string comment;
-            if (!_temperatureValidator.IsValid(temperature))
-            {
-                return "There is no forecast for your city!";
-            }
-
             switch (temperature)
             {
                 case double i when i < 0:

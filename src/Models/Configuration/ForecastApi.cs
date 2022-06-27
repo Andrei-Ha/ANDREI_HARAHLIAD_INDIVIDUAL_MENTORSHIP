@@ -7,6 +7,7 @@ namespace Exadel.Forecast.Models.Configuration
     public enum ForecastApi
     {
         OpenWeather,
-        WeatherApi
+        WeatherApi,
+        WeatherBit
     }
 }

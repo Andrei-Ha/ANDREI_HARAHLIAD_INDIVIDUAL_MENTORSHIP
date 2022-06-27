@@ -1,4 +1,5 @@
 ﻿using Exadel.Forecast.DAL.Interfaces;
+using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.DAL.Models.Weatherapi;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,11 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
+        public ForecastResponseModel[] GetForecastByName(string cityName)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Method return the temperature by the city name
         /// </summary>
@@ -27,7 +33,7 @@ namespace Exadel.Forecast.DAL.Repositories
             var model = requestSender.GetModel(webUrl).Result;
             if (model != null)
             {
-                return model.Current.Temp_c;
+                return model.Current.TempC;
             }
 
             return -273;
