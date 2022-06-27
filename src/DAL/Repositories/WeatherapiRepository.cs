@@ -33,7 +33,7 @@ namespace Exadel.Forecast.DAL.Repositories
             var model = requestSender.GetModel(webUrl).Result;
             if (model != null)
             {
-                return model.Current.Temp_c;
+                return model.Current.TempC;
             }
 
             return -273;

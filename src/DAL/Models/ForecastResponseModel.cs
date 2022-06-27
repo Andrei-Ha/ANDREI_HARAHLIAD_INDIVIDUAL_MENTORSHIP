@@ -6,7 +6,7 @@ namespace Exadel.Forecast.DAL.Models
 {
     public class ForecastResponseModel
     {
-        public double temperature;
-        public DateTime date;
+        public double Temperature { get; set; }
+        public DateTime Date { get; set; }
     }
 }

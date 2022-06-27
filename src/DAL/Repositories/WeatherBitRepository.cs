@@ -2,10 +2,8 @@
 using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.DAL.Models.WeatherBit;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 
 namespace Exadel.Forecast.DAL.Repositories
 {
@@ -28,7 +26,7 @@ namespace Exadel.Forecast.DAL.Repositories
                 return model.Data
                     .Select(p => new ForecastResponseModel()
                         { 
-                            temperature = p.Temp, date = DateTime.ParseExact(p.Datetime, "yyyy-MM-dd", CultureInfo.InvariantCulture) 
+                            Temperature = p.MaxTemp, Date = DateTime.ParseExact(p.DateTime, "yyyy-MM-dd", CultureInfo.InvariantCulture) 
                         })
                     .ToArray();
             }

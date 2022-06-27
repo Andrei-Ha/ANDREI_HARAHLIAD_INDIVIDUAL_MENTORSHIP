@@ -7,9 +7,6 @@
         public string Country { get; set; }
         public double Lat { get; set; }
         public double Lon { get; set; }
-        public string Tz_id { get; set; }
-        public int Localtime_epoch { get; set; }
-        public string Localtime { get; set; }
     }
 
 }

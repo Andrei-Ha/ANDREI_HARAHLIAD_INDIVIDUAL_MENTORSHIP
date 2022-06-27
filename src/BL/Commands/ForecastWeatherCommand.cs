@@ -43,8 +43,8 @@ namespace Exadel.Forecast.BL.Commands
             int i = 1;
             foreach (var model in models) if (i <= _forecastDays)
             {
-                sb.Append($"Day {i++} ({model.date:dd.MM.yyyy}): ");
-                sb.AppendLine(_responseBuilder.WeatherStringByTemp(_cityName, model.temperature));
+                sb.Append($"Day {i++} ({model.Date:dd.MM.yyyy}): ");
+                sb.AppendLine(_responseBuilder.WeatherStringByTemp(_cityName, model.Temperature));
             }
             return sb.ToString();
         }
