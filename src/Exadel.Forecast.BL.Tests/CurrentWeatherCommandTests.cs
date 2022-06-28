@@ -1,5 +1,6 @@
 ﻿using Exadel.Forecast.BL.Commands;
 using Exadel.Forecast.BL.Interfaces;
+using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.Models.Interfaces;
 using Moq;
 
@@ -23,8 +24,10 @@ namespace Exadel.Forecast.BL.Tests
             var mockResponseBuilder = new Mock<IResponseBuilder>();
             mockResponseBuilder.Setup(b => b.WeatherStringByTemp(It.IsAny<string>(), It.IsAny<double>())).Returns($"In {city} {temperature} °C.It's fresh");
 
+            var currentResponseModel = new CurrentResponseModel() { Temperature = temperature };
+
             var mockConfiguration = new Mock<IConfiguration>();
-            mockConfiguration.Setup(x => x.GetDefaultForecastApi().GetTempByName(city)).Returns(temperature);
+            mockConfiguration.Setup(x => x.GetDefaultForecastApi().GetTempByNameAsync(city).Result).Returns(currentResponseModel);
 
             var command = new CurrentWeatherCommand
                 (
@@ -32,7 +35,7 @@ namespace Exadel.Forecast.BL.Tests
                 );
 
             //Act
-            var result = command.GetResult();
+            var result = command.GetResultAsync().Result;
 
             //Assert
             Assert.Equal($"In {city} {temperature} °C.It's fresh", result);

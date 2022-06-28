@@ -18,10 +18,10 @@ namespace Exadel.Forecast.IntegrationTests
             var repositoru = new WeatherapiRepository(Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY"));
 
             // Act
-            var result = repositoru.GetTempByName(city);
+            var currentResponseModel = repositoru.GetTempByNameAsync(city);
 
             // Assert
-            Assert.True(result > -273);
+            Assert.True(currentResponseModel.Result.Temperature > -273);
         }
     }
 }
