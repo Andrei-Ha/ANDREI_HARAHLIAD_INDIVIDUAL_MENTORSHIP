@@ -31,7 +31,7 @@ namespace Exadel.Forecast.BL.Commands
             _cityName = cityName;
         }
 
-        public async Task<string> GetResult()
+        public async Task<string> GetResultAsync()
         {
             if (!_cityValidator.IsValid(_cityName))
             {
@@ -39,7 +39,7 @@ namespace Exadel.Forecast.BL.Commands
             }
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
-            var response = await forecastRepository.GetTempByName(_cityName);
+            var response = await forecastRepository.GetTempByNameAsync(_cityName);
             var temperature = response.Temperature;
 
             if (!_temperatureValidator.IsValid(temperature))

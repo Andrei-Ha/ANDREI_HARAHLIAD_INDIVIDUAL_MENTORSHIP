@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Exadel.Forecast.DAL.Models
 {
-    public class ResponseModel
+    public class CurrentResponseModel
     {
         public double Temperature { get; set; } = -273;
         public long RequestDuration { get; set; } = 0;

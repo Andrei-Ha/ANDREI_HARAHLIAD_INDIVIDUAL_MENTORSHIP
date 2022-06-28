@@ -25,7 +25,7 @@ namespace Exadel.Forecast.BL.Commands
             _responseBuilder = responseBuilder;
         }
 
-        public async Task<string> GetResult()
+        public async Task<string> GetResultAsync()
         {
             if (!_cityValidator.IsValid(_cityName))
             {
@@ -33,7 +33,7 @@ namespace Exadel.Forecast.BL.Commands
             }
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
-            ForecastResponseModel[] models = await forecastRepository.GetForecastByName(_cityName);
+            ForecastResponseModel[] models = await forecastRepository.GetForecastByNameAsync(_cityName);
             if (models == null)
             {
                 return "no data";

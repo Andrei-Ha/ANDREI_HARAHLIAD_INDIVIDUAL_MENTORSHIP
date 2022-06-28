@@ -30,7 +30,7 @@ namespace Exadel.Forecast.BL.Commands
             _cityNames = cityNames;
         }
 
-        public async Task<string> GetResult()
+        public async Task<string> GetResultAsync()
         {
             if (!_cityValidator.IsValid(_cityNames))
             {
@@ -39,14 +39,14 @@ namespace Exadel.Forecast.BL.Commands
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
             string[] cityNames = _cityNames.Split('\u002C').Select(p => p.Trim()).ToArray();
-            Task<ResponseModel>[] tasks = new Task<ResponseModel>[cityNames.Length];
+            Task<CurrentResponseModel>[] tasks = new Task<CurrentResponseModel>[cityNames.Length];
             Stopwatch stopwatchAll = new Stopwatch();
             stopwatchAll.Start();
             for (int i = 0; i < cityNames.Length; i++)
             {
-                tasks[i] = forecastRepository.GetTempByName(cityNames[i]);
+                tasks[i] = forecastRepository.GetTempByNameAsync(cityNames[i]);
             }
-            ResponseModel[] responses = await Task.WhenAll(tasks);
+            CurrentResponseModel[] responses = await Task.WhenAll(tasks);
             stopwatchAll.Stop();
 
             double maxTemp = -273;

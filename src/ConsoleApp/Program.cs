@@ -47,15 +47,14 @@ namespace Exadel.Forecast.ConsoleApp
                         break;
                 }
 
-                Console.WriteLine(await _command.GetResult());
+                Console.WriteLine(await _command.GetResultAsync());
             }
         }
 
         private static ICommand CurrentWeather()
         {
             ChoosingWeatherProvider();
-            string invitation = $"Type the name of city to get the forecast, please";
-            Console.WriteLine(invitation);
+            Console.WriteLine($"Type the name of city to get the forecast, please");
             string input = Console.ReadLine();
             return new CurrentWeatherCommand(input, _configuration, new CityValidator(), new TemperatureValidator(), new ResponseBuilder());
         }
@@ -71,8 +70,9 @@ namespace Exadel.Forecast.ConsoleApp
             {
                 if (daysNumber == 0)
                 {
-                    Console.WriteLine($"Set the number of forecast days between {minValue} and {maxValue}! \"0\" - return to previous menu");
+                    Console.WriteLine($"Set the number of forecast days between {minValue} and {maxValue}!");
                     input = Console.ReadLine();
+
                     if (int.TryParse(input, out int value))
                     {
                         var forecastNumberValidator = new ForecastNumberValidator(int.Parse(minValue), int.Parse(maxValue));
@@ -100,8 +100,7 @@ namespace Exadel.Forecast.ConsoleApp
         private static ICommand FindMaxTemperature()
         {
             _configuration.SetDefaultForecastApi(ForecastApi.OpenWeather);
-            string invitation = $"Enter city names separated by commas to get the maximum temperature.";
-            Console.WriteLine(invitation);
+            Console.WriteLine($"Enter city names separated by commas to get the maximum temperature.");
             string input = Console.ReadLine();
             return new FindMaxTemperatureCommand(input, _configuration, new CityValidator(), new TemperatureValidator());
         }
@@ -114,7 +113,7 @@ namespace Exadel.Forecast.ConsoleApp
                 WeatherApiKey = Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY"),
                 WeatherBitKey = Environment.GetEnvironmentVariable("WEATHERBIT_API_KEY"),
                 DebugInfo = bool.TryParse(System.Configuration.ConfigurationManager.AppSettings["DebugInfo"], out bool value) && value
-        };
+            };
         }
 
         private static void ChoosingWeatherProvider()

@@ -13,7 +13,7 @@ namespace Exadel.Forecast.BL.Commands
             _string = @string;
         }
 
-        public Task<string> GetResult()
+        public Task<string> GetResultAsync()
         {
             return Task.FromResult(_string);
         }

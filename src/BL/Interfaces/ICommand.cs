@@ -7,6 +7,6 @@ namespace Exadel.Forecast.BL.Interfaces
 {
     public interface ICommand
     {
-        Task<string> GetResult();
+        Task<string> GetResultAsync();
     }
 }

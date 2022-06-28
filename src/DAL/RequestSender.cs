@@ -12,7 +12,7 @@ namespace Exadel.Forecast.DAL
     {
         private readonly HttpClient _httpClient = new HttpClient();
 
-        public async Task<T> GetModel(string webUrl)
+        public async Task<T> GetModelAsync(string webUrl)
         {
                 HttpResponseMessage response = await _httpClient.GetAsync(webUrl);
                 response.EnsureSuccessStatusCode();
