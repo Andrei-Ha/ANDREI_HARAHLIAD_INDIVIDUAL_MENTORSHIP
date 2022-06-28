@@ -2,9 +2,8 @@
 using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.DAL.Models.OpenWeather;
 using System;
-using System.Collections.Generic;
-using System.Text;
-//using Exadel.Forecast.Models
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Exadel.Forecast.DAL.Repositories
 {
@@ -17,25 +16,34 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        /// <summary>
-        /// Method return the temperature by the city name
-        /// </summary>
-        /// <param name="cityName">name of city</param>
-        /// <returns>Returns -273 if no result</returns>
-        public double GetTempByName(string cityName)
+        public async Task<ResponseModel> GetTempByName(string cityName)
         {
+            ResponseModel rm = new ResponseModel();
+            Stopwatch stopwatch = new Stopwatch();
             string webUrl = $"https://api.openweathermap.org/data/2.5/weather?q={cityName}&APPID={_apiKey}&units=metric";
             var requestSender = new RequestSender<OpenWeatherDayModel>();
-            var model = requestSender.GetModel(webUrl).Result;
-            if (model != null)
+            stopwatch.Start();
+
+            try
             {
-                return model.Main.Temp;
+                var model = await requestSender.GetModel(webUrl);
+                
+                if (model != null)
+                {
+                    rm.Temperature = model.Main.Temp;
+                }
+            }
+            catch (Exception e)
+            {
+                rm.TextException = e.Message;
             }
 
-            return -273;
+            stopwatch.Stop();
+            rm.RequestDuration = stopwatch.ElapsedMilliseconds;
+            return rm;
         }
 
-        public ForecastResponseModel[] GetForecastByName(string cityName)
+        public Task<ForecastResponseModel[]> GetForecastByName(string cityName)
         {
             throw new NotImplementedException();
         }

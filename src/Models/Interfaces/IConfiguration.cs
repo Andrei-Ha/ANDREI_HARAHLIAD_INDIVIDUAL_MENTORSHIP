@@ -8,6 +8,7 @@ namespace Exadel.Forecast.Models.Interfaces
 {
     public interface IConfiguration
     {
+        bool DebugInfo { get; set; }
         void SetDefaultForecastApi(ForecastApi forecastApi);
         IWebApiRepository GetDefaultForecastApi();
     }

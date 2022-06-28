@@ -4,13 +4,14 @@ using Exadel.Forecast.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Exadel.Forecast.BL.Commands
 {
     public class ForecastWeatherCommand : ICommand
     {
-        private string _cityName;
-        private int _forecastDays;
+        private readonly string _cityName;
+        private readonly int _forecastDays;
         private readonly IConfiguration _configuration;
         private readonly IValidator<string> _cityValidator;
         private readonly IResponseBuilder _responseBuilder;
@@ -24,7 +25,7 @@ namespace Exadel.Forecast.BL.Commands
             _responseBuilder = responseBuilder;
         }
 
-        public string GetResult()
+        public async Task<string> GetResult()
         {
             if (!_cityValidator.IsValid(_cityName))
             {
@@ -32,7 +33,7 @@ namespace Exadel.Forecast.BL.Commands
             }
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
-            ForecastResponseModel[] models = forecastRepository.GetForecastByName(_cityName);
+            ForecastResponseModel[] models = await forecastRepository.GetForecastByName(_cityName);
             if (models == null)
             {
                 return "no data";

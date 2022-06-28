@@ -21,6 +21,8 @@ namespace Exadel.Forecast.Models.Configuration
 
         public string WeatherBitKey { private get; set; }
 
+        public bool DebugInfo { get; set; }
+
         public void SetDefaultForecastApi(ForecastApi forecastApi)
         {
             switch (forecastApi)

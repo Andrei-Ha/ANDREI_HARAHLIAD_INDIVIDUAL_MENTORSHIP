@@ -5,8 +5,6 @@ using Exadel.Forecast.BL.Validators;
 using Exadel.Forecast.Models.Configuration;
 using Exadel.Forecast.Models.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +15,7 @@ namespace Exadel.Forecast.ConsoleApp
         private static IConfiguration _configuration;
         private static ICommand _command;
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             InitConfiguration();
             string input = string.Empty;
@@ -26,6 +24,7 @@ namespace Exadel.Forecast.ConsoleApp
                 StringBuilder sb = new StringBuilder($" --- Menu --- {Environment.NewLine}");
                 sb.AppendLine("1 - Current weather");
                 sb.AppendLine("2 - Weather forecast");
+                sb.AppendLine("3 - Find Max current temperature in cities");
                 sb.AppendLine("0 - Close application");
                 Console.WriteLine(sb.ToString());
                 input = Console.ReadLine();
@@ -37,6 +36,9 @@ namespace Exadel.Forecast.ConsoleApp
                     case "2":
                         _command = WeatherForecast();
                         break;
+                    case "3":
+                        _command = FindMaxTemperature();
+                        break;
                     case "0":
                         _command = new StringCommand("Bye!");
                         break;
@@ -45,7 +47,7 @@ namespace Exadel.Forecast.ConsoleApp
                         break;
                 }
 
-                Console.WriteLine(_command.GetResult());
+                Console.WriteLine(await _command.GetResult());
             }
         }
 
@@ -95,14 +97,24 @@ namespace Exadel.Forecast.ConsoleApp
             return new ForecastWeatherCommand(input, daysNumber, _configuration, new CityValidator(), new ResponseBuilder());
         }
 
+        private static ICommand FindMaxTemperature()
+        {
+            _configuration.SetDefaultForecastApi(ForecastApi.OpenWeather);
+            string invitation = $"Enter city names separated by commas to get the maximum temperature.";
+            Console.WriteLine(invitation);
+            string input = Console.ReadLine();
+            return new FindMaxTemperatureCommand(input, _configuration, new CityValidator(), new TemperatureValidator());
+        }
+
         private static void InitConfiguration()
         {
             _configuration = new Configuration()
             {
                 OpenWeatherKey = Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY"),
                 WeatherApiKey = Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY"),
-                WeatherBitKey = Environment.GetEnvironmentVariable("WEATHERBIT_API_KEY")
-            };
+                WeatherBitKey = Environment.GetEnvironmentVariable("WEATHERBIT_API_KEY"),
+                DebugInfo = bool.TryParse(System.Configuration.ConfigurationManager.AppSettings["DebugInfo"], out bool value) && value
+        };
         }
 
         private static void ChoosingWeatherProvider()

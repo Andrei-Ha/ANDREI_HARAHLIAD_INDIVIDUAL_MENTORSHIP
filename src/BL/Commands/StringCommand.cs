@@ -1,7 +1,6 @@
 ﻿using Exadel.Forecast.BL.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
+using System.Threading.Tasks;
 
 namespace Exadel.Forecast.BL.Commands
 {
@@ -14,9 +13,9 @@ namespace Exadel.Forecast.BL.Commands
             _string = @string;
         }
 
-        public string GetResult()
+        public Task<string> GetResult()
         {
-            return _string;
+            return Task.FromResult(_string);
         }
     }
 }

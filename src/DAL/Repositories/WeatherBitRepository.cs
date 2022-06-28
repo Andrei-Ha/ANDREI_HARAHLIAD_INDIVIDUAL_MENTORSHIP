@@ -4,6 +4,7 @@ using Exadel.Forecast.DAL.Models.WeatherBit;
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Exadel.Forecast.DAL.Repositories
 {
@@ -16,11 +17,11 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public ForecastResponseModel[] GetForecastByName(string cityName)
+        public async Task<ForecastResponseModel[]> GetForecastByName(string cityName)
         {
             string webUrl = $"https://api.weatherbit.io/v2.0/forecast/daily?key={_apiKey}&city={cityName}";
             var requestSender = new RequestSender<WeatherBitForecastModel>();
-            var model = requestSender.GetModel(webUrl).Result;
+            var model = await requestSender.GetModel(webUrl);
             if (model != null)
             {
                 return model.Data
@@ -34,7 +35,7 @@ namespace Exadel.Forecast.DAL.Repositories
             return null;
         }
 
-        public double GetTempByName(string cityName)
+        public Task<ResponseModel> GetTempByName(string cityName)
         {
             throw new NotImplementedException();
         }

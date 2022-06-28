@@ -2,8 +2,8 @@
 using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.DAL.Models.Weatherapi;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Exadel.Forecast.DAL.Repositories
 {
@@ -16,27 +16,36 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public ForecastResponseModel[] GetForecastByName(string cityName)
+        public async Task<ResponseModel> GetTempByName(string cityName)
         {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Method return the temperature by the city name
-        /// </summary>
-        /// <param name="cityName">name of city</param>
-        /// <returns>Returns -273 if no result</returns>
-        public double GetTempByName(string cityName)
-        {
+            ResponseModel rm = new ResponseModel();
+            Stopwatch stopwatch = new Stopwatch();
             string webUrl = $"http://api.weatherapi.com/v1/current.json?key={_apiKey}&q={cityName}";
             var requestSender = new RequestSender<WeatherapiDayModel>();
-            var model = requestSender.GetModel(webUrl).Result;
-            if (model != null)
+            stopwatch.Start();
+
+            try
             {
-                return model.Current.TempC;
+                var model = await requestSender.GetModel(webUrl);
+
+                if (model != null)
+                {
+                    rm.Temperature = model.Current.TempC;
+                }
+            }
+            catch (Exception e)
+            {
+                rm.TextException = e.Message;
             }
 
-            return -273;
+            stopwatch.Stop();
+            rm.RequestDuration = stopwatch.ElapsedMilliseconds;
+            return rm;
+        }
+
+        public Task<ForecastResponseModel[]> GetForecastByName(string cityName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

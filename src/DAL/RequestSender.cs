@@ -14,18 +14,10 @@ namespace Exadel.Forecast.DAL
 
         public async Task<T> GetModel(string webUrl)
         {
-            try
-            {
                 HttpResponseMessage response = await _httpClient.GetAsync(webUrl);
                 response.EnsureSuccessStatusCode();
                 string strModel = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<T>(strModel);
-            }
-            catch (HttpRequestException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            return default;
         }
     }
 }

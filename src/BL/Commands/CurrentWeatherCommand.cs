@@ -3,6 +3,7 @@ using Exadel.Forecast.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Exadel.Forecast.BL.Commands
 {
@@ -30,7 +31,7 @@ namespace Exadel.Forecast.BL.Commands
             _cityName = cityName;
         }
 
-        public string GetResult()
+        public async Task<string> GetResult()
         {
             if (!_cityValidator.IsValid(_cityName))
             {
@@ -38,11 +39,12 @@ namespace Exadel.Forecast.BL.Commands
             }
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
-            double temperature = forecastRepository.GetTempByName(_cityName);
+            var response = await forecastRepository.GetTempByName(_cityName);
+            var temperature = response.Temperature;
 
             if (!_temperatureValidator.IsValid(temperature))
             {
-                return "There is no forecast for your city!";
+                return $"There is no forecast for your city!{Environment.NewLine}Exception:{response.TextException}";
             }
 
             return _responseBuilder.WeatherStringByTemp(_cityName, temperature);

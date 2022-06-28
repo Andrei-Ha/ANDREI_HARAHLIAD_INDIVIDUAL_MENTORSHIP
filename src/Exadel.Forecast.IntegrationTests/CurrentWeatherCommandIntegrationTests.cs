@@ -18,7 +18,7 @@ namespace Exadel.Forecast.IntegrationTests
         [Theory]
         [InlineData("Minsk")]
         [InlineData("Kiev")]
-        public void GetWeatherByName_ForOpenWeatherRepository_ReturnStringBeginningWithIn(string city)
+        public void GetResult_ForOpenWeatherRepository_ReturnStringBeginningWithIn(string city)
         {
             // Arrange
             _configuration.OpenWeatherKey = Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY");
@@ -35,7 +35,7 @@ namespace Exadel.Forecast.IntegrationTests
         [Theory]
         [InlineData("Minsk")]
         [InlineData("Kiev")]
-        public void GetWeatherByName_ForWeatherapiRepository_ReturnStringBeginningWithIn(string city)
+        public void GetResult_ForWeatherapiRepository_ReturnStringBeginningWithIn(string city)
         {
             // Arrange
             _configuration.WeatherApiKey = Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY");
