@@ -38,7 +38,7 @@ namespace Exadel.Forecast.BL.Commands
             }
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
-            string[] cityNames = _cityNames.Split('\u002C').Select(p => p.Trim()).ToArray();
+            string[] cityNames = _cityNames.Split(',').Select(p => p.Trim()).ToArray();
             Task<CurrentResponseModel>[] tasks = new Task<CurrentResponseModel>[cityNames.Length];
             Stopwatch stopwatchAll = new Stopwatch();
             stopwatchAll.Start();
@@ -61,15 +61,15 @@ namespace Exadel.Forecast.BL.Commands
                     if (responses[i].Temperature > maxTemp)
                     {
                         maxTemp = responses[i].Temperature;
-                        cityMaxTemp = cityNames[i];
+                        cityMaxTemp = responses[i].City;
                     }
 
-                    debugSB.AppendLine($" --- City: {cityNames[i]}. Temperature: {responses[i].Temperature}. Timer: {responses[i].RequestDuration} ms.");
+                    debugSB.AppendLine($" --- City: {responses[i].City}. Temperature: {responses[i].Temperature}. Timer: {responses[i].RequestDuration} ms.");
                     successCount++;
                 }
                 else
                 {
-                    debugSB.AppendLine($" --- City: {cityNames[i]}. Error: {responses[i].TextException} Timer: {responses[i].RequestDuration} ms.");
+                    debugSB.AppendLine($" --- City: {responses[i].City}. Error: {responses[i].TextException} Timer: {responses[i].RequestDuration} ms.");
                     failCount++; 
                 }
             }

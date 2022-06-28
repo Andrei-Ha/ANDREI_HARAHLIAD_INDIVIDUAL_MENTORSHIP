@@ -4,8 +4,9 @@ using System.Text;
 
 namespace Exadel.Forecast.DAL.Models
 {
-    public class ForecastResponseModel
+    public class ResponseModel
     {
+        public string City { get; set; }
         public double Temperature { get; set; }
         public DateTime Date { get; set; }
     }

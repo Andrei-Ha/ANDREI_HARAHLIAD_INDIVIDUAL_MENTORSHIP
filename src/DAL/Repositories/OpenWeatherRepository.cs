@@ -18,7 +18,7 @@ namespace Exadel.Forecast.DAL.Repositories
 
         public async Task<CurrentResponseModel> GetTempByNameAsync(string cityName)
         {
-            CurrentResponseModel rm = new CurrentResponseModel();
+            CurrentResponseModel rm = new CurrentResponseModel() { City = cityName};
             Stopwatch stopwatch = new Stopwatch();
             string webUrl = $"https://api.openweathermap.org/data/2.5/weather?q={cityName}&APPID={_apiKey}&units=metric";
             var requestSender = new RequestSender<OpenWeatherDayModel>();
@@ -43,7 +43,7 @@ namespace Exadel.Forecast.DAL.Repositories
             return rm;
         }
 
-        public Task<ForecastResponseModel[]> GetForecastByNameAsync(string cityName)
+        public Task<ResponseModel[]> GetForecastByNameAsync(string cityName)
         {
             throw new NotImplementedException();
         }

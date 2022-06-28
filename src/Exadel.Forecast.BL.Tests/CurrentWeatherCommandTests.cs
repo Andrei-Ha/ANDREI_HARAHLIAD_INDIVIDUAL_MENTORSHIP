@@ -18,11 +18,12 @@ namespace Exadel.Forecast.BL.Tests
             var mockCityValidator = new Mock<IValidator<string>>();
             mockCityValidator.Setup(x => x.IsValid(city)).Returns(true);
 
-            var mockTempValidator = new Mock<IValidator<double>>();
+            var mockTempValidator = new Mock<IValidator<double>>(); 
             mockTempValidator.Setup(x => x.IsValid(temperature)).Returns(true);
 
             var mockResponseBuilder = new Mock<IResponseBuilder>();
-            mockResponseBuilder.Setup(b => b.WeatherStringByTemp(It.IsAny<string>(), It.IsAny<double>())).Returns($"In {city} {temperature} °C.It's fresh");
+            mockResponseBuilder.Setup(
+                b => b.WeatherStringByTemp(new CurrentResponseModel())).Returns($"In {city} {temperature} °C.It's fresh");
 
             var currentResponseModel = new CurrentResponseModel() { Temperature = temperature };
 

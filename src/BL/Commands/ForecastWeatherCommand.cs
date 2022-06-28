@@ -33,7 +33,7 @@ namespace Exadel.Forecast.BL.Commands
             }
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
-            ForecastResponseModel[] models = await forecastRepository.GetForecastByNameAsync(_cityName);
+            ResponseModel[] models = await forecastRepository.GetForecastByNameAsync(_cityName);
             if (models == null)
             {
                 return "no data";
@@ -45,7 +45,7 @@ namespace Exadel.Forecast.BL.Commands
             foreach (var model in models) if (i <= _forecastDays)
             {
                 sb.Append($"Day {i++} ({model.Date:dd.MM.yyyy}): ");
-                sb.AppendLine(_responseBuilder.WeatherStringByTemp(_cityName, model.Temperature));
+                sb.AppendLine(_responseBuilder.WeatherStringByTemp(model));
             }
             return sb.ToString();
         }

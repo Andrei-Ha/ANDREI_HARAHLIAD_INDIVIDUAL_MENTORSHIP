@@ -1,5 +1,6 @@
 ﻿using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.BL.Validators;
+using Exadel.Forecast.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,29 +9,32 @@ namespace Exadel.Forecast.BL
 {   
     public class ResponseBuilder : IResponseBuilder
     {
-        public string WeatherStringByTemp(string city, double temperature)
+        private string GetCommentByTemp(double temperature)
         {
-            string comment;
             switch (temperature)
             {
                 case double i when i < 0:
-                    comment = "Dress warmly";
-                    break;
+                    return "Dress warmly";
                 case double i when i >= 0 && i < 20:
-                    comment = "It's fresh";
-                    break;
+                    return "It's fresh";
                 case double i when i >= 20 && i < 30:
-                    comment = "Good weather";
-                    break;
+                    return "Good weather";
                 case double i when i >= 30:
-                    comment = "It's time to go to the beach";
-                    break;
+                    return "It's time to go to the beach";
                 default:
-                    comment = "something went wrong...";
-                    break;
+                    return "something went wrong...";
             }
+        }
 
-            return $"In {city} {temperature} °C. {comment}";
+        public string WeatherStringByTemp(CurrentResponseModel model, bool debugInfo = false)
+        {
+            string info = debugInfo ? $" Time: {model.RequestDuration}" : string.Empty;
+            return $"In {model.City} {model.Temperature} °C. {GetCommentByTemp(model.Temperature)}{info}";
+        }
+
+        public string WeatherStringByTemp(ResponseModel model)
+        {
+            return $"In {model.City} {model.Temperature} °C. {GetCommentByTemp(model.Temperature)}";
         }
     }
 }
