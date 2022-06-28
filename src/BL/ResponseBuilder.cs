@@ -32,7 +32,7 @@ namespace Exadel.Forecast.BL
             return $"In {model.City} {model.Temperature} °C. {GetCommentByTemp(model.Temperature)}{info}";
         }
 
-        public string WeatherStringByTemp(ResponseModel model)
+        public string WeatherStringByTemp(ForecastResponseModel model)
         {
             return $"In {model.City} {model.Temperature} °C. {GetCommentByTemp(model.Temperature)}";
         }

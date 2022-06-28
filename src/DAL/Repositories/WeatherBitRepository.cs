@@ -17,7 +17,7 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public async Task<ResponseModel[]> GetForecastByNameAsync(string cityName)
+        public async Task<ForecastResponseModel[]> GetForecastByNameAsync(string cityName)
         {
             string webUrl = $"https://api.weatherbit.io/v2.0/forecast/daily?key={_apiKey}&city={cityName}";
             var requestSender = new RequestSender<WeatherBitForecastModel>();
@@ -25,7 +25,7 @@ namespace Exadel.Forecast.DAL.Repositories
             if (model != null)
             {
                 return model.Data
-                    .Select(p => new ResponseModel()
+                    .Select(p => new ForecastResponseModel()
                         { 
                             City = cityName,
                             Temperature = p.MaxTemp,
