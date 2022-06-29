@@ -26,13 +26,13 @@ namespace Exadel.Forecast.BL
             }
         }
 
-        public string WeatherStringByTemp(CurrentResponseModel model, bool debugInfo = false)
+        public string WeatherStringByTemp(DebugModel<CurrentModel> dm, bool debugInfo = false)
         {
-            string info = debugInfo ? $" Time: {model.RequestDuration}" : string.Empty;
-            return $"In {model.City} {model.Temperature} °C. {GetCommentByTemp(model.Temperature)}{info}";
+            string info = debugInfo ? $" Time: {dm.RequestDuration}" : string.Empty;
+            return $"In {dm.Model.City} {dm.Model.Temperature} °C. {GetCommentByTemp(dm.Model.Temperature)}{info}";
         }
 
-        public string WeatherStringByTemp(ForecastResponseModel model)
+        public string WeatherStringByTemp(CurrentModel model)
         {
             return $"In {model.City} {model.Temperature} °C. {GetCommentByTemp(model.Temperature)}";
         }

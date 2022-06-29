@@ -40,7 +40,7 @@ namespace Exadel.Forecast.BL.Commands
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
             var model = await forecastRepository.GetTempByNameAsync(_cityName);
-            var temperature = model.Temperature;
+            var temperature = model.Model.Temperature;
 
             if (!_temperatureValidator.IsValid(temperature))
             {

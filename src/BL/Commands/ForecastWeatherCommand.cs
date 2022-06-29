@@ -33,7 +33,7 @@ namespace Exadel.Forecast.BL.Commands
             }
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
-            ForecastResponseModel[] models = await forecastRepository.GetForecastByNameAsync(_cityName);
+            CurrentModel[] models = await forecastRepository.GetForecastByNameAsync(_cityName);
             if (models == null)
             {
                 return "no data";

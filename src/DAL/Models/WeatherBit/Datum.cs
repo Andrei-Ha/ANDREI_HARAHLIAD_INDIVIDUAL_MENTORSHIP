@@ -15,5 +15,11 @@ namespace Exadel.Forecast.DAL.Models.WeatherBit
 
         [JsonProperty("Min_temp")]
         public double MinTemp { get; set; }
+        
+        [JsonProperty("city_name")]
+        public string CityName { get; set; }
+
+        [JsonProperty("ts")]
+        public int LocaltimeEpoch { get; set; }
     }
 }

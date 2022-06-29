@@ -5,7 +5,7 @@ namespace Exadel.Forecast.DAL.Interfaces
 {
     public interface IWebApiRepository
     {
-        Task<CurrentResponseModel> GetTempByNameAsync(string cityName);
-        Task<ForecastResponseModel[]> GetForecastByNameAsync(string cityName);
+        Task<DebugModel<CurrentModel>> GetTempByNameAsync(string cityName);
+        Task<CurrentModel[]> GetForecastByNameAsync(string cityName);
     }
 }

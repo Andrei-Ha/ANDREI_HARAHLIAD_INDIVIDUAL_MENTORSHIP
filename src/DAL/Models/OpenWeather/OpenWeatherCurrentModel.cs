@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Exadel.Forecast.DAL.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Exadel.Forecast.DAL.Models.OpenWeather
 {
-    public class OpenWeatherDayModel
+    public class OpenWeatherCurrentModel : ICurrentForecastModel
     {
         public Coord Coord { get; set; }
         public Weather[] Weather { get; set; }
@@ -19,6 +20,13 @@ namespace Exadel.Forecast.DAL.Models.OpenWeather
         public int Id { get; set; }
         public string Name { get; set; }
         public int Cod { get; set; }
+
+        public CurrentModel GetCurrentModel()
+        {
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dateTime = dateTime.AddSeconds(Dt);
+            return new CurrentModel() { City = Name, Temperature = Main.Temp, Date = dateTime };
+        }
     }
 
 }

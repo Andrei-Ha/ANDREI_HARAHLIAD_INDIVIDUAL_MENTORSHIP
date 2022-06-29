@@ -1,6 +1,7 @@
 ﻿using Exadel.Forecast.DAL.Interfaces;
 using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.DAL.Models.OpenWeather;
+using Exadel.Forecast.DAL.Services;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -16,34 +17,19 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public async Task<CurrentResponseModel> GetTempByNameAsync(string cityName)
+        public async Task<DebugModel<CurrentModel>> GetTempByNameAsync(string cityName)
         {
-            CurrentResponseModel rm = new CurrentResponseModel() { City = cityName};
-            Stopwatch stopwatch = new Stopwatch();
             string webUrl = $"https://api.openweathermap.org/data/2.5/weather?q={cityName}&APPID={_apiKey}&units=metric";
-            var requestSender = new RequestSender<OpenWeatherDayModel>();
-            stopwatch.Start();
-
-            try
-            {
-                var model = await requestSender.GetModelAsync(webUrl);
-                
-                if (model != null)
-                {
-                    rm.Temperature = model.Main.Temp;
-                }
-            }
-            catch (Exception e)
-            {
-                rm.TextException = e.Message;
-            }
-
-            stopwatch.Stop();
-            rm.RequestDuration = stopwatch.ElapsedMilliseconds;
-            return rm;
+            var requestSender = new RequestSender<OpenWeatherCurrentModel>(webUrl);
+            DebugModel<OpenWeatherCurrentModel> openWeatherDebugModel = await requestSender.GetDebugModelAsync();
+            var currentDebugModel = new DebugModel<CurrentModel>() {
+                RequestDuration = openWeatherDebugModel.RequestDuration,
+                TextException = openWeatherDebugModel.TextException,
+                Model = openWeatherDebugModel.Model.GetCurrentModel()};
+            return currentDebugModel;
         }
 
-        public Task<ForecastResponseModel[]> GetForecastByNameAsync(string cityName)
+        public Task<CurrentModel[]> GetForecastByNameAsync(string cityName)
         {
             throw new NotImplementedException();
         }

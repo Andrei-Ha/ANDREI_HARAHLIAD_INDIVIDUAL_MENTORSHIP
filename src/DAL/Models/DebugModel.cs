@@ -4,10 +4,9 @@ using System.Text;
 
 namespace Exadel.Forecast.DAL.Models
 {
-    public class CurrentResponseModel
+    public class DebugModel<T>
     { 
-        public string City { get; set; } = string.Empty;
-        public double Temperature { get; set; } = -273;
+        public T Model { get; set; }
         public long RequestDuration { get; set; } = 0;
         public string TextException { get; set; }  = string.Empty;
     }

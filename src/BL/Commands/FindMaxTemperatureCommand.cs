@@ -39,14 +39,14 @@ namespace Exadel.Forecast.BL.Commands
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
             string[] cityNames = _cityNames.Split(',').Select(p => p.Trim()).ToArray();
-            Task<CurrentResponseModel>[] tasks = new Task<CurrentResponseModel>[cityNames.Length];
+            Task<DebugModel<CurrentModel>>[] tasks = new Task<DebugModel<CurrentModel>>[cityNames.Length];
             Stopwatch stopwatchAll = new Stopwatch();
             stopwatchAll.Start();
             for (int i = 0; i < cityNames.Length; i++)
             {
                 tasks[i] = forecastRepository.GetTempByNameAsync(cityNames[i]);
             }
-            CurrentResponseModel[] responses = await Task.WhenAll(tasks);
+            DebugModel<CurrentModel>[] responses = await Task.WhenAll(tasks);
             stopwatchAll.Stop();
 
             double maxTemp = -273;
@@ -56,20 +56,20 @@ namespace Exadel.Forecast.BL.Commands
 
             for (int i = 0; i < cityNames.Length; i++)
             {
-                if (_temperatureValidator.IsValid(responses[i].Temperature))
+                if (_temperatureValidator.IsValid(responses[i].Model.Temperature))
                 {
-                    if (responses[i].Temperature > maxTemp)
+                    if (responses[i].Model.Temperature > maxTemp)
                     {
-                        maxTemp = responses[i].Temperature;
-                        cityMaxTemp = responses[i].City;
+                        maxTemp = responses[i].Model.Temperature;
+                        cityMaxTemp = responses[i].Model.City;
                     }
 
-                    debugSB.AppendLine($" --- City: {responses[i].City}. Temperature: {responses[i].Temperature}. Timer: {responses[i].RequestDuration} ms.");
+                    debugSB.AppendLine($" --- City: {responses[i].Model.City}. Temperature: {responses[i].Model.Temperature}. Timer: {responses[i].RequestDuration} ms.");
                     successCount++;
                 }
                 else
                 {
-                    debugSB.AppendLine($" --- City: {responses[i].City}. Error: {responses[i].TextException} Timer: {responses[i].RequestDuration} ms.");
+                    debugSB.AppendLine($" --- City: {responses[i].Model.City}. Error: {responses[i].TextException} Timer: {responses[i].RequestDuration} ms.");
                     failCount++; 
                 }
             }

@@ -17,15 +17,15 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public async Task<ForecastResponseModel[]> GetForecastByNameAsync(string cityName)
+        public async Task<CurrentModel[]> GetForecastByNameAsync(string cityName)
         {
             string webUrl = $"https://api.weatherbit.io/v2.0/forecast/daily?key={_apiKey}&city={cityName}";
-            var requestSender = new RequestSender<WeatherBitForecastModel>();
-            var model = await requestSender.GetModelAsync(webUrl);
+            var requestSender = new RequestSender<WeatherBitForecastModel>(webUrl);
+            var model = await requestSender.GetModelAsync();
             if (model != null)
             {
                 return model.Data
-                    .Select(p => new ForecastResponseModel()
+                    .Select(p => new CurrentModel()
                         { 
                             City = cityName,
                             Temperature = p.MaxTemp,
@@ -37,7 +37,7 @@ namespace Exadel.Forecast.DAL.Repositories
             return null;
         }
 
-        public Task<CurrentResponseModel> GetTempByNameAsync(string cityName)
+        public Task<DebugModel<CurrentModel>> GetTempByNameAsync(string cityName)
         {
             throw new NotImplementedException();
         }

@@ -23,9 +23,9 @@ namespace Exadel.Forecast.BL.Tests
 
             var mockResponseBuilder = new Mock<IResponseBuilder>();
             mockResponseBuilder.Setup(
-                b => b.WeatherStringByTemp(new CurrentResponseModel())).Returns($"In {city} {temperature} °C.It's fresh");
+                b => b.WeatherStringByTemp(new DebugModel())).Returns($"In {city} {temperature} °C.It's fresh");
 
-            var currentResponseModel = new CurrentResponseModel() { Temperature = temperature };
+            var currentResponseModel = new DebugModel() { Temperature = temperature };
 
             var mockConfiguration = new Mock<IConfiguration>();
             mockConfiguration.Setup(x => x.GetDefaultForecastApi().GetTempByNameAsync(city).Result).Returns(currentResponseModel);

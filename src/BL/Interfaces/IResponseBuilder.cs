@@ -7,7 +7,7 @@ namespace Exadel.Forecast.BL.Interfaces
 {
     public interface IResponseBuilder
     {
-        string WeatherStringByTemp(CurrentResponseModel model, bool debugInfo = false);
-        string WeatherStringByTemp(ForecastResponseModel model);
+        string WeatherStringByTemp(DebugModel<CurrentModel> model, bool debugInfo = false);
+        string WeatherStringByTemp(CurrentModel model);
     }
 }
