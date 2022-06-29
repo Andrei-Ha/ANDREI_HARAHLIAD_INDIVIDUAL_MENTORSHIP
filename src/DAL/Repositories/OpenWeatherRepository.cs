@@ -2,6 +2,7 @@
 using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.DAL.Models.OpenWeather;
 using Exadel.Forecast.DAL.Services;
+using Exadel.Forecast.Domain;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace Exadel.Forecast.DAL.Repositories
             var currentDebugModel = new DebugModel<CurrentModel>() {
                 RequestDuration = openWeatherDebugModel.RequestDuration,
                 TextException = openWeatherDebugModel.TextException,
-                Model = openWeatherDebugModel.Model.GetCurrentModel()};
+                Model = openWeatherDebugModel.Model == null ? default : openWeatherDebugModel.Model.GetCurrentModel()};
             return currentDebugModel;
         }
 

@@ -1,6 +1,7 @@
 ﻿using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.BL.Validators;
 using Exadel.Forecast.DAL.Models;
+using Exadel.Forecast.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,8 +29,16 @@ namespace Exadel.Forecast.BL
 
         public string WeatherStringByTemp(DebugModel<CurrentModel> dm, bool debugInfo = false)
         {
-            string info = debugInfo ? $" Time: {dm.RequestDuration}" : string.Empty;
-            return $"In {dm.Model.City} {dm.Model.Temperature} °C. {GetCommentByTemp(dm.Model.Temperature)}{info}";
+            string info = debugInfo ? $" Request duration: {dm.RequestDuration}" : string.Empty;
+            if (dm.Model == null)
+            {
+                return $"Exception: \"{dm.TextException}\"{info}";
+            }
+            else
+            {
+                return $"In {dm.Model.City} {dm.Model.Temperature} °C.  {GetCommentByTemp(dm.Model.Temperature)}." +
+                    $" Date: {dm.Model.Date:dd.MM.yyyy}  {info}";
+            }
         }
 
         public string WeatherStringByTemp(CurrentModel model)

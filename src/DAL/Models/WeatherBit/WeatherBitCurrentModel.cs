@@ -1,9 +1,10 @@
 ﻿using Exadel.Forecast.DAL.Interfaces;
+using Exadel.Forecast.Domain;
 using System;
 
 namespace Exadel.Forecast.DAL.Models.WeatherBit
 {
-    public class WeatherBitCurrentModel : ICurrentForecastModel
+    public class WeatherBitCurrentModel : ICurrentWeatherModel
     {
         public Datum[] Data { get; set; }
         public int Count { get; set; }

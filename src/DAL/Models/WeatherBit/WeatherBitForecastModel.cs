@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Exadel.Forecast.DAL.Interfaces;
 using Newtonsoft.Json;
 
 namespace Exadel.Forecast.DAL.Models.WeatherBit
 {
 
-    public class WeatherBitForecastModel
+    public class WeatherBitForecastModel : IForecastModel
     {
         public Datum[] Data { get; set; }
 
@@ -22,5 +23,10 @@ namespace Exadel.Forecast.DAL.Models.WeatherBit
 
         [JsonProperty("State_code")]
         public string StateCode { get; set; }
+
+        public IDayForecastModel[] GetDaysForecastModel()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

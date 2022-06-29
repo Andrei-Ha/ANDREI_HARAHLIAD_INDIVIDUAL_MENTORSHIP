@@ -1,4 +1,5 @@
 ﻿using Exadel.Forecast.DAL.Models;
+using Exadel.Forecast.Domain;
 using System.Threading.Tasks;
 
 namespace Exadel.Forecast.DAL.Interfaces

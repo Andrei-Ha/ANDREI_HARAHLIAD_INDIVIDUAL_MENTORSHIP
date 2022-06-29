@@ -19,12 +19,27 @@ namespace Exadel.Forecast.DAL
             _webUrl = webUrl;
         }
 
-        public async Task<T> GetModelAsync()
+        private async Task<T> Get()
         {
             HttpResponseMessage response = await _httpClient.GetAsync(_webUrl);
             response.EnsureSuccessStatusCode();
             string strModel = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(strModel);
+        }
+
+        public async Task<T> GetModelAsync()
+        {
+            try
+            {
+                await Get();
+            }
+            catch(Exception ex)
+            {
+                // Logger(ex.Message)
+                Console.WriteLine(ex.Message);
+            }
+
+            return default;
         }
 
         public async Task<DebugModel<T>> GetDebugModelAsync()
@@ -35,7 +50,7 @@ namespace Exadel.Forecast.DAL
 
             try
             {
-                T model = await GetModelAsync();
+                T model = await Get();
                 if(model != null)
                 {
                     debugModel.Model = model;

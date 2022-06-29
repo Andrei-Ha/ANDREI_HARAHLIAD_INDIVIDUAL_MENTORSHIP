@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Exadel.Forecast.DAL.Models
+namespace Exadel.Forecast.Domain
 {
-    public class CurrentModel
+    public class BaseModel
     {
         public string City { get; set; }
-        public double Temperature { get; set; }
         public DateTime Date { get; set; }
     }
 }

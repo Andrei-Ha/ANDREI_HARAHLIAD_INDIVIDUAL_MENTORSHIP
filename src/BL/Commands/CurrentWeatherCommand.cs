@@ -39,15 +39,16 @@ namespace Exadel.Forecast.BL.Commands
             }
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
-            var model = await forecastRepository.GetTempByNameAsync(_cityName);
-            var temperature = model.Model.Temperature;
+            var debugModel = await forecastRepository.GetTempByNameAsync(_cityName);
+
+            /*var temperature = model.Model.Temperature;
 
             if (!_temperatureValidator.IsValid(temperature))
             {
                 return $"There is no forecast for your city!{Environment.NewLine}Exception:{model.TextException}";
-            }
+            }*/
 
-            return _responseBuilder.WeatherStringByTemp(model, _configuration.DebugInfo);
+            return _responseBuilder.WeatherStringByTemp(debugModel, _configuration.DebugInfo);
         }
     }
 }

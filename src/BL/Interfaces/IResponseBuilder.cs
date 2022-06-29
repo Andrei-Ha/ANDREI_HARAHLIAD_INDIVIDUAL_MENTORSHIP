@@ -1,4 +1,5 @@
 ﻿using Exadel.Forecast.DAL.Models;
+using Exadel.Forecast.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;

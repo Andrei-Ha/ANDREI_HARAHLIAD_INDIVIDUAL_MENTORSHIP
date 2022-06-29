@@ -1,11 +1,12 @@
 ﻿using Exadel.Forecast.DAL.Interfaces;
+using Exadel.Forecast.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Exadel.Forecast.DAL.Models.OpenWeather
 {
-    public class OpenWeatherCurrentModel : ICurrentForecastModel
+    public class OpenWeatherCurrentModel : ICurrentWeatherModel
     {
         public Coord Coord { get; set; }
         public Weather[] Weather { get; set; }

@@ -1,6 +1,7 @@
 ﻿using Exadel.Forecast.DAL.Interfaces;
 using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.DAL.Models.WeatherBit;
+using Exadel.Forecast.Domain;
 using System;
 using System.Globalization;
 using System.Linq;

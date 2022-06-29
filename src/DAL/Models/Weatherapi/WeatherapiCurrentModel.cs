@@ -1,11 +1,12 @@
 ﻿using Exadel.Forecast.DAL.Interfaces;
+using Exadel.Forecast.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Exadel.Forecast.DAL.Models.Weatherapi
 {
-    public class WeatherapiCurrentModel : ICurrentForecastModel
+    public class WeatherapiCurrentModel : ICurrentWeatherModel
     {
         public Location Location { get; set; }
         public Current Current { get; set; }

@@ -2,6 +2,7 @@
 using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.DAL.Models.OpenWeather;
 using Exadel.Forecast.DAL.Models.Weatherapi;
+using Exadel.Forecast.Domain;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -21,12 +22,12 @@ namespace Exadel.Forecast.DAL.Repositories
         {
             string webUrl = $"http://api.weatherapi.com/v1/current.json?key={_apiKey}&q={cityName}";
             var requestSender = new RequestSender<WeatherapiCurrentModel>(webUrl);
-            DebugModel<WeatherapiCurrentModel> openWeatherDebugModel = await requestSender.GetDebugModelAsync();
+            DebugModel<WeatherapiCurrentModel> weatherapiDebugModel = await requestSender.GetDebugModelAsync();
             var currentDebugModel = new DebugModel<CurrentModel>()
             {
-                RequestDuration = openWeatherDebugModel.RequestDuration,
-                TextException = openWeatherDebugModel.TextException,
-                Model = openWeatherDebugModel.Model.GetCurrentModel()
+                RequestDuration = weatherapiDebugModel.RequestDuration,
+                TextException = weatherapiDebugModel.TextException,
+                Model = weatherapiDebugModel.Model == null ? default : weatherapiDebugModel.Model.GetCurrentModel()
             };
             return currentDebugModel;
         }
