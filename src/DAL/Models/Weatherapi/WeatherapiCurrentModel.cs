@@ -1,5 +1,5 @@
-﻿using Exadel.Forecast.DAL.Interfaces;
-using Exadel.Forecast.Domain;
+﻿using Exadel.Forecast.Domain;
+using Exadel.Forecast.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;

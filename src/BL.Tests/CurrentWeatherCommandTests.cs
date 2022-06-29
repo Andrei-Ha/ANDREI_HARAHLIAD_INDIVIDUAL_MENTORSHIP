@@ -18,7 +18,7 @@ namespace Exadel.Forecast.BL.Tests
             var mockCityValidator = new Mock<IValidator<string>>();
             mockCityValidator.Setup(x => x.IsValid(city)).Returns(true);
 
-            var mockTempValidator = new Mock<IValidator<double>>(); 
+            var mockTempValidator = new Mock<IValidator<double>>();
             mockTempValidator.Setup(x => x.IsValid(temperature)).Returns(true);
 
             var mockResponseBuilder = new Mock<IResponseBuilder>();
