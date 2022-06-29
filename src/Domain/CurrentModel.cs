@@ -4,8 +4,9 @@ using System.Text;
 
 namespace Exadel.Forecast.Domain
 {
-    public class CurrentModel : BaseModel
+    public class CurrentModel : BaseLocationModel
     {
         public double Temperature { get; set; }
+        public DateTime Date { get; set; }
     }
 }

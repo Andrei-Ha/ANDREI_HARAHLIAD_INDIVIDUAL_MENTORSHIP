@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Exadel.Forecast.Domain
 {
-    public class ForecastModel : BaseModel
+    public class ForecastModel : BaseLocationModel
     {
         public List<DayModel> Days { get; set; }
     }

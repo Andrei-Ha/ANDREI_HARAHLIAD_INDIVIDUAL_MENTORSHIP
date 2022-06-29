@@ -30,7 +30,7 @@ namespace Exadel.Forecast.DAL.Repositories
             return currentDebugModel;
         }
 
-        public Task<CurrentModel[]> GetForecastByNameAsync(string cityName)
+        public Task<ForecastModel> GetForecastByNameAsync(string cityName)
         {
             throw new NotImplementedException();
         }

@@ -41,9 +41,17 @@ namespace Exadel.Forecast.BL
             }
         }
 
-        public string WeatherStringByTemp(CurrentModel model)
+        public string WeatherStringByTemp(ForecastModel fm, int forecastDays = int.MaxValue)
         {
-            return $"In {model.City} {model.Temperature} °C. {GetCommentByTemp(model.Temperature)}";
+            var sb = new StringBuilder();
+            sb.AppendLine($"{fm.City} maximum daily temperature forecast:");
+            int i = 1;
+            foreach (var day in fm.Days) if (i <= forecastDays)
+                {
+                    sb.Append($"Day {i++} ({day.Date:dd.MM.yyyy}): ");
+                    sb.AppendLine($"In {fm.City} {day.MaxTemperature} °C. {GetCommentByTemp(day.MaxTemperature)}");
+                }
+            return sb.ToString();
         }
     }
 }

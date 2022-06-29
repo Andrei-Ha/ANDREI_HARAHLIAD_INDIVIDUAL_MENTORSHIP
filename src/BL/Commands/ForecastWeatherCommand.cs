@@ -34,21 +34,13 @@ namespace Exadel.Forecast.BL.Commands
             }
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
-            CurrentModel[] models = await forecastRepository.GetForecastByNameAsync(_cityName);
-            if (models == null)
+            ForecastModel forecastModel = await forecastRepository.GetForecastByNameAsync(_cityName);
+            if (forecastModel == null)
             {
                 return "no data";
             }
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"{_cityName} weather forecast:");
-            int i = 1;
-            foreach (var model in models) if (i <= _forecastDays)
-            {
-                sb.Append($"Day {i++} ({model.Date:dd.MM.yyyy}): ");
-                sb.AppendLine(_responseBuilder.WeatherStringByTemp(model));
-            }
-            return sb.ToString();
+            return new ResponseBuilder().WeatherStringByTemp(forecastModel, _forecastDays);
         }
     }
 }

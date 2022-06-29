@@ -1,10 +1,9 @@
 ﻿using Exadel.Forecast.DAL.Interfaces;
 using Exadel.Forecast.DAL.Models;
-using Exadel.Forecast.DAL.Models.OpenWeather;
 using Exadel.Forecast.DAL.Models.Weatherapi;
+using Exadel.Forecast.DAL.Services;
 using Exadel.Forecast.Domain;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Exadel.Forecast.DAL.Repositories
@@ -32,7 +31,7 @@ namespace Exadel.Forecast.DAL.Repositories
             return currentDebugModel;
         }
 
-        public Task<CurrentModel[]> GetForecastByNameAsync(string cityName)
+        public Task<ForecastModel> GetForecastByNameAsync(string cityName)
         {
             throw new NotImplementedException();
         }

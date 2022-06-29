@@ -1,7 +1,9 @@
-﻿namespace Exadel.Forecast.Domain.Interfaces
+﻿using System.Collections.Generic;
+
+namespace Exadel.Forecast.Domain.Interfaces
 {
     public interface IForecastModel
     {
-        IDayForecastModel[] GetDaysForecastModel();
+        ForecastModel GetForecastModel();
     }
 }

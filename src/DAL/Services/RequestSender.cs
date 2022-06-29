@@ -7,7 +7,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Exadel.Forecast.DAL
+namespace Exadel.Forecast.DAL.Services
 {
     public class RequestSender<T>
     {
@@ -31,9 +31,9 @@ namespace Exadel.Forecast.DAL
         {
             try
             {
-                await Get();
+                return await Get();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // Logger(ex.Message)
                 Console.WriteLine(ex.Message);
@@ -51,7 +51,7 @@ namespace Exadel.Forecast.DAL
             try
             {
                 T model = await Get();
-                if(model != null)
+                if (model != null)
                 {
                     debugModel.Model = model;
                 }
