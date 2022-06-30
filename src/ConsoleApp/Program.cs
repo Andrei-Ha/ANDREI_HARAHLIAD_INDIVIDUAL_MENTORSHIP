@@ -32,6 +32,12 @@ namespace Exadel.Forecast.ConsoleApp
                 switch (input)
                 {
                     case "1":
+                        var currentStrategy = new CurrentWeatherStrategy();
+                        var currentCommandBuilder = new CurrentCommandCmdBuilder(_configuration);
+                        var currentCommand = await currentCommandBuilder.BuildCommand();
+
+                        var result = await currentStrategy.Execute(currentCommand);
+
                         _command = CurrentWeather();
                         break;
                     case "2":

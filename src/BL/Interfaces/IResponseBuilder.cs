@@ -12,4 +12,11 @@ namespace Exadel.Forecast.BL.Interfaces
         string BuildForecast(ForecastModel model, int amountOfDays);
         string BuildMaxCurrent(List<DebugModel<CurrentModel>> model, bool debugInfo = false);
     }
+
+
+    public interface IResponseBuilder<TModel, TResponse>
+        where TModel : class
+    {
+        TResponse BuildResponse(TModel model, bool debugInfo = false);
+    }
 }

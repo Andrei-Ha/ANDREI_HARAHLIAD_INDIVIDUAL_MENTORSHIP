@@ -45,7 +45,7 @@ namespace Exadel.Forecast.BL.Services
 
                 if (!_temperatureValidator.IsValid(dm.Model.Temperature))
                 {
-                    return $"The service returned the unreal temperature!{Environment.NewLine}Exception:{dm.TextException}";
+                    return $"The service returned the wrong temperature!{Environment.NewLine}Exception:{dm.TextException}";
                 }
 
                 return $"In {dm.Model.City} {dm.Model.Temperature} °C.  {GetCommentByTemp(dm.Model.Temperature)}." +
@@ -88,7 +88,7 @@ namespace Exadel.Forecast.BL.Services
                 }
                 else
                 {
-                    debugSB.AppendLine($" --- Error: {dm.TextException} Timer: {dm.RequestDuration} ms.");
+                    debugSB.AppendLine($" --- Exception: {dm.TextException} Timer: {dm.RequestDuration} ms.");
                     failCount++;
                 }
             }

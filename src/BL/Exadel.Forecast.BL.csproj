@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\CurrentCommandBuilder.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Interfaces\NewFile1.txt" />
+    <None Remove="Services\NewFile1.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DAL\Exadel.Forecast.DAL.csproj" />
     <ProjectReference Include="..\Models\Exadel.Forecast.Models.csproj" />
   </ItemGroup>
