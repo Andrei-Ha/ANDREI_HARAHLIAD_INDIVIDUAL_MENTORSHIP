@@ -2,7 +2,7 @@
 using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.DAL.Models.Weatherapi;
 using Exadel.Forecast.DAL.Services;
-using Exadel.Forecast.Domain;
+using Exadel.Forecast.Domain.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -17,7 +17,7 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public async Task<DebugModel<CurrentModel>> GetTempByNameAsync(string cityName)
+        public async Task<DebugModel<CurrentModel>> GetCurrentWeatherAsync(string cityName)
         {
             string webUrl = $"http://api.weatherapi.com/v1/current.json?key={_apiKey}&q={cityName}";
             var requestSender = new RequestSender<WeatherapiCurrentModel>(webUrl);
@@ -31,7 +31,7 @@ namespace Exadel.Forecast.DAL.Repositories
             return currentDebugModel;
         }
 
-        public Task<ForecastModel> GetForecastByNameAsync(string cityName)
+        public Task<ForecastModel> GetWeatherForecastAsync(string cityName)
         {
             throw new NotImplementedException();
         }

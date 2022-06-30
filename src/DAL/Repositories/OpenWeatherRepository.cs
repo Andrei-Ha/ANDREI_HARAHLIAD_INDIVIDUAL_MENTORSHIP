@@ -2,7 +2,7 @@
 using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.DAL.Models.OpenWeather;
 using Exadel.Forecast.DAL.Services;
-using Exadel.Forecast.Domain;
+using Exadel.Forecast.Domain.Models;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -18,7 +18,7 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public async Task<DebugModel<CurrentModel>> GetTempByNameAsync(string cityName)
+        public async Task<DebugModel<CurrentModel>> GetCurrentWeatherAsync(string cityName)
         {
             string webUrl = $"https://api.openweathermap.org/data/2.5/weather?q={cityName}&APPID={_apiKey}&units=metric";
             var requestSender = new RequestSender<OpenWeatherCurrentModel>(webUrl);
@@ -30,7 +30,7 @@ namespace Exadel.Forecast.DAL.Repositories
             return currentDebugModel;
         }
 
-        public Task<ForecastModel> GetForecastByNameAsync(string cityName)
+        public Task<ForecastModel> GetWeatherForecastAsync(string cityName)
         {
             throw new NotImplementedException();
         }

@@ -57,7 +57,8 @@ namespace Exadel.Forecast.ConsoleApp
             ChoosingWeatherProvider();
             Console.WriteLine($"Type the name of city to get the forecast, please");
             string input = Console.ReadLine();
-            return new CurrentWeatherCommand(input, _configuration, new CityValidator(), new TemperatureValidator(), new ResponseBuilder());
+            return new CurrentWeatherCommand
+                (input, _configuration, new CityValidator(), new ResponseBuilder(new TemperatureValidator()));
         }
 
         private static ICommand WeatherForecast() 
@@ -95,7 +96,8 @@ namespace Exadel.Forecast.ConsoleApp
                 }
             }
 
-            return new ForecastWeatherCommand(input, amountOfDays, _configuration, new CityValidator(), new ResponseBuilder());
+            return new ForecastWeatherCommand
+                (input, amountOfDays, _configuration, new CityValidator(), new ResponseBuilder(new TemperatureValidator()));
         }
 
         private static ICommand FindMaxTemperature()
@@ -103,7 +105,8 @@ namespace Exadel.Forecast.ConsoleApp
             _configuration.SetDefaultForecastApi(ForecastApi.OpenWeather);
             Console.WriteLine($"Enter city names separated by commas to get the maximum temperature.");
             string input = Console.ReadLine();
-            return new FindMaxTemperatureCommand(input, _configuration, new CityValidator(), new TemperatureValidator());
+            return new FindMaxTemperatureCommand
+                (input, _configuration, new CityValidator(), new ResponseBuilder(new TemperatureValidator()));
         }
 
         private static void InitConfiguration()

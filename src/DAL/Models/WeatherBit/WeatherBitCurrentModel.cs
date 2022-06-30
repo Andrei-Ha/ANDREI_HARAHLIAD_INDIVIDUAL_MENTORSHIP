@@ -1,6 +1,6 @@
 ﻿using Exadel.Forecast.DAL.Interfaces;
-using Exadel.Forecast.Domain;
 using Exadel.Forecast.Domain.Interfaces;
+using Exadel.Forecast.Domain.Models;
 using System;
 
 namespace Exadel.Forecast.DAL.Models.WeatherBit

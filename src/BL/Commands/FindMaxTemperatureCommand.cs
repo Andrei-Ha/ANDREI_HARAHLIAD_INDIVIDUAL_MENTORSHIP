@@ -1,9 +1,9 @@
 ﻿using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.DAL.Models;
-using Exadel.Forecast.Domain;
+using Exadel.Forecast.Domain.Models;
 using Exadel.Forecast.Models.Interfaces;
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,21 +14,21 @@ namespace Exadel.Forecast.BL.Commands
     {
         private readonly IConfiguration _configuration;
         private readonly IValidator<string> _cityValidator;
-        private readonly IValidator<double> _temperatureValidator;
         private readonly string _cityNames;
+        private readonly IResponseBuilder _responseBuilder;
 
         public FindMaxTemperatureCommand
             (
                 string cityNames,
                 IConfiguration configuration,
                 IValidator<string> cityValidator,
-                IValidator<double> temperatureValidator
+                IResponseBuilder responseBuilder
             )
         {
             _configuration = configuration;
             _cityValidator = cityValidator;
-            _temperatureValidator = temperatureValidator;
             _cityNames = cityNames;
+            _responseBuilder = responseBuilder;
         }
 
         public async Task<string> GetResultAsync()
@@ -40,60 +40,15 @@ namespace Exadel.Forecast.BL.Commands
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
             string[] cityNames = _cityNames.Split(',').Select(p => p.Trim()).ToArray();
-            Task<DebugModel<CurrentModel>>[] tasks = new Task<DebugModel<CurrentModel>>[cityNames.Length];
-            Stopwatch stopwatchAll = new Stopwatch();
-            stopwatchAll.Start();
-            for (int i = 0; i < cityNames.Length; i++)
+            List<Task<DebugModel<CurrentModel>>> tasksList = new List<Task<DebugModel<CurrentModel>>>();
+
+            foreach (var cityName in cityNames)
             {
-                tasks[i] = forecastRepository.GetTempByNameAsync(cityNames[i]);
-            }
-            DebugModel<CurrentModel>[] responses = await Task.WhenAll(tasks);
-            stopwatchAll.Stop();
-
-            double maxTemp = -273;
-            string cityMaxTemp = string.Empty;
-            int successCount = 0, failCount = 0;
-            StringBuilder debugSB = new StringBuilder($"Debug info:{Environment.NewLine}");
-
-            for (int i = 0; i < cityNames.Length; i++)
-            {
-                if (_temperatureValidator.IsValid(responses[i].Model.Temperature))
-                {
-                    if (responses[i].Model.Temperature > maxTemp)
-                    {
-                        maxTemp = responses[i].Model.Temperature;
-                        cityMaxTemp = responses[i].Model.City;
-                    }
-
-                    debugSB.AppendLine($" --- City: {responses[i].Model.City}. Temperature: {responses[i].Model.Temperature}. Timer: {responses[i].RequestDuration} ms.");
-                    successCount++;
-                }
-                else
-                {
-                    debugSB.AppendLine($" --- City: {responses[i].Model.City}. Error: {responses[i].TextException} Timer: {responses[i].RequestDuration} ms.");
-                    failCount++; 
-                }
+                tasksList.Add(forecastRepository.GetCurrentWeatherAsync(cityName));
             }
 
-            string result;
-
-            if (maxTemp > -273)
-            {
-                result = $"City with the highest temperature {maxTemp} °C: {cityMaxTemp}. Successful request count: {successCount}, failed: {failCount}.";
-            }
-            else
-            {
-                result = $"Error, no successful requests.Failed requests count: {failCount}";
-            }
-
-            result += " Time: " + stopwatchAll.ElapsedMilliseconds + " milliseconds";
-
-            if (_configuration.DebugInfo)
-            {
-                result += Environment.NewLine + debugSB.ToString();
-            }
-
-            return result;
+            var debugCurrentModelList = (await Task.WhenAll(tasksList)).ToList();
+            return _responseBuilder.BuildMaxCurrent(debugCurrentModelList, _configuration.DebugInfo);
         }
     }
 }

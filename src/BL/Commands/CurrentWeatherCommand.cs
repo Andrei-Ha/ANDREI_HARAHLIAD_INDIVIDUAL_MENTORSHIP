@@ -11,7 +11,6 @@ namespace Exadel.Forecast.BL.Commands
     {
         private readonly IConfiguration _configuration;
         private readonly IValidator<string> _cityValidator;
-        private readonly IValidator<double> _temperatureValidator;
         private readonly IResponseBuilder _responseBuilder;
         private readonly string _cityName;
 
@@ -20,13 +19,11 @@ namespace Exadel.Forecast.BL.Commands
                 string cityName,
                 IConfiguration configuration,
                 IValidator<string> cityValidator,
-                IValidator<double> temperatureValidator,
                 IResponseBuilder responseBuilder
             )
         {
             _configuration = configuration;
             _cityValidator = cityValidator;
-            _temperatureValidator = temperatureValidator;
             _responseBuilder = responseBuilder;
             _cityName = cityName;
         }
@@ -39,14 +36,7 @@ namespace Exadel.Forecast.BL.Commands
             }
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
-            var debugModel = await forecastRepository.GetTempByNameAsync(_cityName);
-
-            /*var temperature = model.Model.Temperature;
-
-            if (!_temperatureValidator.IsValid(temperature))
-            {
-                return $"There is no forecast for your city!{Environment.NewLine}Exception:{model.TextException}";
-            }*/
+            var debugModel = await forecastRepository.GetCurrentWeatherAsync(_cityName);
 
             return _responseBuilder.BuildCurrent(debugModel, _configuration.DebugInfo);
         }

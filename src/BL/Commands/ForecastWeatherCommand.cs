@@ -1,6 +1,6 @@
 ﻿using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.BL.Services;
-using Exadel.Forecast.Domain;
+using Exadel.Forecast.Domain.Models;
 using Exadel.Forecast.Models.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -41,7 +41,7 @@ namespace Exadel.Forecast.BL.Commands
             }
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
-            ForecastModel forecastModel = await forecastRepository.GetForecastByNameAsync(_cityName);
+            ForecastModel forecastModel = await forecastRepository.GetWeatherForecastAsync(_cityName);
 
             if (forecastModel == null)
             {

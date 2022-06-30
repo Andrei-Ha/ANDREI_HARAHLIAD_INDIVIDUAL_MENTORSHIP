@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Exadel.Forecast.Domain.Models;
+using System.Collections.Generic;
 
 namespace Exadel.Forecast.Domain.Interfaces
 {

@@ -2,7 +2,7 @@
 using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.DAL.Models.WeatherBit;
 using Exadel.Forecast.DAL.Services;
-using Exadel.Forecast.Domain;
+using Exadel.Forecast.Domain.Models;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -19,7 +19,7 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public async Task<ForecastModel> GetForecastByNameAsync(string cityName)
+        public async Task<ForecastModel> GetWeatherForecastAsync(string cityName)
         {
             string webUrl = $"https://api.weatherbit.io/v2.0/forecast/daily?key={_apiKey}&city={cityName}";
             var requestSender = new RequestSender<WeatherBitForecastModel>(webUrl);
@@ -32,7 +32,7 @@ namespace Exadel.Forecast.DAL.Repositories
             return null;
         }
 
-        public Task<DebugModel<CurrentModel>> GetTempByNameAsync(string cityName)
+        public Task<DebugModel<CurrentModel>> GetCurrentWeatherAsync(string cityName)
         {
             throw new NotImplementedException();
         }

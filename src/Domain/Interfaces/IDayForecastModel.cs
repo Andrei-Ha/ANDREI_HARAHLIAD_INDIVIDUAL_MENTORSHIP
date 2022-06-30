@@ -1,4 +1,6 @@
-﻿namespace Exadel.Forecast.Domain.Interfaces
+﻿using Exadel.Forecast.Domain.Models;
+
+namespace Exadel.Forecast.Domain.Interfaces
 {
     public interface IDayForecastModel
     {
