@@ -1,6 +1,7 @@
 ﻿using Exadel.Forecast.BL;
 using Exadel.Forecast.BL.Commands;
 using Exadel.Forecast.BL.Interfaces;
+using Exadel.Forecast.BL.Services;
 using Exadel.Forecast.BL.Validators;
 using Exadel.Forecast.Models.Configuration;
 using Exadel.Forecast.Models.Interfaces;
@@ -64,11 +65,11 @@ namespace Exadel.Forecast.ConsoleApp
             _configuration.SetDefaultForecastApi(ForecastApi.WeatherBit);
             string minValue = System.Configuration.ConfigurationManager.AppSettings["MinValue"];
             string maxValue = System.Configuration.ConfigurationManager.AppSettings["MaxValue"];
-            int daysNumber = 0;
+            int amountOfDays = 0;
             string input;
             while (true)
             {
-                if (daysNumber == 0)
+                if (amountOfDays == 0)
                 {
                     Console.WriteLine($"Set the number of forecast days between {minValue} and {maxValue}!");
                     input = Console.ReadLine();
@@ -78,7 +79,7 @@ namespace Exadel.Forecast.ConsoleApp
                         var forecastNumberValidator = new ForecastNumberValidator(int.Parse(minValue), int.Parse(maxValue));
                         if (forecastNumberValidator.IsValid(value))
                         {
-                            daysNumber = value;
+                            amountOfDays = value;
                         }
                         else
                         {
@@ -94,7 +95,7 @@ namespace Exadel.Forecast.ConsoleApp
                 }
             }
 
-            return new ForecastWeatherCommand(input, daysNumber, _configuration, new CityValidator(), new ResponseBuilder());
+            return new ForecastWeatherCommand(input, amountOfDays, _configuration, new CityValidator(), new ResponseBuilder());
         }
 
         private static ICommand FindMaxTemperature()

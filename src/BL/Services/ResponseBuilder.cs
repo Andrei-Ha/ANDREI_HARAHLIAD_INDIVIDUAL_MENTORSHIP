@@ -6,8 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Exadel.Forecast.BL
-{   
+namespace Exadel.Forecast.BL.Services
+{
     public class ResponseBuilder : IResponseBuilder
     {
         private string GetCommentByTemp(double temperature)
@@ -27,7 +27,7 @@ namespace Exadel.Forecast.BL
             }
         }
 
-        public string WeatherStringByTemp(DebugModel<CurrentModel> dm, bool debugInfo = false)
+        public string BuildCurrent(DebugModel<CurrentModel> dm, bool debugInfo = false)
         {
             string info = debugInfo ? $" Request duration: {dm.RequestDuration}" : string.Empty;
             if (dm.Model == null)
@@ -41,17 +41,22 @@ namespace Exadel.Forecast.BL
             }
         }
 
-        public string WeatherStringByTemp(ForecastModel fm, int forecastDays = int.MaxValue)
+        public string BuildForecast(ForecastModel fm, int amountOfDays)
         {
             var sb = new StringBuilder();
             sb.AppendLine($"{fm.City} maximum daily temperature forecast:");
             int i = 1;
-            foreach (var day in fm.Days) if (i <= forecastDays)
+            foreach (var day in fm.Days) if (i <= amountOfDays)
                 {
                     sb.Append($"Day {i++} ({day.Date:dd.MM.yyyy}): ");
                     sb.AppendLine($"In {fm.City} {day.MaxTemperature} °C. {GetCommentByTemp(day.MaxTemperature)}");
                 }
             return sb.ToString();
+        }
+
+        public string BuildMaxCurrent(List<DebugModel<CurrentModel>> model)
+        {
+            throw new NotImplementedException();
         }
     }
 }

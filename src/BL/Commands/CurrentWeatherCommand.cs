@@ -48,7 +48,7 @@ namespace Exadel.Forecast.BL.Commands
                 return $"There is no forecast for your city!{Environment.NewLine}Exception:{model.TextException}";
             }*/
 
-            return _responseBuilder.WeatherStringByTemp(debugModel, _configuration.DebugInfo);
+            return _responseBuilder.BuildCurrent(debugModel, _configuration.DebugInfo);
         }
     }
 }
