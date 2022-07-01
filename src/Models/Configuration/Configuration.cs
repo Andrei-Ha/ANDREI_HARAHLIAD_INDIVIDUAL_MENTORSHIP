@@ -17,6 +17,10 @@ namespace Exadel.Forecast.Models.Configuration
             } 
         }
 
+        public int MinAmountOfDays { get; set; }
+
+        public int MaxAmountOfDays { get; set; }
+
         public string WeatherApiKey { private get; set; }
 
         public string WeatherBitKey { private get; set; }

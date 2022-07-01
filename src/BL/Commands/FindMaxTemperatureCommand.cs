@@ -13,7 +13,6 @@ namespace Exadel.Forecast.BL.Commands
     public class FindMaxTemperatureCommand : ICommand
     {
         private readonly IConfiguration _configuration;
-        private readonly IValidator<string> _cityValidator;
         private readonly string _cityNames;
         private readonly IResponseBuilder _responseBuilder;
 
@@ -21,23 +20,16 @@ namespace Exadel.Forecast.BL.Commands
             (
                 string cityNames,
                 IConfiguration configuration,
-                IValidator<string> cityValidator,
                 IResponseBuilder responseBuilder
             )
         {
             _configuration = configuration;
-            _cityValidator = cityValidator;
             _cityNames = cityNames;
             _responseBuilder = responseBuilder;
         }
 
         public async Task<string> GetResultAsync()
         {
-            if (!_cityValidator.IsValid(_cityNames))
-            {
-                return "You need to type name of the city!";
-            }
-
             var forecastRepository = _configuration.GetDefaultForecastApi();
             string[] cityNames = _cityNames.Split(',').Select(p => p.Trim()).ToArray();
             List<Task<DebugModel<CurrentModel>>> tasksList = new List<Task<DebugModel<CurrentModel>>>();

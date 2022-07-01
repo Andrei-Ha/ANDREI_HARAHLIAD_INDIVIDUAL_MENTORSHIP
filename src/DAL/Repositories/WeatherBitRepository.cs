@@ -19,9 +19,14 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public async Task<ForecastModel> GetWeatherForecastAsync(string cityName)
+        public Task<DebugModel<CurrentModel>> GetCurrentWeatherAsync(string cityName)
         {
-            string webUrl = $"https://api.weatherbit.io/v2.0/forecast/daily?key={_apiKey}&city={cityName}";
+            throw new NotImplementedException();
+        }
+
+        public async Task<ForecastModel> GetWeatherForecastAsync(string cityName, int amountOfDays)
+        {
+            string webUrl = $"https://api.weatherbit.io/v2.0/forecast/daily?key={_apiKey}&city={cityName}&days={amountOfDays}";
             var requestSender = new RequestSender<WeatherBitForecastModel>(webUrl);
             var model = await requestSender.GetModelAsync();
             if (model != null)
@@ -30,11 +35,6 @@ namespace Exadel.Forecast.DAL.Repositories
             }
 
             return null;
-        }
-
-        public Task<DebugModel<CurrentModel>> GetCurrentWeatherAsync(string cityName)
-        {
-            throw new NotImplementedException();
         }
     }
 }

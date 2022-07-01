@@ -10,7 +10,6 @@ namespace Exadel.Forecast.BL.Commands
     public class CurrentWeatherCommand : ICommand
     {
         private readonly IConfiguration _configuration;
-        private readonly IValidator<string> _cityValidator;
         private readonly IResponseBuilder _responseBuilder;
         private readonly string _cityName;
 
@@ -18,23 +17,16 @@ namespace Exadel.Forecast.BL.Commands
             (
                 string cityName,
                 IConfiguration configuration,
-                IValidator<string> cityValidator,
                 IResponseBuilder responseBuilder
             )
         {
             _configuration = configuration;
-            _cityValidator = cityValidator;
             _responseBuilder = responseBuilder;
             _cityName = cityName;
         }
 
         public async Task<string> GetResultAsync()
         {
-            if (!_cityValidator.IsValid(_cityName))
-            {
-                return "An invalid city name was entered!";
-            }
-
             var forecastRepository = _configuration.GetDefaultForecastApi();
             var debugModel = await forecastRepository.GetCurrentWeatherAsync(_cityName);
 

@@ -9,7 +9,7 @@ namespace Exadel.Forecast.BL.Interfaces
     public interface IResponseBuilder
     {
         string BuildCurrent(DebugModel<CurrentModel> model, bool debugInfo = false);
-        string BuildForecast(ForecastModel model, int amountOfDays);
+        string BuildForecast(ForecastModel model);
         string BuildMaxCurrent(List<DebugModel<CurrentModel>> model, bool debugInfo = false);
     }
 

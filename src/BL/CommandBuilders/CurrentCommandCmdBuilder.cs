@@ -1,4 +1,5 @@
 ﻿using Exadel.Forecast.BL.Commands;
+using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.BL.Services;
 using Exadel.Forecast.BL.Validators;
 using Exadel.Forecast.DAL.Models;
@@ -12,19 +13,19 @@ using System.Threading.Tasks;
 namespace Exadel.Forecast.BL.CommandBuilders
 {
 
-    public class CurrentCmdCommandBuilder : BaseCmdCommandBuilder<CurrentWeatherCommand>
+    public class CurrentCommandCmdBuilder : BaseCommandCmdBuilder<CurrentWeatherCommand>
     {
-        public CurrentCmdCommandBuilder(IConfiguration configuration) : base(configuration)
+        public CurrentCommandCmdBuilder(IConfiguration configuration, IValidator<string> validator) : base(configuration, validator)
         {
 
         }
+
         public override async Task<CurrentWeatherCommand> BuildCommand()
         {
-            ChoosingWeatherProvider();
-            Console.WriteLine($"Type the name of city to get the forecast, please");
-            string input = Console.ReadLine();
-            return new CurrentWeatherCommand
-                (input, Configuration, new CityValidator(), new ResponseBuilder(new TemperatureValidator()));
+            SetWeatherProviderFromUser();
+            SetCityNameFromUser();
+            
+            return new CurrentWeatherCommand(_cityName, Configuration, new ResponseBuilder(new TemperatureValidator()));
         }
     }
 }

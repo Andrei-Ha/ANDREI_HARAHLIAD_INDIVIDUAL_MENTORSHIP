@@ -14,7 +14,7 @@ namespace Exadel.Forecast.BL.Services
             throw new NotImplementedException();
         }
 
-        public string BuildForecast(ForecastModel model, int amountOfDays)
+        public string BuildForecast(ForecastModel model)
         {
             throw new NotImplementedException();
         }

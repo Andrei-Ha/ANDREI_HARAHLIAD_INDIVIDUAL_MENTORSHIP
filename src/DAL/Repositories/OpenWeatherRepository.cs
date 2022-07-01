@@ -30,7 +30,7 @@ namespace Exadel.Forecast.DAL.Repositories
             return currentDebugModel;
         }
 
-        public Task<ForecastModel> GetWeatherForecastAsync(string cityName)
+        public Task<ForecastModel> GetWeatherForecastAsync(string cityName, int amountOfDays)
         {
             throw new NotImplementedException();
         }

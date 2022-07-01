@@ -6,16 +6,24 @@ using System.Threading.Tasks;
 
 namespace Exadel.Forecast.BL.CommandBuilders
 {
-    public class BaseCmdCommandBuilder<TCommand> : ICommandBuilder<TCommand> where TCommand : ICommand
+    public class BaseCommandCmdBuilder<TCommand> : ICommandBuilder<TCommand> where TCommand : ICommand
     {
         protected IConfiguration Configuration;
+        protected IValidator<string> _cityValidator;
+        protected string _cityName;
 
-        public BaseCmdCommandBuilder(IConfiguration configuration)
+        public BaseCommandCmdBuilder(IConfiguration configuration, IValidator<string> cityValidator)
         {
             Configuration = configuration;
+            _cityValidator = cityValidator;
         }
 
-        protected void ChoosingWeatherProvider()
+        public void SetWeatherProvider(ForecastApi weatherProvider)
+        {
+            Configuration.SetDefaultForecastApi(weatherProvider);
+        }
+
+        public void SetWeatherProviderFromUser()
         {
             Console.WriteLine($"PLease choose weather provider:");
             Console.WriteLine($"1 - OpenWeather");
@@ -43,7 +51,28 @@ namespace Exadel.Forecast.BL.CommandBuilders
             }
 
             Console.WriteLine("You entered an invalid number!");
-            ChoosingWeatherProvider();
+            SetWeatherProviderFromUser();
+        }
+
+        public void SetCityName(string cityName)
+        {
+            _cityName = cityName;
+        }
+
+        public void SetCityNameFromUser(string invite = "Type the name of city to get the forecast, please")
+        {
+            Console.WriteLine(invite);
+            string input = Console.ReadLine();
+
+            if (!_cityValidator.IsValid(input))
+            {
+                Console.WriteLine("An invalid city name was entered!");
+                SetCityNameFromUser();
+            }
+            else
+            {
+                _cityName = input;
+            }
         }
 
         public virtual Task<TCommand> BuildCommand()

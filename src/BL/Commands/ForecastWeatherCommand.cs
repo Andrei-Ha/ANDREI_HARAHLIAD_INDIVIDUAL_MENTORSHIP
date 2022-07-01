@@ -14,7 +14,6 @@ namespace Exadel.Forecast.BL.Commands
         private readonly string _cityName;
         private readonly int _amountOfDays;
         private readonly IConfiguration _configuration;
-        private readonly IValidator<string> _cityValidator;
         private readonly IResponseBuilder _responseBuilder;
 
         public ForecastWeatherCommand
@@ -22,33 +21,26 @@ namespace Exadel.Forecast.BL.Commands
                 string cityName,
                 int amountOfDays,
                 IConfiguration configuration,
-                IValidator<string> cityValidator,
                 IResponseBuilder responseBuilder
             )
         {
             _cityName = cityName;
             _amountOfDays = amountOfDays;
             _configuration = configuration;
-            _cityValidator = cityValidator;
             _responseBuilder = responseBuilder;
         }
 
         public async Task<string> GetResultAsync()
         {
-            if (!_cityValidator.IsValid(_cityName))
-            {
-                return "You need to type name of the city!";
-            }
-
             var forecastRepository = _configuration.GetDefaultForecastApi();
-            ForecastModel forecastModel = await forecastRepository.GetWeatherForecastAsync(_cityName);
+            ForecastModel forecastModel = await forecastRepository.GetWeatherForecastAsync(_cityName, _amountOfDays);
 
             if (forecastModel == null)
             {
                 return "no data";
             }
 
-            return _responseBuilder.BuildForecast(forecastModel, _amountOfDays);
+            return _responseBuilder.BuildForecast(forecastModel);
         }
     }
 }

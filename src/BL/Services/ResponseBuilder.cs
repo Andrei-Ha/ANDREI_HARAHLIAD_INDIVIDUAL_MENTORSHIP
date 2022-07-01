@@ -53,12 +53,12 @@ namespace Exadel.Forecast.BL.Services
             }
         }
 
-        public string BuildForecast(ForecastModel fm, int amountOfDays)
+        public string BuildForecast(ForecastModel fm)
         {
             var sb = new StringBuilder();
             sb.AppendLine($"{fm.City} maximum daily temperature forecast:");
             int i = 1;
-            foreach (var day in fm.Days) if (i <= amountOfDays)
+            foreach (var day in fm.Days)
                 {
                     sb.Append($"Day {i++} ({day.Date:dd.MM.yyyy}): ");
                     sb.AppendLine($"In {fm.City} {day.MaxTemperature} °C. {GetCommentByTemp(day.MaxTemperature)}");
