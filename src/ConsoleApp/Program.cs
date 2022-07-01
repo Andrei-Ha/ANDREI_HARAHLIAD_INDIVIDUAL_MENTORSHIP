@@ -1,7 +1,9 @@
 ﻿using Exadel.Forecast.BL;
+using Exadel.Forecast.BL.CommandBuilders;
 using Exadel.Forecast.BL.Commands;
 using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.BL.Services;
+using Exadel.Forecast.BL.Strategies;
 using Exadel.Forecast.BL.Validators;
 using Exadel.Forecast.Models.Configuration;
 using Exadel.Forecast.Models.Interfaces;
@@ -32,11 +34,11 @@ namespace Exadel.Forecast.ConsoleApp
                 switch (input)
                 {
                     case "1":
-                        var currentStrategy = new CurrentWeatherStrategy();
-                        var currentCommandBuilder = new CurrentCommandCmdBuilder(_configuration);
-                        var currentCommand = await currentCommandBuilder.BuildCommand();
+                        //IWeatherStrategy<CurrentWeatherCommand,string> currentStrategy = new CurrentWeatherStrategy();
+                        ICommandBuilder<CurrentWeatherCommand> currentCommandBuilder = new CurrentCmdCommandBuilder(_configuration);
+                        CurrentWeatherCommand currentCommand = await currentCommandBuilder.BuildCommand();
 
-                        var result = await currentStrategy.Execute(currentCommand);
+                        //string result = await currentStrategy.Execute(currentCommand);
 
                         _command = CurrentWeather();
                         break;
