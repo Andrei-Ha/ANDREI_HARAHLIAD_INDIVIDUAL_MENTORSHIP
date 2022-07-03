@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Exadel.Forecast.DAL.Services
@@ -19,9 +20,9 @@ namespace Exadel.Forecast.DAL.Services
             _webUrl = webUrl;
         }
 
-        private async Task<T> Get()
+        private async Task<T> Get(CancellationToken token = default)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync(_webUrl);
+            HttpResponseMessage response = await _httpClient.GetAsync(_webUrl, token);
             response.EnsureSuccessStatusCode();
             string strModel = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(strModel);
@@ -42,7 +43,7 @@ namespace Exadel.Forecast.DAL.Services
             return default;
         }
 
-        public async Task<DebugModel<T>> GetDebugModelAsync()
+        public async Task<DebugModel<T>> GetDebugModelAsync(CancellationToken token = default)
         {
             var debugModel = new DebugModel<T>();
             Stopwatch stopwatch = new Stopwatch();
@@ -50,7 +51,7 @@ namespace Exadel.Forecast.DAL.Services
 
             try
             {
-                T model = await Get();
+                T model = await Get(token);
                 if (model != null)
                 {
                     debugModel.Model = model;

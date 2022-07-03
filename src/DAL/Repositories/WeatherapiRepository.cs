@@ -4,6 +4,7 @@ using Exadel.Forecast.DAL.Models.Weatherapi;
 using Exadel.Forecast.DAL.Services;
 using Exadel.Forecast.Domain.Models;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Exadel.Forecast.DAL.Repositories
@@ -17,7 +18,7 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public async Task<DebugModel<CurrentModel>> GetCurrentWeatherAsync(string cityName)
+        public async Task<DebugModel<CurrentModel>> GetCurrentWeatherAsync(string cityName, CancellationToken token = default)
         {
             string webUrl = $"http://api.weatherapi.com/v1/current.json?key={_apiKey}&q={cityName}";
             var requestSender = new RequestSender<WeatherapiCurrentModel>(webUrl);

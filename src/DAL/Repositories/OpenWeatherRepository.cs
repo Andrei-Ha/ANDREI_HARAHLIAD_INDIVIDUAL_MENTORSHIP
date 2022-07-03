@@ -5,6 +5,7 @@ using Exadel.Forecast.DAL.Services;
 using Exadel.Forecast.Domain.Models;
 using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Exadel.Forecast.DAL.Repositories
@@ -18,11 +19,11 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public async Task<DebugModel<CurrentModel>> GetCurrentWeatherAsync(string cityName)
+        public async Task<DebugModel<CurrentModel>> GetCurrentWeatherAsync(string cityName, CancellationToken token = default) 
         {
             string webUrl = $"https://api.openweathermap.org/data/2.5/weather?q={cityName}&APPID={_apiKey}&units=metric";
             var requestSender = new RequestSender<OpenWeatherCurrentModel>(webUrl);
-            DebugModel<OpenWeatherCurrentModel> openWeatherDebugModel = await requestSender.GetDebugModelAsync();
+            DebugModel<OpenWeatherCurrentModel> openWeatherDebugModel = await requestSender.GetDebugModelAsync(token);
             var currentDebugModel = new DebugModel<CurrentModel>() {
                 RequestDuration = openWeatherDebugModel.RequestDuration,
                 TextException = openWeatherDebugModel.TextException,

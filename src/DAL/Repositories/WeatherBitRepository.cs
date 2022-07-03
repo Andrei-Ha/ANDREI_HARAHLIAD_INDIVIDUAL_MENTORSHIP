@@ -6,6 +6,7 @@ using Exadel.Forecast.Domain.Models;
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Exadel.Forecast.DAL.Repositories
@@ -19,7 +20,7 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public Task<DebugModel<CurrentModel>> GetCurrentWeatherAsync(string cityName)
+        public Task<DebugModel<CurrentModel>> GetCurrentWeatherAsync(string cityName, CancellationToken token = default)
         {
             throw new NotImplementedException();
         }
