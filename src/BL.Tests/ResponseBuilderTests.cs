@@ -1,4 +1,5 @@
 using Exadel.Forecast.BL.Interfaces;
+using Exadel.Forecast.BL.Services;
 using Moq;
 namespace Exadel.Forecast.BL.Tests
 {

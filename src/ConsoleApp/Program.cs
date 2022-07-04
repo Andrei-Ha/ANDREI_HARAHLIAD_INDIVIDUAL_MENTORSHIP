@@ -1,12 +1,12 @@
 ﻿using Exadel.Forecast.BL;
+using Exadel.Forecast.BL.CommandBuilders;
 using Exadel.Forecast.BL.Commands;
 using Exadel.Forecast.BL.Interfaces;
+using Exadel.Forecast.BL.Strategies;
 using Exadel.Forecast.BL.Validators;
 using Exadel.Forecast.Models.Configuration;
 using Exadel.Forecast.Models.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,123 +15,67 @@ namespace Exadel.Forecast.ConsoleApp
     internal class Program
     {
         private static IConfiguration _configuration;
-        private static ICommand _command;
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             InitConfiguration();
+            ICommandBuilder<WeatherCommand> commandBuilder;
+            ICommand command;
+            IWeatherStrategy<string> strategy;
+            string output = string.Empty;
             string input = string.Empty;
             while (input != "0")
             {
                 StringBuilder sb = new StringBuilder($" --- Menu --- {Environment.NewLine}");
                 sb.AppendLine("1 - Current weather");
                 sb.AppendLine("2 - Weather forecast");
+                sb.AppendLine("3 - Find Max current temperature in cities");
                 sb.AppendLine("0 - Close application");
                 Console.WriteLine(sb.ToString());
                 input = Console.ReadLine();
+
                 switch (input)
                 {
                     case "1":
-                        _command = CurrentWeather();
+                        commandBuilder = new CurrentCommandCmdBuilder(_configuration, new CityValidator());
+                        strategy = new CurrentWeatherStrategy(new TemperatureValidator(), _configuration.DebugInfo);
+                        command = await commandBuilder.BuildCommand();
+                        output = await strategy.Execute(command);
                         break;
                     case "2":
-                        _command = WeatherForecast();
+                        var forecastNumberValidator = new ForecastNumberValidator(_configuration.MinAmountOfDays, _configuration.MaxAmountOfDays);
+                        commandBuilder = new ForecastCommandCmdBuilder(_configuration, new CityValidator(), forecastNumberValidator);
+                        strategy = new ForecastStrategy(new TemperatureValidator(), _configuration.DebugInfo);
+                        command = await commandBuilder.BuildCommand();
+                        output = await strategy.Execute(command);
                         break;
-                    case "0":
-                        _command = new StringCommand("Bye!");
+                    case "3":
+                        commandBuilder = new CurrentCommandCmdBuilder(_configuration, new CityValidator());
+                        strategy = new FindMaxTemperatureStrategy(new TemperatureValidator(), _configuration.DebugInfo);
+                        command = await commandBuilder.BuildCommand();
+                        output = await strategy.Execute(command);
                         break;
                     default:
-                        _command = new StringCommand("Wrong input!");
                         break;
                 }
-
-                Console.WriteLine(_command.GetResult());
+                
+                Console.WriteLine(output);
+                output = string.Empty;
             }
-        }
-
-        private static ICommand CurrentWeather()
-        {
-            ChoosingWeatherProvider();
-            string invitation = $"Type the name of city to get the forecast, please";
-            Console.WriteLine(invitation);
-            string input = Console.ReadLine();
-            return new CurrentWeatherCommand(input, _configuration, new CityValidator(), new TemperatureValidator(), new ResponseBuilder());
-        }
-
-        private static ICommand WeatherForecast() 
-        {
-            _configuration.SetDefaultForecastApi(ForecastApi.WeatherBit);
-            string minValue = System.Configuration.ConfigurationManager.AppSettings["MinValue"];
-            string maxValue = System.Configuration.ConfigurationManager.AppSettings["MaxValue"];
-            int daysNumber = 0;
-            string input;
-            while (true)
-            {
-                if (daysNumber == 0)
-                {
-                    Console.WriteLine($"Set the number of forecast days between {minValue} and {maxValue}! \"0\" - return to previous menu");
-                    input = Console.ReadLine();
-                    if (int.TryParse(input, out int value))
-                    {
-                        var forecastNumberValidator = new ForecastNumberValidator(int.Parse(minValue), int.Parse(maxValue));
-                        if (forecastNumberValidator.IsValid(value))
-                        {
-                            daysNumber = value;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Wrong number!");
-                        }
-                    }
-                }
-                else
-                {
-                    Console.WriteLine($"Type the name of city to get the forecast, please!");
-                    input = Console.ReadLine();
-                    break;
-                }
-            }
-
-            return new ForecastWeatherCommand(input, daysNumber, _configuration, new CityValidator(), new ResponseBuilder());
         }
 
         private static void InitConfiguration()
         {
             _configuration = new Configuration()
             {
+                MinAmountOfDays = int.Parse(System.Configuration.ConfigurationManager.AppSettings["MinValue"]),
+                MaxAmountOfDays = int.Parse(System.Configuration.ConfigurationManager.AppSettings["MaxValue"]),
                 OpenWeatherKey = Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY"),
                 WeatherApiKey = Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY"),
-                WeatherBitKey = Environment.GetEnvironmentVariable("WEATHERBIT_API_KEY")
+                WeatherBitKey = Environment.GetEnvironmentVariable("WEATHERBIT_API_KEY"),
+                DebugInfo = bool.TryParse(System.Configuration.ConfigurationManager.AppSettings["DebugInfo"], out bool value) && value,
+                ExecutionTime = int.Parse(System.Configuration.ConfigurationManager.AppSettings["ExecutionTime"])
             };
-        }
-
-        private static void ChoosingWeatherProvider()
-        {
-            Console.WriteLine($"PLease choose weather provider:");
-            Console.WriteLine($"1 - OpenWeather");
-            Console.WriteLine($"2 - WeatherApi");
-            var input = Console.ReadLine();
-
-            if (int.TryParse(input, out int provider) && provider > 0 && provider < 3)
-            {
-                if (provider == 1)
-                {
-                    _configuration.SetDefaultForecastApi(ForecastApi.OpenWeather);
-                    Console.WriteLine("You have chosen an OpenWeather provider.");
-                    return;
-                }
-                if (provider == 2)
-                {
-                    _configuration.SetDefaultForecastApi(ForecastApi.WeatherApi);
-                    Console.WriteLine("You have chosen a WeatherApi provider.");
-                    return;
-                }
-            }
-            else
-            {
-                Console.WriteLine("You entered an invalid number!");
-                ChoosingWeatherProvider();
-            }
         }
     }
 }

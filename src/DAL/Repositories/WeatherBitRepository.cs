@@ -1,9 +1,13 @@
 ﻿using Exadel.Forecast.DAL.Interfaces;
 using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.DAL.Models.WeatherBit;
+using Exadel.Forecast.DAL.Services;
+using Exadel.Forecast.Domain.Models;
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Exadel.Forecast.DAL.Repositories
 {
@@ -16,27 +20,29 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public ForecastResponseModel[] GetForecastByName(string cityName)
+        public async Task<DebugModel<ForecastModel>> GetForecastAsync(string cityName, int amountOfDays, CancellationToken token = default)
         {
-            string webUrl = $"https://api.weatherbit.io/v2.0/forecast/daily?key={_apiKey}&city={cityName}";
-            var requestSender = new RequestSender<WeatherBitForecastModel>();
-            var model = requestSender.GetModel(webUrl).Result;
-            if (model != null)
+            var forecastModel = new ForecastModel();
+            var forecastDebugModel = new DebugModel<ForecastModel>();
+            string webUrl = $"https://api.weatherbit.io/v2.0/current?key={_apiKey}&city={cityName}";
+            var requestSender = new RequestSender<WeatherBitCurrentModel>(webUrl);
+            var weatherBitCurrentDebugModel = await requestSender.GetDebugModelAsync(token);
+            forecastDebugModel.RequestDuration = weatherBitCurrentDebugModel.RequestDuration;
+            forecastDebugModel.TextException = weatherBitCurrentDebugModel.TextException;
+            forecastDebugModel.Model = weatherBitCurrentDebugModel.Model == null ? default : weatherBitCurrentDebugModel.Model.UpdateForecastModel(forecastModel);
+
+            if (amountOfDays > 0)
             {
-                return model.Data
-                    .Select(p => new ForecastResponseModel()
-                        { 
-                            Temperature = p.MaxTemp, Date = DateTime.ParseExact(p.DateTime, "yyyy-MM-dd", CultureInfo.InvariantCulture) 
-                        })
-                    .ToArray();
+                webUrl = $"https://api.weatherbit.io/v2.0/forecast/daily?key={_apiKey}&city={cityName}&days={amountOfDays}";
+                var newRequestSender = new RequestSender<WeatherBitForecastModel>(webUrl);
+                var weatherBitForecastDebugModel = await newRequestSender.GetDebugModelAsync(token);
+                forecastDebugModel.RequestDuration += weatherBitForecastDebugModel.RequestDuration;
+                forecastDebugModel.TextException += $"{Environment.NewLine}{weatherBitForecastDebugModel.TextException}";
+                forecastDebugModel.Model = weatherBitForecastDebugModel.Model == null ? default : weatherBitForecastDebugModel.Model.UpdateForecastModel(forecastDebugModel.Model);
             }
 
-            return null;
-        }
-
-        public double GetTempByName(string cityName)
-        {
-            throw new NotImplementedException();
+            var result = forecastDebugModel;
+            return result;
         }
     }
 }

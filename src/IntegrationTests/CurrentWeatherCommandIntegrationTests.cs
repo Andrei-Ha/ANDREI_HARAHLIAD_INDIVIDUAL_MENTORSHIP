@@ -18,35 +18,37 @@ namespace Exadel.Forecast.IntegrationTests
         [Theory]
         [InlineData("Minsk")]
         [InlineData("Kiev")]
-        public void GetWeatherByName_ForOpenWeatherRepository_ReturnStringBeginningWithIn(string city)
+        public void GetResult_ForOpenWeatherRepository_ReturnStringBeginningWithIn(string city)
         {
             // Arrange
             _configuration.OpenWeatherKey = Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY");
             _configuration.SetDefaultForecastApi(ForecastApi.OpenWeather);
-            var command = new CurrentWeatherCommand(city, _configuration, new CityValidator(), new TemperatureValidator(), new ResponseBuilder());
+            var command = new CurrentWeatherCommand(
+                city, _configuration, new CityValidator(), new TemperatureValidator(), new ResponseBuilder());
 
             // Act
-            var result = command.GetResult();
+            var result = command.GetResultAsync();
 
             // Assert
-            Assert.StartsWith($"In {city}", result);
+            Assert.StartsWith($"In {city}", result.Result);
         }
 
         [Theory]
         [InlineData("Minsk")]
         [InlineData("Kiev")]
-        public void GetWeatherByName_ForWeatherapiRepository_ReturnStringBeginningWithIn(string city)
+        public void GetResult_ForWeatherapiRepository_ReturnStringBeginningWithIn(string city)
         {
             // Arrange
             _configuration.WeatherApiKey = Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY");
             _configuration.SetDefaultForecastApi(ForecastApi.WeatherApi);
-            var command = new CurrentWeatherCommand(city, _configuration, new CityValidator(), new TemperatureValidator(), new ResponseBuilder());
+            var command = new CurrentWeatherCommand(
+                city, _configuration, new CityValidator(), new TemperatureValidator(), new ResponseBuilder());
 
             // Act
-            var result = command.GetResult();
+            var result = command.GetResultAsync();
 
             // Assert
-            Assert.StartsWith($"In {city}", result);
+            Assert.StartsWith($"In {city}", result.Result);
         }
     }
 }

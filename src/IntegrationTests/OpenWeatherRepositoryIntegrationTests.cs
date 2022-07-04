@@ -15,13 +15,13 @@ namespace Exadel.Forecast.IntegrationTests
         public void GetTempByName_ForCityName_ReturnTemperatureIsMoreThanMinus273(string city)
         {
             // Arrange
-            var repositoru = new OpenWeatherRepository(Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY"));
+            var repository = new OpenWeatherRepository(Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY"));
 
             // Act
-            var result = repositoru.GetTempByName(city);
+            var currentResponseModel = repository.GetTempByNameAsync(city);
 
             // Assert
-            Assert.True(result > -273);
+            Assert.True(currentResponseModel.Result.Temperature > -273);
         }
     }
 }

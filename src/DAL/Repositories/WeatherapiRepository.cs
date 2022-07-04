@@ -1,9 +1,11 @@
 ﻿using Exadel.Forecast.DAL.Interfaces;
 using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.DAL.Models.Weatherapi;
+using Exadel.Forecast.DAL.Services;
+using Exadel.Forecast.Domain.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Exadel.Forecast.DAL.Repositories
 {
@@ -16,27 +18,18 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public ForecastResponseModel[] GetForecastByName(string cityName)
+        public async Task<DebugModel<ForecastModel>> GetForecastAsync(string cityName, int amountOfDays, CancellationToken token = default)
         {
-            throw new NotImplementedException();
-        }
+            var forecastModel = new ForecastModel();
+            var forecastDebugModel = new DebugModel<ForecastModel>();
+            string webUrl = $"https://api.weatherapi.com/v1/forecast.json?key={_apiKey}&q={cityName}&days={amountOfDays}&aqi=no&alerts=no&hour=no";
+            var requestSender = new RequestSender<WeatherapiForecastModel>(webUrl);
+            DebugModel<WeatherapiForecastModel> weatherapiDebugModel = await requestSender.GetDebugModelAsync(token);
+            forecastDebugModel.RequestDuration = weatherapiDebugModel.RequestDuration;
+            forecastDebugModel.TextException = weatherapiDebugModel.TextException;
+            forecastDebugModel.Model = weatherapiDebugModel.Model == null ? default : weatherapiDebugModel.Model.UpdateForecastModel(forecastModel);
 
-        /// <summary>
-        /// Method return the temperature by the city name
-        /// </summary>
-        /// <param name="cityName">name of city</param>
-        /// <returns>Returns -273 if no result</returns>
-        public double GetTempByName(string cityName)
-        {
-            string webUrl = $"http://api.weatherapi.com/v1/current.json?key={_apiKey}&q={cityName}";
-            var requestSender = new RequestSender<WeatherapiDayModel>();
-            var model = requestSender.GetModel(webUrl).Result;
-            if (model != null)
-            {
-                return model.Current.TempC;
-            }
-
-            return -273;
+            return forecastDebugModel;
         }
     }
 }

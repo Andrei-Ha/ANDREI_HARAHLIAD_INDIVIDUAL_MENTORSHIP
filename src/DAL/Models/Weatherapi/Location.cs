@@ -1,4 +1,6 @@
-﻿namespace Exadel.Forecast.DAL.Models.Weatherapi
+﻿using Newtonsoft.Json;
+
+namespace Exadel.Forecast.DAL.Models.Weatherapi
 {
     public class Location
     {
@@ -7,6 +9,9 @@
         public string Country { get; set; }
         public double Lat { get; set; }
         public double Lon { get; set; }
+
+        [JsonProperty("localtime_epoch")]
+        public int LocaltimeEpoch { get; set; }
     }
 
 }
