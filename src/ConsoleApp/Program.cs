@@ -2,7 +2,6 @@
 using Exadel.Forecast.BL.CommandBuilders;
 using Exadel.Forecast.BL.Commands;
 using Exadel.Forecast.BL.Interfaces;
-using Exadel.Forecast.BL.Services;
 using Exadel.Forecast.BL.Strategies;
 using Exadel.Forecast.BL.Validators;
 using Exadel.Forecast.Models.Configuration;
@@ -16,11 +15,17 @@ namespace Exadel.Forecast.ConsoleApp
     internal class Program
     {
         private static IConfiguration _configuration;
-        private static ICommand _command;
 
         static async Task Main(string[] args)
         {
             InitConfiguration();
+            ICommandBuilder commandBuilder = new CommandCmdBuilder(
+                    _configuration,
+                    new CityValidator(),
+                    new ForecastNumberValidator(_configuration.MinAmountOfDays, _configuration.MaxAmountOfDays));
+            ICommand command;
+            IWeatherStrategy<string> strategy;
+            string output = string.Empty;
             string input = string.Empty;
             while (input != "0")
             {
@@ -31,43 +36,45 @@ namespace Exadel.Forecast.ConsoleApp
                 sb.AppendLine("0 - Close application");
                 Console.WriteLine(sb.ToString());
                 input = Console.ReadLine();
+
                 switch (input)
                 {
                     case "1":
                         //IWeatherStrategy<CurrentWeatherCommand,string> currentStrategy = new CurrentWeatherStrategy();
-                        ICommandBuilder<CurrentWeatherCommand> currentCommandBuilder = new CurrentCommandCmdBuilder(_configuration, new CityValidator());
-                        CurrentWeatherCommand currentCommand = await currentCommandBuilder.BuildCommand();
-
-                        //string result = await currentStrategy.Execute(currentCommand);
-
-                        _command = currentCommand;
+                        commandBuilder.SetWeatherProviderByUser();
+                        commandBuilder.SetCityNameByUser();
+                        strategy = new CurrentWeatherStrategy(new TemperatureValidator(), _configuration.DebugInfo);
+                        command = await commandBuilder.BuildCommand();
+                        commandBuilder.Reset();
+                        output = await strategy.Execute(command);
                         break;
                     case "2":
-                        var forecastNumberValidator = 
-                            new ForecastNumberValidator(_configuration.MinAmountOfDays, _configuration.MaxAmountOfDays);
-
-                        ICommandBuilder<ForecastWeatherCommand> forecastCommandBuilder =
-                            new ForecastCommandCmdBuilder(_configuration, new CityValidator(), forecastNumberValidator);
-
-                        ForecastWeatherCommand forecastCommand = await forecastCommandBuilder.BuildCommand();
-                        _command = forecastCommand;
+                        commandBuilder.SetWeatherProvider(ForecastApi.WeatherBit);
+                        commandBuilder.SetNumberOfForecastDays(7);
+                        commandBuilder.SetCityNameByUser();
+                        strategy = new ForecastStrategy(new TemperatureValidator(), _configuration.DebugInfo);
+                        command = await commandBuilder.BuildCommand();
+                        commandBuilder.Reset();
+                        output = await strategy.Execute(command);
                         break;
                     case "3":
-                        ICommandBuilder<FindMaxTemperatureCommand> findMaxTemperatureCommandBuilder =
-                            new FindMaxCommandCmdBuilder(_configuration, new CityValidator());
-
-                        FindMaxTemperatureCommand findMaxTemperatureCommand = await findMaxTemperatureCommandBuilder.BuildCommand();
-                        _command = findMaxTemperatureCommand;
+                        commandBuilder.SetWeatherProvider(ForecastApi.OpenWeather);
+                        commandBuilder.SetCityNameByUser();
+                        strategy = new FindMaxTemperatureStrategy(new TemperatureValidator(), _configuration.DebugInfo);
+                        command = await commandBuilder.BuildCommand();
+                        commandBuilder.Reset();
+                        output = await strategy.Execute(command);
                         break;
                     case "0":
-                        _command = new StringCommand("Bye!");
+                        //_command = new StringCommand("Bye!");
                         break;
                     default:
-                        _command = new StringCommand("Wrong input!");
+                        //_command = new StringCommand("Wrong input!");
                         break;
                 }
-
-                Console.WriteLine(await _command.GetResultAsync());
+                
+                Console.WriteLine(output);
+                output = string.Empty;
             }
         }
 
@@ -80,7 +87,8 @@ namespace Exadel.Forecast.ConsoleApp
                 OpenWeatherKey = Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY"),
                 WeatherApiKey = Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY"),
                 WeatherBitKey = Environment.GetEnvironmentVariable("WEATHERBIT_API_KEY"),
-                DebugInfo = bool.TryParse(System.Configuration.ConfigurationManager.AppSettings["DebugInfo"], out bool value) && value
+                DebugInfo = bool.TryParse(System.Configuration.ConfigurationManager.AppSettings["DebugInfo"], out bool value) && value,
+                ExecutionTime = int.Parse(System.Configuration.ConfigurationManager.AppSettings["ExecutionTime"])
             };
         }
     }

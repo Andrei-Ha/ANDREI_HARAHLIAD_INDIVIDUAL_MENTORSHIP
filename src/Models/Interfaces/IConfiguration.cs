@@ -11,6 +11,7 @@ namespace Exadel.Forecast.Models.Interfaces
         int MaxAmountOfDays { get; set; }
         int MinAmountOfDays { get; set; }
         bool DebugInfo { get; set; }
+        int ExecutionTime { get; set; }
         void SetDefaultForecastApi(ForecastApi forecastApi);
         IWebApiRepository GetDefaultForecastApi();
     }

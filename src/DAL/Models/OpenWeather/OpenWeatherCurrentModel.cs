@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Exadel.Forecast.DAL.Models.OpenWeather
 {
-    public class OpenWeatherCurrentModel : ICurrentWeatherModel
+    public class OpenWeatherCurrentModel : IForecastModel
     {
         public Coord Coord { get; set; }
         public Weather[] Weather { get; set; }
@@ -22,11 +22,13 @@ namespace Exadel.Forecast.DAL.Models.OpenWeather
         public string Name { get; set; }
         public int Cod { get; set; }
 
-        public CurrentModel GetCurrentModel()
+        public ForecastModel UpdateForecastModel(ForecastModel forecastModel)
         {
-            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dateTime = dateTime.AddSeconds(Dt);
-            return new CurrentModel() { City = Name, Temperature = Main.Temp, Date = dateTime };
+            forecastModel.City = Name;
+            forecastModel.Current.Temperature = Main.Temp;
+            forecastModel.Current.Date = DateTimeOffset.FromUnixTimeSeconds(Dt).DateTime;
+
+            return forecastModel;
         }
     }
 

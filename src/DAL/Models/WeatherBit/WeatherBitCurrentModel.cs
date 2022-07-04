@@ -5,7 +5,7 @@ using System;
 
 namespace Exadel.Forecast.DAL.Models.WeatherBit
 {
-    public class WeatherBitCurrentModel : ICurrentWeatherModel
+    public class WeatherBitCurrentModel : IForecastModel
     {
         public Datum[] Data { get; set; }
         public int Count { get; set; }
@@ -15,11 +15,13 @@ namespace Exadel.Forecast.DAL.Models.WeatherBit
             return Data[0].Temp;
         }
 
-        public CurrentModel GetCurrentModel()
+        public ForecastModel UpdateForecastModel(ForecastModel forecastModel)
         {
-            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dateTime = dateTime.AddSeconds(Data[0].LocaltimeEpoch);
-            return new CurrentModel() { City = Data[0].CityName, Temperature = Data[0].Temp, Date = dateTime };
+            forecastModel.City = Data[0].CityName;
+            forecastModel.Current.Temperature = Data[0].Temp;
+            forecastModel.Current.Date = DateTimeOffset.FromUnixTimeSeconds(Data[0].LocaltimeEpoch).DateTime;
+
+            return forecastModel;
         }
     }
 }

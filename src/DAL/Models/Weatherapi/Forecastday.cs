@@ -1,8 +1,11 @@
-﻿namespace Exadel.Forecast.DAL.Models.Weatherapi
+﻿using Newtonsoft.Json;
+
+namespace Exadel.Forecast.DAL.Models.Weatherapi
 {
     public class Forecastday
     {
-        public string Date { get; set; }
+        [JsonProperty("date_epoch")]
+        public int DateEpoch { get; set; }
         public Day Day { get; set; }
     }
 }

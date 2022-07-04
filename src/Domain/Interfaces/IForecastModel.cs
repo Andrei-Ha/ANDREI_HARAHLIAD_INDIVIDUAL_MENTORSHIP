@@ -5,6 +5,6 @@ namespace Exadel.Forecast.Domain.Interfaces
 {
     public interface IForecastModel
     {
-        ForecastModel GetForecastModel();
+        ForecastModel UpdateForecastModel(ForecastModel forecastModel);
     }
 }

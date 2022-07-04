@@ -11,39 +11,42 @@ using System.Threading.Tasks;
 
 namespace Exadel.Forecast.BL.Commands
 {
-    public class CurrentWeatherCommand : ICommand<List<DebugModel<CurrentModel>>>
+    public class WeatherCommand : ICommand
     {
         private readonly IConfiguration _configuration;
         private readonly string _cityNames;
+        private readonly int _amountOfDays;
 
-        public CurrentWeatherCommand
+        public WeatherCommand
             (
                 string cityNames,
-                IConfiguration configuration
+                IConfiguration configuration,
+                int amountOfDays
             )
         {
             _configuration = configuration;
             _cityNames = cityNames;
+            _amountOfDays = amountOfDays;
         }
 
-        public async Task<List<DebugModel<CurrentModel>>> GetResultAsync()
+        public async Task<List<DebugModel<ForecastModel>>> GetResultAsync()
         {
 
             CancellationTokenSource source = new CancellationTokenSource();
-            source.CancelAfter(130);
+            source.CancelAfter(_configuration.ExecutionTime);
             CancellationToken token = source.Token;
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
             string[] cityNames = _cityNames.Split(',').Select(p => p.Trim()).ToArray();
-            List<Task<DebugModel<CurrentModel>>> tasksList = new List<Task<DebugModel<CurrentModel>>>();
+            List<Task<DebugModel<ForecastModel>>> tasksList = new List<Task<DebugModel<ForecastModel>>>();
 
             foreach (var cityName in cityNames)
             {
-                tasksList.Add(forecastRepository.GetCurrentWeatherAsync(cityName, token));
+                tasksList.Add(forecastRepository.GetForecastAsync(cityName, _amountOfDays, token)) ;
             }
 
-            var debugCurrentModelList = (await Task.WhenAll(tasksList)).ToList();
-            return debugCurrentModelList;
+            var debugForecastModelList = (await Task.WhenAll(tasksList)).ToList();
+            return debugForecastModelList;
         }
     }
 }

@@ -20,22 +20,29 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public Task<DebugModel<CurrentModel>> GetCurrentWeatherAsync(string cityName, CancellationToken token = default)
+        public async Task<DebugModel<ForecastModel>> GetForecastAsync(string cityName, int amountOfDays, CancellationToken token = default)
         {
-            throw new NotImplementedException();
-        }
+            var forecastModel = new ForecastModel();
+            var forecastDebugModel = new DebugModel<ForecastModel>();
+            string webUrl = $"https://api.weatherbit.io/v2.0/current?key={_apiKey}&city={cityName}";
+            var requestSender = new RequestSender<WeatherBitCurrentModel>(webUrl);
+            var weatherBitCurrentDebugModel = await requestSender.GetDebugModelAsync(token);
+            forecastDebugModel.RequestDuration = weatherBitCurrentDebugModel.RequestDuration;
+            forecastDebugModel.TextException = weatherBitCurrentDebugModel.TextException;
+            forecastDebugModel.Model = weatherBitCurrentDebugModel.Model == null ? default : weatherBitCurrentDebugModel.Model.UpdateForecastModel(forecastModel);
 
-        public async Task<ForecastModel> GetWeatherForecastAsync(string cityName, int amountOfDays)
-        {
-            string webUrl = $"https://api.weatherbit.io/v2.0/forecast/daily?key={_apiKey}&city={cityName}&days={amountOfDays}";
-            var requestSender = new RequestSender<WeatherBitForecastModel>(webUrl);
-            var model = await requestSender.GetModelAsync();
-            if (model != null)
+            if (amountOfDays > 0)
             {
-                return model.GetForecastModel();
+                webUrl = $"https://api.weatherbit.io/v2.0/forecast/daily?key={_apiKey}&city={cityName}&days={amountOfDays}";
+                var newRequestSender = new RequestSender<WeatherBitForecastModel>(webUrl);
+                var weatherBitForecastDebugModel = await newRequestSender.GetDebugModelAsync(token);
+                forecastDebugModel.RequestDuration += weatherBitForecastDebugModel.RequestDuration;
+                forecastDebugModel.TextException += $"{Environment.NewLine}{weatherBitForecastDebugModel.TextException}";
+                forecastDebugModel.Model = weatherBitForecastDebugModel.Model == null ? default : weatherBitForecastDebugModel.Model.UpdateForecastModel(forecastDebugModel.Model);
             }
 
-            return null;
+            var result = forecastDebugModel;
+            return result;
         }
     }
 }

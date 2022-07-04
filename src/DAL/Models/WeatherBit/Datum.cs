@@ -4,7 +4,7 @@ namespace Exadel.Forecast.DAL.Models.WeatherBit
 {
     public class Datum
     {
-        public int Rh { get; set; }
+        public double Rh { get; set; }
         public double Pres { get; set; }
 
         [JsonProperty("Max_temp")]

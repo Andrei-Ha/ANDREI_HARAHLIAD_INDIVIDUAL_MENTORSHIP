@@ -19,21 +19,18 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public async Task<DebugModel<CurrentModel>> GetCurrentWeatherAsync(string cityName, CancellationToken token = default) 
+        public async Task<DebugModel<ForecastModel>> GetForecastAsync(string cityName, int amountOfDays, CancellationToken token = default) 
         {
+            var forecastModel = new ForecastModel();
+            var forecastDebugModel = new DebugModel<ForecastModel>();
             string webUrl = $"https://api.openweathermap.org/data/2.5/weather?q={cityName}&APPID={_apiKey}&units=metric";
             var requestSender = new RequestSender<OpenWeatherCurrentModel>(webUrl);
             DebugModel<OpenWeatherCurrentModel> openWeatherDebugModel = await requestSender.GetDebugModelAsync(token);
-            var currentDebugModel = new DebugModel<CurrentModel>() {
-                RequestDuration = openWeatherDebugModel.RequestDuration,
-                TextException = openWeatherDebugModel.TextException,
-                Model = openWeatherDebugModel.Model == null ? default : openWeatherDebugModel.Model.GetCurrentModel()};
-            return currentDebugModel;
-        }
+            forecastDebugModel.RequestDuration = openWeatherDebugModel.RequestDuration;
+            forecastDebugModel.TextException = openWeatherDebugModel.TextException;
+            forecastDebugModel.Model = openWeatherDebugModel.Model == null ? default : openWeatherDebugModel.Model.UpdateForecastModel(forecastModel);
 
-        public Task<ForecastModel> GetWeatherForecastAsync(string cityName, int amountOfDays)
-        {
-            throw new NotImplementedException();
+            return forecastDebugModel;
         }
     }
 }

@@ -18,23 +18,18 @@ namespace Exadel.Forecast.DAL.Repositories
             _apiKey = apiKey;
         }
 
-        public async Task<DebugModel<CurrentModel>> GetCurrentWeatherAsync(string cityName, CancellationToken token = default)
+        public async Task<DebugModel<ForecastModel>> GetForecastAsync(string cityName, int amountOfDays, CancellationToken token = default)
         {
-            string webUrl = $"http://api.weatherapi.com/v1/current.json?key={_apiKey}&q={cityName}";
-            var requestSender = new RequestSender<WeatherapiCurrentModel>(webUrl);
-            DebugModel<WeatherapiCurrentModel> weatherapiDebugModel = await requestSender.GetDebugModelAsync();
-            var currentDebugModel = new DebugModel<CurrentModel>()
-            {
-                RequestDuration = weatherapiDebugModel.RequestDuration,
-                TextException = weatherapiDebugModel.TextException,
-                Model = weatherapiDebugModel.Model == null ? default : weatherapiDebugModel.Model.GetCurrentModel()
-            };
-            return currentDebugModel;
-        }
+            var forecastModel = new ForecastModel();
+            var forecastDebugModel = new DebugModel<ForecastModel>();
+            string webUrl = $"https://api.weatherapi.com/v1/forecast.json?key={_apiKey}&q={cityName}&days={amountOfDays}&aqi=no&alerts=no&hour=no";
+            var requestSender = new RequestSender<WeatherapiForecastModel>(webUrl);
+            DebugModel<WeatherapiForecastModel> weatherapiDebugModel = await requestSender.GetDebugModelAsync(token);
+            forecastDebugModel.RequestDuration = weatherapiDebugModel.RequestDuration;
+            forecastDebugModel.TextException = weatherapiDebugModel.TextException;
+            forecastDebugModel.Model = weatherapiDebugModel.Model == null ? default : weatherapiDebugModel.Model.UpdateForecastModel(forecastModel);
 
-        public Task<ForecastModel> GetWeatherForecastAsync(string cityName, int amountOfDays)
-        {
-            throw new NotImplementedException();
+            return forecastDebugModel;
         }
     }
 }

@@ -27,6 +27,8 @@ namespace Exadel.Forecast.Models.Configuration
 
         public bool DebugInfo { get; set; }
 
+        public int ExecutionTime { get; set; }
+
         public void SetDefaultForecastApi(ForecastApi forecastApi)
         {
             switch (forecastApi)
@@ -46,5 +48,6 @@ namespace Exadel.Forecast.Models.Configuration
         }
 
         public IWebApiRepository GetDefaultForecastApi() => _defaultRepository;
+
     }
 }

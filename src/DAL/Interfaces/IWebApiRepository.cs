@@ -7,7 +7,6 @@ namespace Exadel.Forecast.DAL.Interfaces
 {
     public interface IWebApiRepository
     {
-        Task<DebugModel<CurrentModel>> GetCurrentWeatherAsync(string cityName, CancellationToken token = default);
-        Task<ForecastModel> GetWeatherForecastAsync(string cityName, int amountOfDays);
+        Task<DebugModel<ForecastModel>> GetForecastAsync(string cityName, int amountOfDays, CancellationToken token = default);
     }
 }
