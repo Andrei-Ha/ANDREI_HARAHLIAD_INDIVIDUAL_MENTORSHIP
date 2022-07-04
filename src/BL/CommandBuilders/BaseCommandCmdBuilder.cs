@@ -3,23 +3,47 @@ using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.Models.Configuration;
 using Exadel.Forecast.Models.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Exadel.Forecast.BL.CommandBuilders
 {
-
-    public class CommandCmdBuilder : BaseCommandBuilder
+    public abstract class BaseCommandCmdBuilder : ICommandBuilder<WeatherCommand>
     {
-        public CommandCmdBuilder(
+        protected IConfiguration Configuration;
+        protected IValidator<string> _cityValidator;
+        protected string _cityName;
+        protected int _amountOfDays = 0;
+
+        public BaseCommandCmdBuilder(
             IConfiguration configuration,
-            IValidator<string> validator,
-            IValidator<int> forecastNumberValidator) : base(configuration, validator, forecastNumberValidator)
+            IValidator<string> cityValidator)
         {
+            Configuration = configuration;
+            _cityValidator = cityValidator;
         }
 
-        public override void SetWeatherProviderByUser()
+        public void Reset() 
+        {
+            _cityName = string.Empty;
+            _amountOfDays = 0;
+        }
+
+        public void SetWeatherProvider(ForecastApi weatherProvider)
+        {
+            Configuration.SetDefaultForecastApi(weatherProvider);
+        }
+
+        public void SetCityName(string cityName)
+        {
+            _cityName = cityName;
+        }
+
+        public void SetNumberOfForecastDays(int amountOfDays)
+        {
+            _amountOfDays = amountOfDays;
+        }
+
+        public void SetWeatherProviderByUser()
         {
             Console.WriteLine($"PLease choose weather provider:");
             Console.WriteLine($"1 - OpenWeather");
@@ -50,7 +74,7 @@ namespace Exadel.Forecast.BL.CommandBuilders
             SetWeatherProviderByUser();
         }
 
-        public override void SetCityNameByUser()
+        public void SetCityNameByUser()
         {
             Console.WriteLine("Enter city names separated by commas, please");
             string input = Console.ReadLine();
@@ -66,29 +90,6 @@ namespace Exadel.Forecast.BL.CommandBuilders
             }
         }
 
-        public override void SetNumberOfForecastDaysByUser()
-        {
-            Console.WriteLine($"Set the number of forecast days" +
-                $" between {Configuration.MaxAmountOfDays} and {Configuration.MinAmountOfDays}!");
-
-            string input = Console.ReadLine();
-
-            if (int.TryParse(input, out int value) && _forecastNumberValidator.IsValid(value))
-            {
-                _amountOfDays = value;
-            }
-            else
-            {
-                Console.WriteLine("Wrong number!");
-                SetNumberOfForecastDaysByUser();
-            }
-        }
-
-        public override async Task<WeatherCommand> BuildCommand()
-        {
-            var result = new WeatherCommand(_cityName, Configuration, _amountOfDays);
-            //Reset();
-            return result;
-        }
+        public abstract Task<WeatherCommand> BuildCommand();
     }
 }
