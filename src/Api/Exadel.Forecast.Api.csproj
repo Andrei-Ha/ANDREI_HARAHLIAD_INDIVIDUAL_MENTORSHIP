@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BL.Tests\Exadel.Forecast.BL.Tests.csproj" />
     <ProjectReference Include="..\Domain\Exadel.Forecast.Domain.csproj" />
+    <ProjectReference Include="..\Models\Exadel.Forecast.Models.csproj" />
   </ItemGroup>
 
 </Project>

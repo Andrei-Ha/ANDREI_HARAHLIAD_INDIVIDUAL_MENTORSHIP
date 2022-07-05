@@ -11,27 +11,19 @@ namespace Exadel.Forecast.Api.Services
     public class ForecastService : IForecastService
     {
         private readonly IMapper _mapper;
+        private readonly Models.Interfaces.IConfiguration _configuration;
 
-        public ForecastService(IMapper mapper)
+        public ForecastService(IMapper mapper, Models.Interfaces.IConfiguration configuration)
         {
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         public async Task<IEnumerable<WeatherForecastDTO>> GetForecast(ForecastQueryDTO queryDTO)
         {
-            var configuration = new Configuration()
-            {
-                MinAmountOfDays = 1, // int.Parse(System.Configuration.ConfigurationManager.AppSettings["MinValue"]),
-                MaxAmountOfDays = 16, // int.Parse(System.Configuration.ConfigurationManager.AppSettings["MaxValue"]),
-                OpenWeatherKey = Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY"),
-                WeatherApiKey = Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY"),
-                WeatherBitKey = Environment.GetEnvironmentVariable("WEATHERBIT_API_KEY"),
-                DebugInfo = true, // bool.TryParse(System.Configuration.ConfigurationManager.AppSettings["DebugInfo"], out bool value) && value,
-                ExecutionTime = 10000 // int.Parse(System.Configuration.ConfigurationManager.AppSettings["ExecutionTime"])
-            };
-            configuration.SetDefaultForecastApi(ForecastApi.WeatherBit);
+            _configuration.SetDefaultForecastApi(ForecastApi.WeatherBit);
             string cities = string.Join(",", queryDTO.Cities);
-            var weatherCommand = new WeatherCommand(cities, configuration, queryDTO.Days);
+            var weatherCommand = new WeatherCommand(cities, _configuration, queryDTO.Days);
             var forecastList = await weatherCommand.GetResultAsync();
             List<WeatherForecastDTO> dtoList = forecastList.Select(p => _mapper.Map<WeatherForecastDTO>(p.Model)).ToList();
             return dtoList;

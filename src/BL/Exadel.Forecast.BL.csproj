@@ -5,16 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Services\CurrentCommandBuilder.cs" />
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Services\**" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DAL\Exadel.Forecast.DAL.csproj" />
     <ProjectReference Include="..\Models\Exadel.Forecast.Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
