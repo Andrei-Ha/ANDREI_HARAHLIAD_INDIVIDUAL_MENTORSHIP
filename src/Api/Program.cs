@@ -11,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IForecastService, ForecastService>();
+builder.Services.AddScoped<ICurrentWeatherService, CurrentWeatherService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 

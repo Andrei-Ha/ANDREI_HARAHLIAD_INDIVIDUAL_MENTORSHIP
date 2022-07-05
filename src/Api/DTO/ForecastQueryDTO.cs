@@ -3,6 +3,6 @@
     public class ForecastQueryDTO
     {
         public List<string> Cities { get; set; } = new();
-        public int Days { get; set; }
+        public int Days { get; set; } = 1;
     }
 }

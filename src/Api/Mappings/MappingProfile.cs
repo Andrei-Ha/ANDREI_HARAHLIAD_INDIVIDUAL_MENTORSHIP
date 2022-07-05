@@ -10,6 +10,7 @@ namespace Exadel.Forecast.Api.Mappings
         public MappingProfile()
         {
             CreateMap<ForecastModel, WeatherForecastDTO>();
+            CreateMap<ForecastModel, CurrentWeatherDTO>();
             //CreateMap<WeatherForecastDTO, ForecastModel>();
         }
     }
