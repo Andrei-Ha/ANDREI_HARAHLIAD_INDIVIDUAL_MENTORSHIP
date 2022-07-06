@@ -1,46 +1,19 @@
-﻿using Exadel.Forecast.BL.Commands;
+﻿using Exadel.Forecast.BL.CommandBuilders;
+using Exadel.Forecast.BL.Commands;
 using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.Models.Configuration;
 using Exadel.Forecast.Models.Interfaces;
 using System;
 using System.Threading.Tasks;
 
-namespace Exadel.Forecast.BL.CommandBuilders
+namespace Exadel.Forecast.ConsoleApp.CommandBuilders
 {
-    public abstract class BaseCommandCmdBuilder : ICommandBuilder<WeatherCommand>
+    public abstract class BaseCommandCmdBuilder : BaseCommandBuilder
     {
-        protected IConfiguration Configuration;
-        protected IValidator<string> _cityValidator;
-        protected string _cityName;
-        protected int _amountOfDays = 0;
-
         public BaseCommandCmdBuilder(
             IConfiguration configuration,
-            IValidator<string> cityValidator)
+            IValidator<string> cityValidator) : base(configuration, cityValidator)
         {
-            Configuration = configuration;
-            _cityValidator = cityValidator;
-        }
-
-        public void Reset() 
-        {
-            _cityName = string.Empty;
-            _amountOfDays = 0;
-        }
-
-        public void SetWeatherProvider(ForecastApi weatherProvider)
-        {
-            Configuration.SetDefaultForecastApi(weatherProvider);
-        }
-
-        public void SetCityName(string cityName)
-        {
-            _cityName = cityName;
-        }
-
-        public void SetNumberOfForecastDays(int amountOfDays)
-        {
-            _amountOfDays = amountOfDays;
         }
 
         public void SetWeatherProviderByUser()
@@ -90,6 +63,6 @@ namespace Exadel.Forecast.BL.CommandBuilders
             }
         }
 
-        public abstract Task<WeatherCommand> BuildCommand();
+        public override abstract Task<WeatherCommand> BuildCommand();
     }
 }

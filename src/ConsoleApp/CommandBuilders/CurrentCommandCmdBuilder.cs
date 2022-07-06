@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Exadel.Forecast.BL.CommandBuilders
+namespace Exadel.Forecast.ConsoleApp.CommandBuilders
 {
 
     public class CurrentCommandCmdBuilder : BaseCommandCmdBuilder

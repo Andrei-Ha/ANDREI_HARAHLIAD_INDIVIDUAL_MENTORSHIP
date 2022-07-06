@@ -124,6 +124,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandBuilders\BaseCommandCmdBuilder.cs" />
+    <Compile Include="CommandBuilders\CurrentCommandCmdBuilder.cs" />
+    <Compile Include="CommandBuilders\ForecastCommandCmdBuilder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
