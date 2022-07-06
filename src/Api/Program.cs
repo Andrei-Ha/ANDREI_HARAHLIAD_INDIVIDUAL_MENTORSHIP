@@ -1,5 +1,7 @@
 using Exadel.Forecast.Api.Interfaces;
 using Exadel.Forecast.Api.Services;
+using ModelsInterfaces = Exadel.Forecast.Models.Interfaces;
+using ModelsConfig = Exadel.Forecast.Models.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,17 +15,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IForecastService, ForecastService>();
 builder.Services.AddScoped<ICurrentWeatherService, CurrentWeatherService>();
 
-builder.Services.AddScoped<Exadel.Forecast.Models.Interfaces.IConfiguration, Exadel.Forecast.Models.Configuration.Configuration>(
-    p => new Exadel.Forecast.Models.Configuration.Configuration()
-    {
-        MinAmountOfDays = builder.Configuration.GetValue<int>("Configuration:MinAmountOfDays"),
-        MaxAmountOfDays = builder.Configuration.GetValue<int>("Configuration:MaxAmountOfDays"),
-        DebugInfo = builder.Configuration.GetValue<bool>("Configuration:DebugInfo"),
-        ExecutionTime = builder.Configuration.GetValue<int>("Configuration:ExecutionTime"),
-        OpenWeatherKey = Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY"),
-        WeatherApiKey = Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY"),
-        WeatherBitKey = Environment.GetEnvironmentVariable("WEATHERBIT_API_KEY")
-    });
+var weatherConfig = new ModelsConfig.Configuration();
+builder.Configuration.GetSection("WeatherConfig").Bind(weatherConfig);
+weatherConfig.OpenWeatherKey = Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY");
+weatherConfig.WeatherApiKey = Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY");
+weatherConfig.WeatherBitKey = Environment.GetEnvironmentVariable("WEATHERBIT_API_KEY");
+
+builder.Services.AddScoped<ModelsInterfaces.IConfiguration, ModelsConfig.Configuration>(p => weatherConfig);
+//  https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-6.0
+//  builder.Services.Configure<ModelsConfig.Configuration>(builder.Configuration.GetSection("WeatherConfig"));
 
 builder.Services.AddAutoMapper(typeof(Program));
 
