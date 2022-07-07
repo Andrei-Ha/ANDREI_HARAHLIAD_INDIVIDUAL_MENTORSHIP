@@ -9,12 +9,13 @@ namespace Exadel.Forecast.Api.Controllers
     public class WeatherForecastController : ControllerBase
     {
         private readonly IForecastService _forecastService;
-        private readonly ICurrentWeatherService _currentWeatherService;
+        private readonly ICurrentService _currentService;
 
-        public WeatherForecastController(IForecastService forecastService, ICurrentWeatherService currentWeatherService)
+        public WeatherForecastController(IForecastService forecastService, ICurrentService currentService)
         {
             _forecastService = forecastService;
-            _currentWeatherService = currentWeatherService;
+            _currentService = currentService;
+
         }
 
         [HttpGet]
@@ -26,7 +27,7 @@ namespace Exadel.Forecast.Api.Controllers
         [HttpGet("current")]
         public async Task<IActionResult> GetCurrent([FromQuery]CurrentQueryDTO currentQueryDTO)
         {
-            return Ok(await _currentWeatherService.GetCurrentWeather(currentQueryDTO));
+            return Ok(await _currentService.GetCurrent(currentQueryDTO));
         }
     }
 }

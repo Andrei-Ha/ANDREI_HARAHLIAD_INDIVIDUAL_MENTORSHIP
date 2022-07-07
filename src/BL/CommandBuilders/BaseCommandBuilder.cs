@@ -3,6 +3,7 @@ using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.Models.Configuration;
 using Exadel.Forecast.Models.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Exadel.Forecast.BL.CommandBuilders
@@ -38,10 +39,23 @@ namespace Exadel.Forecast.BL.CommandBuilders
             _cityName = cityName;
         }
 
-        public void SetNumberOfForecastDays(int amountOfDays)
+        public void SetCityName(IEnumerable<string> cityNames)
         {
-            _amountOfDays = amountOfDays;
+            string input = string.Join(",", cityNames);
+            if (!_cityValidator.IsValid(input))
+            {
+                _cityName = "default";
+            }
+            else
+            {
+                _cityName = string.Join(",", cityNames);
+            }
         }
+
+        //public void SetNumberOfForecastDays(int amountOfDays)
+        //{
+        //    _amountOfDays = amountOfDays;
+        //}
 
         public abstract Task<WeatherCommand> BuildCommand();
     }

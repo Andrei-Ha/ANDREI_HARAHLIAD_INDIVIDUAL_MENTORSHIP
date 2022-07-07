@@ -1,6 +1,5 @@
 ﻿using Exadel.Forecast.BL.Commands;
 using Exadel.Forecast.BL.Interfaces;
-using Exadel.Forecast.Models.Configuration;
 using Exadel.Forecast.Models.Interfaces;
 using System;
 using System.Collections.Generic;

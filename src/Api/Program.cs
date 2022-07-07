@@ -2,6 +2,9 @@ using Exadel.Forecast.Api.Interfaces;
 using Exadel.Forecast.Api.Services;
 using ModelsInterfaces = Exadel.Forecast.Models.Interfaces;
 using ModelsConfig = Exadel.Forecast.Models.Configuration;
+using Exadel.Forecast.BL.Interfaces;
+using Exadel.Forecast.Api.DTO;
+using Exadel.Forecast.BL.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +16,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IForecastService, ForecastService>();
-builder.Services.AddScoped<ICurrentWeatherService, CurrentWeatherService>();
+builder.Services.AddScoped<ICurrentService, CurrentService>();
+builder.Services.AddScoped<IValidator<string>, CityValidator>();
 
 var weatherConfig = new ModelsConfig.Configuration();
 builder.Configuration.GetSection("WeatherConfig").Bind(weatherConfig);
