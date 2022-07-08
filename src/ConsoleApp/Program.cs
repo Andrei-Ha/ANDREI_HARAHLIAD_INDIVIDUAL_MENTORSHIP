@@ -1,9 +1,8 @@
-﻿using Exadel.Forecast.BL;
-using Exadel.Forecast.BL.CommandBuilders;
-using Exadel.Forecast.BL.Commands;
+﻿using Exadel.Forecast.BL.Commands;
 using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.BL.Strategies;
 using Exadel.Forecast.BL.Validators;
+using Exadel.Forecast.ConsoleApp.CommandBuilders;
 using Exadel.Forecast.Models.Configuration;
 using Exadel.Forecast.Models.Interfaces;
 using System;

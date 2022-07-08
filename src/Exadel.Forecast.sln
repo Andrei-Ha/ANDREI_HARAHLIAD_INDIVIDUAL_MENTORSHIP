@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exadel.Forecast.BL.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exadel.Forecast.IntegrationTests", "IntegrationTests\Exadel.Forecast.IntegrationTests.csproj", "{37F2CFD3-C613-4E09-9C7F-709A4A615085}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exadel.Forecast.Domain", "Domain\Exadel.Forecast.Domain.csproj", "{C9C519A4-CA5C-4E48-9EC5-51D015F7D4A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exadel.Forecast.Domain", "Domain\Exadel.Forecast.Domain.csproj", "{C9C519A4-CA5C-4E48-9EC5-51D015F7D4A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exadel.Forecast.Api", "Api\Exadel.Forecast.Api.csproj", "{292729EB-E49D-4F28-AF02-DC25CA5359C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{C9C519A4-CA5C-4E48-9EC5-51D015F7D4A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9C519A4-CA5C-4E48-9EC5-51D015F7D4A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9C519A4-CA5C-4E48-9EC5-51D015F7D4A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{292729EB-E49D-4F28-AF02-DC25CA5359C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{292729EB-E49D-4F28-AF02-DC25CA5359C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{292729EB-E49D-4F28-AF02-DC25CA5359C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{292729EB-E49D-4F28-AF02-DC25CA5359C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
