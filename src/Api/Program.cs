@@ -6,6 +6,7 @@ using Exadel.Forecast.BL.Validators;
 using ModelsInterfaces = Exadel.Forecast.Models.Interfaces;
 using ModelsConfig = Exadel.Forecast.Models.Configuration;
 using Quartz;
+using Exadel.Forecast.Api.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,9 @@ builder.Services.AddQuartz(q =>
 });
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
+//  https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-6.0
+builder.Services.Configure<CitiesSet>(builder.Configuration.GetSection("CitiesSet"));
+
 builder.Services.AddScoped<IForecastService, ForecastService>();
 builder.Services.AddScoped<ICurrentService, CurrentService>();
 builder.Services.AddScoped<IValidator<string>, CityValidator>();
@@ -39,8 +43,6 @@ weatherConfig.WeatherApiKey = Environment.GetEnvironmentVariable("WEATHERAPI_API
 weatherConfig.WeatherBitKey = Environment.GetEnvironmentVariable("WEATHERBIT_API_KEY");
 
 builder.Services.AddScoped<ModelsInterfaces.IConfiguration, ModelsConfig.Configuration>(p => weatherConfig);
-//  https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-6.0
-//  builder.Services.Configure<ModelsConfig.Configuration>(builder.Configuration.GetSection("WeatherConfig"));
 
 builder.Services.AddAutoMapper(typeof(Program));
 

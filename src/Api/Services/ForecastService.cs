@@ -5,18 +5,19 @@ using Exadel.Forecast.Api.Interfaces;
 using Exadel.Forecast.Api.Strategies;
 using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.BL.Validators;
+using ModelsInterfaces = Exadel.Forecast.Models.Interfaces;
 
 namespace Exadel.Forecast.Api.Services
 {
     public class ForecastService : IForecastService
     {
         private readonly IMapper _mapper;
-        private readonly Models.Interfaces.IConfiguration _configuration;
+        private readonly ModelsInterfaces.IConfiguration _configuration;
         private readonly IValidator<string> _cityValidator;
 
         public ForecastService(
             IMapper mapper,
-            Models.Interfaces.IConfiguration configuration,
+            ModelsInterfaces.IConfiguration configuration,
             IValidator<string> cityValidator)
         {
             _mapper = mapper;
