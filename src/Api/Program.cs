@@ -1,10 +1,11 @@
 using Exadel.Forecast.Api.Interfaces;
+using Exadel.Forecast.Api.Jobs;
 using Exadel.Forecast.Api.Services;
+using Exadel.Forecast.BL.Interfaces;
+using Exadel.Forecast.BL.Validators;
 using ModelsInterfaces = Exadel.Forecast.Models.Interfaces;
 using ModelsConfig = Exadel.Forecast.Models.Configuration;
-using Exadel.Forecast.BL.Interfaces;
-using Exadel.Forecast.Api.DTO;
-using Exadel.Forecast.BL.Validators;
+using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,18 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionJobFactory();
+    var jobKey = new JobKey("SavingWeatherJob-Key");
+    q.AddJob<SavingWeatherJob>(opts => opts.WithIdentity(jobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("SavingWeatherJob-Trigger")
+        .WithSimpleSchedule(x => x.WithIntervalInSeconds(5).RepeatForever()));
+});
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 builder.Services.AddScoped<IForecastService, ForecastService>();
 builder.Services.AddScoped<ICurrentService, CurrentService>();
