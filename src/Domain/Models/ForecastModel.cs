@@ -9,5 +9,6 @@ namespace Exadel.Forecast.Domain.Models
         public string City { get; set; }
         public CurrentModel Current { get; set; } = new CurrentModel();
         public List<DayModel> Days { get; set; } = new List<DayModel>();
+        public List<CurrentModel> History { get; set; } = new List<CurrentModel>();
     }
 }
