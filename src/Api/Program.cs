@@ -20,12 +20,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddQuartz(q =>
 {
     q.UseMicrosoftDependencyInjectionJobFactory();
-    var jobKey = new JobKey("SavingWeatherJob-Key");
-    q.AddJob<SavingWeatherJob>(opts => opts.WithIdentity(jobKey));
+    var jobKey = new JobKey(nameof(CreatingTimerTriggersJob));
+    q.AddJob<CreatingTimerTriggersJob>(opts => opts.WithIdentity(jobKey));
     q.AddTrigger(opts => opts
         .ForJob(jobKey)
-        .WithIdentity("SavingWeatherJob-Trigger")
-        .WithSimpleSchedule(x => x.WithIntervalInSeconds(100).WithRepeatCount(2)));
+        .WithIdentity($"{nameof(CreatingTimerTriggersJob)}-Trigger").StartNow());
 });
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 

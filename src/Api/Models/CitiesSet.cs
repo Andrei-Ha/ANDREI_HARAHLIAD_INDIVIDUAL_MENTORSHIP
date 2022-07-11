@@ -6,7 +6,7 @@ namespace Exadel.Forecast.Api.Models
     {
         public City[] Cities { get; set; } = Array.Empty<City>();
 
-        public string GetAllAsString()
+        public string GetAllTimerAsString()
         {
             StringBuilder sb = new();
             foreach (int timer in Cities.Select(c => c.Timer).OrderBy(c=>c).Distinct())

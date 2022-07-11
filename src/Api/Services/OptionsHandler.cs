@@ -16,6 +16,7 @@ namespace Exadel.Forecast.Api.Services
         {
             _optionsMonitor = optionsMonitor;
             _optionsMonitor.OnChange(UpdateTriggers);
+            _citiesSet = _optionsMonitor.CurrentValue;
             _schedulerFactory = schedulerFactory;
         }
 
@@ -23,40 +24,50 @@ namespace Exadel.Forecast.Api.Services
         {
             Console.WriteLine("UpdateTrigger");
             var scheduler = _schedulerFactory.GetScheduler().Result;
-            var jobDetail = scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup()).Result.FirstOrDefault();
-            Console.WriteLine($"JobName:{jobDetail.Name}");
-            var allTriggerKeys = scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.AnyGroup());
+            var jobKeys = scheduler.GetJobKeys(GroupMatcher<JobKey>.GroupEquals("WEATHER")).Result;
 
-            if (_citiesSet.GetAllAsString() != citiesSet.GetAllAsString())
+            if (_citiesSet.GetAllTimerAsString() != citiesSet.GetAllTimerAsString())
             {
-                Console.WriteLine("ConfigChanged");
+                Console.WriteLine(" --- ConfigChanged");
                 _citiesSet = citiesSet;
-                foreach (var triggerKey in allTriggerKeys.Result)
+                foreach (var job in jobKeys)
                 {
-                    Console.WriteLine($"TriggerKey: {triggerKey}");
-                    //scheduler.UnscheduleJob(triggerKey);
+                    scheduler.DeleteJob(job);
                 }
-                foreach (var city in _citiesSet.Cities)
+
+                AddSavingWeatherJobToScheduler();
+
+                var allJobKeys = scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup());
+                foreach (var jobKey in allJobKeys.Result)
                 {
-                    var newTrigger = TriggerBuilder.Create()
-                        .WithIdentity($"SavingWeatherJob-Trigger_{city.Timer}")
-                        .ForJob(jobKey: jobDetail)
-                        .WithSimpleSchedule(x => x.WithIntervalInSeconds(city.Timer).RepeatForever())
-                        .Build();
-                    scheduler.ScheduleJob(newTrigger);
+                    Console.WriteLine($"jobKey: {jobKey}");
                 }
             }
         }
 
-        //var scheduler = _schedulerFactory.GetScheduler().Result;
-        //var allTriggerKeys = scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.AnyGroup());
-        //foreach (var triggerKey in allTriggerKeys.Result)
-        //{
-        //    var triggerdetails = scheduler.GetTrigger(triggerKey);
-        //    var Jobdetails = scheduler.GetJobDetail(triggerdetails.Result.JobKey);
+        public void AddSavingWeatherJobToScheduler()
+        {
+            Console.WriteLine("in addSavingWeatherJobToScheduler");
+            IJobDetail jobDetail = JobBuilder.Create<SavingWeatherJob>()
+                .WithIdentity(nameof(SavingWeatherJob), "WEATHER")
+                .Build();
 
-        //    Console.WriteLine("IsCompleted -" + triggerdetails.IsCompleted + " |  TriggerKey  - " + triggerdetails.Result.Key.Name + " Job key -" + triggerdetails.Result.JobKey.Name);
-        //}
-        //_optionsDelegate.OnChange((CitiesSet s, string str) => Console.WriteLine("changed"));
+            List<ITrigger> list = new List<ITrigger>();
+            ITrigger trigger;
+            foreach (int timer in _optionsMonitor.CurrentValue.Cities.Select(c => c.Timer).OrderBy(c => c).Distinct())
+            {
+                trigger = TriggerBuilder.Create()
+                    .WithIdentity($"{nameof(SavingWeatherJob)}-Trigger_{timer}", "WEATHER")
+                    .ForJob(jobDetail)
+                    .StartNow()
+                    .WithSimpleSchedule(s => s.WithIntervalInSeconds(timer).RepeatForever())
+                    .Build();
+                list.Add(trigger);
+                Console.WriteLine($"Job: {jobDetail.Key.Name}. Added trigger: {trigger.Key.Name} ");
+            }
+
+            var scheduler = _schedulerFactory.GetScheduler().Result;
+            scheduler.ScheduleJob(jobDetail, list, true);
+        }
     }
 }

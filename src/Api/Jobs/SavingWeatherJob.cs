@@ -10,36 +10,33 @@ namespace Exadel.Forecast.Api.Jobs
     public class SavingWeatherJob : IJob
     {
         private readonly ILogger<SavingWeatherJob> _logger;
-        private readonly IOptionsMonitor<CitiesSet> _optionsDelegate;
+        private readonly IOptionsMonitor<CitiesSet> _optionsMonitor;
         private readonly ISchedulerFactory _schedulerFactory;
-        private readonly OptionsHandler _optionsHandler;
         public SavingWeatherJob(
             ILogger<SavingWeatherJob> logger,
-            IOptionsMonitor<CitiesSet> optionsDelegate,
-            ISchedulerFactory schedulerFactory,
-            OptionsHandler optionsHandler) 
+            IOptionsMonitor<CitiesSet> optionsMonitor,
+            ISchedulerFactory schedulerFactory) 
         {
             _logger = logger;
-            _optionsDelegate = optionsDelegate;
+            _optionsMonitor = optionsMonitor;
             _schedulerFactory = schedulerFactory;
-            _optionsHandler = optionsHandler;
         }
         public Task Execute(IJobExecutionContext context)
         {
-            //var citiesSet = _optionsDelegate.CurrentValue.Cities;
-            //foreach(var c in citiesSet)
-            //{
-            //    Console.WriteLine($"City: {c.CityName}, Timer: {c.Timer}");
-            //    var newTrigger = TriggerBuilder.Create()
-            //    .WithIdentity($"SavingWeatherJob-Trigger_{c.Timer}")
-            //    .ForJob(context.JobDetail)
-            //    .WithSimpleSchedule(x => x.WithIntervalInSeconds(c.Timer).RepeatForever())
-            //    .Build();
-            //    context.Scheduler.ScheduleJob(newTrigger);
-            //}
-
             string triggerKey = context.Trigger.Key.Name;
-            _logger.LogInformation($"Hello World! Time: {DateTime.Now.ToLongTimeString()}, TriggerKey: {triggerKey}");
+            var arr = triggerKey.Split('_');
+
+            if (arr.Length > 1 && int.TryParse(arr[1], out int timer))
+            {
+                var cityList = _optionsMonitor.CurrentValue.Cities.Where(c => c.Timer == timer).ToList();
+
+                foreach (var city in cityList)
+                {
+                    _logger.LogInformation(
+                        $"City: {city.Name} Time: {DateTime.Now.ToLongTimeString()}, TriggerKey: {triggerKey}, Timer: {timer}");
+                }
+            }
+
             return Task.CompletedTask;
         }
     }
