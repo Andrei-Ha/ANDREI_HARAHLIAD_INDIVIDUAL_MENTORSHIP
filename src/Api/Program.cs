@@ -25,12 +25,14 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
         .ForJob(jobKey)
         .WithIdentity("SavingWeatherJob-Trigger")
-        .WithSimpleSchedule(x => x.WithIntervalInSeconds(5).RepeatForever()));
+        .WithSimpleSchedule(x => x.WithIntervalInSeconds(100).WithRepeatCount(2)));
 });
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 //  https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-6.0
 builder.Services.Configure<CitiesSet>(builder.Configuration.GetSection("CitiesSet"));
+
+builder.Services.AddSingleton<OptionsHandler>();
 
 builder.Services.AddScoped<IForecastService, ForecastService>();
 builder.Services.AddScoped<ICurrentService, CurrentService>();
