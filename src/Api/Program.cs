@@ -3,10 +3,12 @@ using Exadel.Forecast.Api.Jobs;
 using Exadel.Forecast.Api.Services;
 using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.BL.Validators;
+using Microsoft.EntityFrameworkCore;
 using ModelsInterfaces = Exadel.Forecast.Models.Interfaces;
 using ModelsConfig = Exadel.Forecast.Models.Configuration;
 using Quartz;
 using Exadel.Forecast.Api.Models;
+using Exadel.Forecast.DAL.EF;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
+builder.Services.AddDbContext<WeatherDbContext>(options => options.UseSqlServer(connectionString, x => x.MigrationsAssembly("Exadel.Forecast.Api")));
 
 builder.Services.AddQuartz(q =>
 {

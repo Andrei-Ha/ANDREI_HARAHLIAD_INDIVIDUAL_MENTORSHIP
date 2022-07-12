@@ -6,6 +6,7 @@ namespace Exadel.Forecast.Domain.Models
 {
     public class DayModel
     {
+        public int Id { get; set; }
         public double AvgTemperature { get; set; }
         public double MaxTemperature { get; set; }
         public double MinTemperature { get; set; }

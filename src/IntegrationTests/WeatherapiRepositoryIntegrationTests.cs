@@ -9,19 +9,19 @@ namespace Exadel.Forecast.IntegrationTests
 {
     public class WeatherapiRepositoryIntegrationTests
     {
-        [Theory]
-        [InlineData("Pinsk")]
-        [InlineData("Kiev")]
-        public void GetTempByName_ForCityName_ReturnTemperatureIsMoreThanMinus273(string city)
-        {
-            // Arrange
-            var repositoru = new WeatherapiRepository(Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY"));
+        //[Theory]
+        //[InlineData("Pinsk")]
+        //[InlineData("Kiev")]
+        //public void GetTempByName_ForCityName_ReturnTemperatureIsMoreThanMinus273(string city)
+        //{
+        //    // Arrange
+        //    var repositoru = new WeatherapiRepository(Environment.GetEnvironmentVariable("WEATHERAPI_API_KEY"));
 
-            // Act
-            var currentResponseModel = repositoru.GetTempByNameAsync(city);
+        //    // Act
+        //    var currentResponseModel = repositoru.GetTempByNameAsync(city);
 
-            // Assert
-            Assert.True(currentResponseModel.Result.Temperature > -273);
-        }
+        //    // Assert
+        //    Assert.True(currentResponseModel.Result.Temperature > -273);
+        //}
     }
 }

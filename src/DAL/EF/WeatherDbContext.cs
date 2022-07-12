@@ -13,6 +13,6 @@ namespace Exadel.Forecast.DAL.EF
 
         }
 
-        public DbSet<ForecastModel> WeatherModels { get; set; }
+        public DbSet<ForecastModel> ForecastModels { get; set; }
     }
 }
