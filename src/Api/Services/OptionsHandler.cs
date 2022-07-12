@@ -52,7 +52,7 @@ namespace Exadel.Forecast.Api.Services
                 .WithIdentity(nameof(SavingWeatherJob), "WEATHER")
                 .Build();
 
-            List<ITrigger> list = new List<ITrigger>();
+            List<ITrigger> list = new();
             ITrigger trigger;
             foreach (int timer in _optionsMonitor.CurrentValue.Cities.Select(c => c.Timer).OrderBy(c => c).Distinct())
             {
