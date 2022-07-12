@@ -20,7 +20,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
-builder.Services.AddDbContext<WeatherDbContext>(options => options.UseSqlServer(connectionString, x => x.MigrationsAssembly("Exadel.Forecast.Api")));
+builder.Services.AddDbContext<WeatherDbContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddQuartz(q =>
 {

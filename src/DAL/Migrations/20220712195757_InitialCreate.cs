@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Exadel.Forecast.Api.Migrations
+namespace Exadel.Forecast.DAL.Migrations
 {
     public partial class InitialCreate : Migration
     {
