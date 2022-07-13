@@ -11,49 +11,46 @@ namespace Exadel.Forecast.Api.Services
         private readonly IOptionsMonitor<CitiesSet> _optionsMonitor;
         private readonly ISchedulerFactory _schedulerFactory;
         private CitiesSet _citiesSet = new();
+        private readonly ILogger<OptionsHandler> _logger;
 
-        public OptionsHandler (IOptionsMonitor<CitiesSet> optionsMonitor, ISchedulerFactory schedulerFactory)
+        public OptionsHandler (IOptionsMonitor<CitiesSet> optionsMonitor, ISchedulerFactory schedulerFactory, ILogger<OptionsHandler> logger)
         {
             _optionsMonitor = optionsMonitor;
             _optionsMonitor.OnChange(UpdateTriggers);
             _citiesSet = _optionsMonitor.CurrentValue;
             _schedulerFactory = schedulerFactory;
+            _logger = logger;
         }
 
         private void UpdateTriggers(CitiesSet citiesSet, string str)
         {
-            Console.WriteLine("UpdateTrigger");
             var scheduler = _schedulerFactory.GetScheduler().Result;
             var jobKeys = scheduler.GetJobKeys(GroupMatcher<JobKey>.GroupEquals("WEATHER")).Result;
 
             if (_citiesSet.GetAllTimerAsString() != citiesSet.GetAllTimerAsString())
             {
-                Console.WriteLine(" --- ConfigChanged");
+                _logger.LogInformation(" --- Changed the set of cities from appsettings --- ");
                 _citiesSet = citiesSet;
+
                 foreach (var job in jobKeys)
                 {
                     scheduler.DeleteJob(job);
                 }
 
                 AddSavingWeatherJobToScheduler();
-
-                var allJobKeys = scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup());
-                foreach (var jobKey in allJobKeys.Result)
-                {
-                    Console.WriteLine($"jobKey: {jobKey}");
-                }
             }
         }
 
         public void AddSavingWeatherJobToScheduler()
         {
-            Console.WriteLine("in addSavingWeatherJobToScheduler");
+            _logger.LogInformation("Method AddSavingWeatherJobToScheduler started executing");
             IJobDetail jobDetail = JobBuilder.Create<SavingWeatherJob>()
                 .WithIdentity(nameof(SavingWeatherJob), "WEATHER")
                 .Build();
 
             List<ITrigger> list = new();
             ITrigger trigger;
+
             foreach (int timer in _optionsMonitor.CurrentValue.Cities.Select(c => c.Timer).OrderBy(c => c).Distinct())
             {
                 trigger = TriggerBuilder.Create()
@@ -63,7 +60,7 @@ namespace Exadel.Forecast.Api.Services
                     .WithSimpleSchedule(s => s.WithIntervalInSeconds(timer).RepeatForever())
                     .Build();
                 list.Add(trigger);
-                Console.WriteLine($"Job: {jobDetail.Key.Name}. Added trigger: {trigger.Key.Name} ");
+                _logger.LogInformation($"Job: {jobDetail.Key.Name}. Added trigger: {trigger.Key.Name} ");
             }
 
             var scheduler = _schedulerFactory.GetScheduler().Result;
