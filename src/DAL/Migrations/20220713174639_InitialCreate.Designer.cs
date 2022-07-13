@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Exadel.Forecast.DAL.Migrations
 {
     [DbContext(typeof(WeatherDbContext))]
-    [Migration("20220712195757_InitialCreate")]
+    [Migration("20220713174639_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
