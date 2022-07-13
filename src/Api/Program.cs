@@ -9,6 +9,7 @@ using ModelsConfig = Exadel.Forecast.Models.Configuration;
 using Quartz;
 using Exadel.Forecast.Api.Models;
 using Exadel.Forecast.DAL.EF;
+using Exadel.Forecast.Api.Logger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +52,8 @@ weatherConfig.WeatherBitKey = Environment.GetEnvironmentVariable("WEATHERBIT_API
 builder.Services.AddScoped<ModelsInterfaces.IConfiguration, ModelsConfig.Configuration>(p => weatherConfig);
 
 builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Logging.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "log.txt"));
 
 var app = builder.Build();
 
