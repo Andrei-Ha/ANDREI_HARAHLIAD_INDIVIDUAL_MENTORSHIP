@@ -3,6 +3,7 @@
     public class FileLoggerProvider : ILoggerProvider
     {
         private readonly string _pathFile;
+        private FileLogger? _fileLogger;
 
         public FileLoggerProvider(string pathFile)
         {
@@ -11,9 +12,13 @@
 
         public ILogger CreateLogger(string categoryName)
         {
-            return new FileLogger(_pathFile);
+            _fileLogger = new FileLogger(_pathFile);
+            return _fileLogger;
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+            _fileLogger?.Dispose();
+        }
     }
 }
