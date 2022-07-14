@@ -25,7 +25,7 @@ namespace Exadel.Forecast.ConsoleApp.CommandBuilders
         public void SetNumberOfForecastDaysByUser()
         {
             Console.WriteLine($"Set the number of forecast days" +
-                $" between {Configuration.MaxAmountOfDays} and {Configuration.MinAmountOfDays}!");
+                $" between {Configuration.MinAmountOfDays} and {Configuration.MaxAmountOfDays}!");
 
             string input = Console.ReadLine();
 

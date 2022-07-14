@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Exadel.Forecast.Domain.Models
 {
-    public class DayModel
+    public class DayModel : BaseModel
     {
         public double AvgTemperature { get; set; }
         public double MaxTemperature { get; set; }
