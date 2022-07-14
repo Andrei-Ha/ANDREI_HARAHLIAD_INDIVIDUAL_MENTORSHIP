@@ -24,9 +24,16 @@
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
         {
-            lock (_lock)
+            try
             {
-                File.AppendAllText(_filePath, formatter(state, exception) + Environment.NewLine);
+                lock (_lock)
+                {
+                    File.AppendAllText(_filePath, formatter(state, exception) + Environment.NewLine);
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine($"Exception in LogFile: {e.Message}");
             }
         }
     }

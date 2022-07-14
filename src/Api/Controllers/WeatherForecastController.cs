@@ -10,14 +10,16 @@ namespace Exadel.Forecast.Api.Controllers
     {
         private readonly IWeatherService<WeatherForecastDTO, ForecastQueryDTO> _forecastService;
         private readonly IWeatherService<CurrentWeatherDTO, CurrentQueryDTO> _currentService;
+        private readonly IWeatherService<WeatherHistoryDTO, HistoryQueryDTO> _historyService;
 
         public WeatherForecastController(
             IWeatherService<WeatherForecastDTO, ForecastQueryDTO> forecastService,
-            IWeatherService<CurrentWeatherDTO, CurrentQueryDTO> currentService)
+            IWeatherService<CurrentWeatherDTO, CurrentQueryDTO> currentService,
+            IWeatherService<WeatherHistoryDTO, HistoryQueryDTO> historyService)
         {
             _forecastService = forecastService;
             _currentService = currentService;
-
+            _historyService = historyService;
         }
 
         [HttpGet]
@@ -30,6 +32,12 @@ namespace Exadel.Forecast.Api.Controllers
         public async Task<IActionResult> GetCurrent([FromQuery]CurrentQueryDTO currentQueryDTO)
         {
             return Ok(await _currentService.Get(currentQueryDTO));
+        }
+
+        [HttpGet("history")]
+        public async Task<IActionResult> GetHistory([FromQuery] HistoryQueryDTO historyQueryDTO)
+        {
+            return Ok(await _historyService.Get(historyQueryDTO));
         }
     }
 }

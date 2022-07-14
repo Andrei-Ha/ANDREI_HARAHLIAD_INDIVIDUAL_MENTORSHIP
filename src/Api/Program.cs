@@ -42,6 +42,7 @@ builder.Services.AddSingleton<OptionsHandler>();
 
 builder.Services.AddScoped<IWeatherService<WeatherForecastDTO, ForecastQueryDTO>, ForecastService>();
 builder.Services.AddScoped<IWeatherService<CurrentWeatherDTO, CurrentQueryDTO>, CurrentService>();
+builder.Services.AddScoped<IWeatherService<WeatherHistoryDTO, HistoryQueryDTO>, HistoryService>();
 builder.Services.AddScoped<IValidator<string>, CityValidator>();
 
 var weatherConfig = new ModelsConfig.Configuration();
