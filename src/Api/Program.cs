@@ -10,6 +10,7 @@ using Quartz;
 using Exadel.Forecast.Api.Models;
 using Exadel.Forecast.DAL.EF;
 using Exadel.Forecast.Api.Logger;
+using Exadel.Forecast.Api.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,8 +40,8 @@ builder.Services.Configure<CitiesSet>(builder.Configuration.GetSection("CitiesSe
 
 builder.Services.AddSingleton<OptionsHandler>();
 
-builder.Services.AddScoped<IForecastService, ForecastService>();
-builder.Services.AddScoped<ICurrentService, CurrentService>();
+builder.Services.AddScoped<IWeatherService<WeatherForecastDTO, ForecastQueryDTO>, ForecastService>();
+builder.Services.AddScoped<IWeatherService<CurrentWeatherDTO, CurrentQueryDTO>, CurrentService>();
 builder.Services.AddScoped<IValidator<string>, CityValidator>();
 
 var weatherConfig = new ModelsConfig.Configuration();

@@ -14,13 +14,13 @@ namespace Exadel.Forecast.Api.Jobs
         private readonly ILogger<SavingWeatherJob> _logger;
         private readonly IOptionsMonitor<CitiesSet> _optionsMonitor;
         private readonly WeatherDbContext _dbContext;
-        private readonly ICurrentService _currentService;
+        private readonly IWeatherService<CurrentWeatherDTO, CurrentQueryDTO> _currentService;
 
         public SavingWeatherJob(
             ILogger<SavingWeatherJob> logger,
             IOptionsMonitor<CitiesSet> optionsMonitor,
             WeatherDbContext weatherDbContext,
-            ICurrentService currentService) 
+            IWeatherService<CurrentWeatherDTO, CurrentQueryDTO> currentService) 
         {
             _logger = logger;
             _optionsMonitor = optionsMonitor;
@@ -33,7 +33,7 @@ namespace Exadel.Forecast.Api.Jobs
             var cityList = _optionsMonitor.CurrentValue.Cities.Where(c => c.Timer == timer).ToList();
             var cityNameList = cityList.Select(c => c.Name).ToList();
 
-            var currentWeatherDTOList = await _currentService.GetCurrent(new CurrentQueryDTO() { Cities = cityNameList });
+            var currentWeatherDTOList = await _currentService.Get(new CurrentQueryDTO() { Cities = cityNameList });
 
             foreach (var currentWeather in currentWeatherDTOList) if (currentWeather != null)
             {

@@ -2,9 +2,8 @@
 
 namespace Exadel.Forecast.Api.DTO
 {
-    public class CurrentWeatherDTO
+    public class CurrentWeatherDTO : BaseWeatherDTO
     {
-        public string City { get; set; } = string.Empty;
         public CurrentModel Current { get; set; } = new CurrentModel();
     }
 }
