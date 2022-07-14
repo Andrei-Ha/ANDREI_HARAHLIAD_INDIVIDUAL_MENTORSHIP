@@ -2,9 +2,8 @@
 
 namespace Exadel.Forecast.Api.DTO
 {
-    public class CurrentQueryDTO
+    public class CurrentQueryDTO : BaseQueryDTO
     {
-        public List<string> Cities { get; set; } = new();
         public ForecastApi ForecastApi { get; set; } = ForecastApi.OpenWeather;
     }
 }
