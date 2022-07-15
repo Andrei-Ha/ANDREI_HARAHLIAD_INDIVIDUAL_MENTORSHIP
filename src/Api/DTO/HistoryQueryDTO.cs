@@ -2,7 +2,7 @@
 {
     public class HistoryQueryDTO : BaseQueryDTO
     {
-        public DateTime StartDateTime { get; set; } = DateTime.Now.AddDays(-1);
-        public DateTime EndDateTime { get; set; } = DateTime.Now;
+        public DateTime? StartDateTime { get; set; }
+        public DateTime? EndDateTime { get; set; }
     }
 }
