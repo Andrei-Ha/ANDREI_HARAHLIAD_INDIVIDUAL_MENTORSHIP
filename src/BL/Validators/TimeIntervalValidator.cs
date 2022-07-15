@@ -10,12 +10,7 @@ namespace Exadel.Forecast.BL.Validators
     {
         public bool IsValid(DateTime? startDateTime, DateTime? endDateTime)
         {
-            if(startDateTime != null && endDateTime != null && startDateTime <= endDateTime)
-            {
-                return true;
-            }
-
-            return false;
+            return startDateTime != null && endDateTime != null && startDateTime <= endDateTime;
         }
     }
 }
