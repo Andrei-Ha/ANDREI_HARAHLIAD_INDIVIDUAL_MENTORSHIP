@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace Exadel.Forecast.BL.CommandBuilders
 {
-    public abstract class BaseCommandBuilder : ICommandBuilder<WeatherCommand>
+    public abstract class BaseCommandBuilder<TCommand> : ICommandBuilder<TCommand>
+        where TCommand : ICommand
     {
         protected IConfiguration Configuration;
         protected IValidator<string> _cityValidator;
-        protected string _cityName;
+        protected string _cityName = string.Empty;
         protected int _amountOfDays = 0;
 
         public BaseCommandBuilder(
@@ -52,11 +53,6 @@ namespace Exadel.Forecast.BL.CommandBuilders
             }
         }
 
-        //public void SetNumberOfForecastDays(int amountOfDays)
-        //{
-        //    _amountOfDays = amountOfDays;
-        //}
-
-        public abstract Task<WeatherCommand> BuildCommand();
+        public abstract Task<TCommand> BuildCommand();
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Exadel.Forecast.ConsoleApp.CommandBuilders
 {
-    public abstract class BaseCommandCmdBuilder : BaseCommandBuilder
+    public abstract class BaseCommandCmdBuilder : BaseCommandBuilder<WeatherCommand>
     {
         public BaseCommandCmdBuilder(
             IConfiguration configuration,

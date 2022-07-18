@@ -6,7 +6,7 @@ using ModelsConfiguration = Exadel.Forecast.Models.Interfaces;
 
 namespace Exadel.Forecast.Api.Builders
 {
-    public class CurrentCommandApiBuilder : BaseCommandBuilder
+    public class CurrentCommandApiBuilder : BaseCommandBuilder<WeatherCommand>
     {
         private readonly CurrentQueryDTO _queryDTO;
 

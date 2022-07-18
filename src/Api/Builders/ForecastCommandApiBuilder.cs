@@ -8,7 +8,7 @@ using ModelsConfiguration = Exadel.Forecast.Models.Interfaces;
 
 namespace Exadel.Forecast.Api.Builders
 {
-    public class ForecastCommandApiBuilder : BaseCommandBuilder
+    public class ForecastCommandApiBuilder : BaseCommandBuilder<WeatherCommand>
     {
         private readonly ForecastQueryDTO _queryDTO;
         private readonly IValidator<int> _forecastNumberValidator;

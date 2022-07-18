@@ -4,19 +4,19 @@ using Exadel.Forecast.BL.Interfaces;
 
 namespace Exadel.Forecast.Api.Strategies
 {
-    public class ForecastStrategy : IWeatherStrategy<IEnumerable<WeatherForecastDTO>>
+    public class HistoryStrategy : IWeatherStrategy<IEnumerable<WeatherHistoryDTO>>
     {
         private readonly IMapper _mapper;
 
-        public ForecastStrategy(IMapper mapper)
+        public HistoryStrategy(IMapper mapper)
         {
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<WeatherForecastDTO>> Execute(ICommand weatherCommand)
+        public async Task<IEnumerable<WeatherHistoryDTO>> Execute(ICommand weatherCommand)
         {
             var weatherForecastList = await weatherCommand.GetResultAsync();
-            List<WeatherForecastDTO> dtoList = weatherForecastList.Select(p => _mapper.Map<WeatherForecastDTO>(p.Model)).ToList();
+            List<WeatherHistoryDTO> dtoList = weatherForecastList.Select(p => _mapper.Map<WeatherHistoryDTO>(p.Model)).ToList();
             return dtoList;
         }
     }

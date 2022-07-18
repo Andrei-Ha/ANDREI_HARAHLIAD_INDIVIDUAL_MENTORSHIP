@@ -32,5 +32,10 @@ namespace Exadel.Forecast.DAL.Repositories
 
             return forecastDebugModel;
         }
+
+        public Task<DebugModel<ForecastModel>> GetHistoryAsync(string cityName, DateTime startDate, DateTime endDate, CancellationToken token = default)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
