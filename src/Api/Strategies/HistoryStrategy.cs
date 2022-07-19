@@ -13,9 +13,9 @@ namespace Exadel.Forecast.Api.Strategies
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<WeatherHistoryDTO>> Execute(ICommand weatherCommand)
+        public async Task<IEnumerable<WeatherHistoryDTO>> Execute(ICommand historyCommand)
         {
-            var weatherForecastList = await weatherCommand.GetResultAsync();
+            var weatherForecastList = await historyCommand.GetResultAsync();
             List<WeatherHistoryDTO> dtoList = weatherForecastList.Select(p => _mapper.Map<WeatherHistoryDTO>(p.Model)).ToList();
             return dtoList;
         }

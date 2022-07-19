@@ -11,6 +11,7 @@ using Exadel.Forecast.Api.Models;
 using Exadel.Forecast.DAL.EF;
 using Exadel.Forecast.Api.Logger;
 using Exadel.Forecast.Api.DTO;
+using Exadel.Forecast.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,6 +59,8 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Logging.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "log.txt"));
 
 var app = builder.Build();
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

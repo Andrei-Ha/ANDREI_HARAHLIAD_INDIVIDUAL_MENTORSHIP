@@ -35,24 +35,10 @@ namespace Exadel.Forecast.BL.CommandBuilders
             Configuration.SetDefaultForecastApi(weatherProvider);
         }
 
-        public void SetCityName(string cityName)
-        {
-            CityName = cityName;
-        }
+        public abstract void SetCityName(string cityName);
 
-        public void SetCityName(IEnumerable<string> cityNames)
-        {
-            string input = string.Join(",", cityNames);
-            if (!CityValidator.IsValid(input))
-            {
-                CityName = "default";
-            }
-            else
-            {
-                CityName = string.Join(",", cityNames);
-            }
-        }
-
+        public abstract void SetCityName(IEnumerable<string> cityNames);
+        
         public abstract Task<TCommand> BuildCommand();
     }
 }

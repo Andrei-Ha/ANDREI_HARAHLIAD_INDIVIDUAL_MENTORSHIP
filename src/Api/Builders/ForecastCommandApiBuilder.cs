@@ -1,5 +1,4 @@
 ﻿using Exadel.Forecast.Api.DTO;
-using Exadel.Forecast.BL.CommandBuilders;
 using Exadel.Forecast.BL.Commands;
 using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.Models.Configuration;
@@ -8,7 +7,7 @@ using ModelsConfiguration = Exadel.Forecast.Models.Interfaces;
 
 namespace Exadel.Forecast.Api.Builders
 {
-    public class ForecastCommandApiBuilder : BaseCommandBuilder<WeatherCommand>
+    public class ForecastCommandApiBuilder : BaseCommandApiBuilder<WeatherCommand>
     {
         private readonly ForecastQueryDTO _queryDTO;
         private readonly IValidator<int> _forecastNumberValidator;
@@ -28,14 +27,14 @@ namespace Exadel.Forecast.Api.Builders
             if (!_forecastNumberValidator.IsValid(AmountOfDays))
             {
                 // Loger: wrong number
-                AmountOfDays = Configuration.MinAmountOfDays;
+                throw new HttpRequestException($"The number of forecast days must be" +
+                $" between {Configuration.MinAmountOfDays} and {Configuration.MaxAmountOfDays}!", null, System.Net.HttpStatusCode.UnprocessableEntity);
             }
             else
             {
                 AmountOfDays = amountOfDays;
             }
         }
-
 
         public override Task<WeatherCommand> BuildCommand()
         {

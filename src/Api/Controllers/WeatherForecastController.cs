@@ -1,6 +1,5 @@
 using Exadel.Forecast.Api.DTO;
 using Exadel.Forecast.Api.Interfaces;
-using Exadel.Forecast.BL.Validators;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Exadel.Forecast.Api.Controllers
@@ -38,13 +37,6 @@ namespace Exadel.Forecast.Api.Controllers
         [HttpGet("history")]
         public async Task<IActionResult> GetHistory([FromQuery] HistoryQueryDTO historyQueryDTO)
         {
-            var timeIntervalValidator = new TimeIntervalValidator();
-
-            if (!timeIntervalValidator.IsValid(historyQueryDTO.StartDateTime, historyQueryDTO.EndDateTime))
-            {
-                return BadRequest();
-            }
-
             return Ok(await _historyService.Get(historyQueryDTO));
         }
     }
