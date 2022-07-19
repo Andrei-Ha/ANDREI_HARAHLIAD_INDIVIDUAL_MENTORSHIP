@@ -12,22 +12,22 @@ namespace Exadel.Forecast.BL.CommandBuilders
         where TCommand : ICommand
     {
         protected IConfiguration Configuration;
-        protected IValidator<string> _cityValidator;
-        protected string _cityName = string.Empty;
-        protected int _amountOfDays = 0;
+        protected IValidator<string> CityValidator;
+        protected string CityName = string.Empty;
+        protected int AmountOfDays = 0;
 
         public BaseCommandBuilder(
             IConfiguration configuration,
             IValidator<string> cityValidator)
         {
             Configuration = configuration;
-            _cityValidator = cityValidator;
+            CityValidator = cityValidator;
         }
 
         public void Reset() 
         {
-            _cityName = string.Empty;
-            _amountOfDays = 0;
+            CityName = string.Empty;
+            AmountOfDays = 0;
         }
 
         public void SetWeatherProvider(ForecastApi weatherProvider)
@@ -37,19 +37,19 @@ namespace Exadel.Forecast.BL.CommandBuilders
 
         public void SetCityName(string cityName)
         {
-            _cityName = cityName;
+            CityName = cityName;
         }
 
         public void SetCityName(IEnumerable<string> cityNames)
         {
             string input = string.Join(",", cityNames);
-            if (!_cityValidator.IsValid(input))
+            if (!CityValidator.IsValid(input))
             {
-                _cityName = "default";
+                CityName = "default";
             }
             else
             {
-                _cityName = string.Join(",", cityNames);
+                CityName = string.Join(",", cityNames);
             }
         }
 

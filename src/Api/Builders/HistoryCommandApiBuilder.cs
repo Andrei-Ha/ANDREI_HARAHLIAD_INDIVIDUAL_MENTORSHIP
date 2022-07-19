@@ -28,7 +28,7 @@ namespace Exadel.Forecast.Api.Builders
             SetWeatherProvider(ForecastApi.WeatherApi);
             SetCityName(string.Join(",", _queryDTO.Cities));
             return Task.FromResult(
-                new HistoryCommand(_cityName, Configuration, _queryDTO.StartDateTime, _queryDTO.EndDateTime, _dbContext));
+                new HistoryCommand(CityName, Configuration, _queryDTO.StartDateTime, _queryDTO.EndDateTime, _dbContext));
         }
     }
 }

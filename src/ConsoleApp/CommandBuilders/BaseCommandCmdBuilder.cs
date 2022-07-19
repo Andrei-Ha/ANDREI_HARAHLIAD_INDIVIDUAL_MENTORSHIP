@@ -52,14 +52,14 @@ namespace Exadel.Forecast.ConsoleApp.CommandBuilders
             Console.WriteLine("Enter city names separated by commas, please");
             string input = Console.ReadLine();
 
-            if (!_cityValidator.IsValid(input))
+            if (!CityValidator.IsValid(input))
             {
                 Console.WriteLine("An invalid city name was entered!");
                 SetCityNameByUser();
             }
             else
             {
-                _cityName = input;
+                CityName = input;
             }
         }
 

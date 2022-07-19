@@ -25,14 +25,14 @@ namespace Exadel.Forecast.Api.Builders
 
         private void SetNumberOfForecastDays(int amountOfDays) 
         {
-            if (!_forecastNumberValidator.IsValid(_amountOfDays))
+            if (!_forecastNumberValidator.IsValid(AmountOfDays))
             {
                 // Loger: wrong number
-                _amountOfDays = Configuration.MinAmountOfDays;
+                AmountOfDays = Configuration.MinAmountOfDays;
             }
             else
             {
-                _amountOfDays = amountOfDays;
+                AmountOfDays = amountOfDays;
             }
         }
 
@@ -42,7 +42,7 @@ namespace Exadel.Forecast.Api.Builders
             SetWeatherProvider(ForecastApi.WeatherBit);
             SetCityName(string.Join(",", _queryDTO.Cities));
             SetNumberOfForecastDays(_queryDTO.Days);
-            return Task.FromResult(new WeatherCommand(_cityName, Configuration, _amountOfDays));
+            return Task.FromResult(new WeatherCommand(CityName, Configuration, AmountOfDays));
         }
     }
 }

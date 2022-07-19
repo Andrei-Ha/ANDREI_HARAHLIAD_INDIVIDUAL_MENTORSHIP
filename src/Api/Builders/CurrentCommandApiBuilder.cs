@@ -21,7 +21,7 @@ namespace Exadel.Forecast.Api.Builders
         {
             SetWeatherProvider(_queryDTO.ForecastApi);
             SetCityName(string.Join(",", _queryDTO.Cities));
-            return Task.FromResult(new WeatherCommand(_cityName, Configuration, 0));
+            return Task.FromResult(new WeatherCommand(CityName, Configuration, 0));
         }
     }
 }
