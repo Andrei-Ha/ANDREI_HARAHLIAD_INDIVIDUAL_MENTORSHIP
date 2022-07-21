@@ -12,6 +12,7 @@ using Exadel.Forecast.DAL.EF;
 using Exadel.Forecast.Api.Logger;
 using Exadel.Forecast.Api.DTO;
 using Exadel.Forecast.Api.Middleware;
+using Exadel.Forecast.BL.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,7 @@ builder.Services.AddScoped<IWeatherService<WeatherForecastDTO, ForecastQueryDTO>
 builder.Services.AddScoped<IWeatherService<CurrentWeatherDTO, CurrentQueryDTO>, CurrentService>();
 builder.Services.AddScoped<IWeatherService<WeatherHistoryDTO, HistoryQueryDTO>, HistoryService>();
 builder.Services.AddScoped<IValidator<string>, CityValidator>();
+builder.Services.AddScoped<IValidator<TimeInterval>, TimeIntervalValidator>();
 
 var weatherConfig = new ModelsConfig.Configuration();
 builder.Configuration.GetSection("WeatherConfig").Bind(weatherConfig);
