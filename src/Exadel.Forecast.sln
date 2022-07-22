@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exadel.Forecast.ConsoleApp", "ConsoleApp\Exadel.Forecast.ConsoleApp.csproj", "{A8541576-6D2C-4541-8731-953E8CC25971}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exadel.Forecast.ConsoleApp", "ConsoleApp\Exadel.Forecast.ConsoleApp.csproj", "{A8541576-6D2C-4541-8731-953E8CC25971}"
 	ProjectSection(ProjectDependencies) = postProject
 		{83746A0A-96D7-49F3-9744-4BCDBDF1C00D} = {83746A0A-96D7-49F3-9744-4BCDBDF1C00D}
 	EndProjectSection
@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exadel.Forecast.Integration
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exadel.Forecast.Domain", "Domain\Exadel.Forecast.Domain.csproj", "{C9C519A4-CA5C-4E48-9EC5-51D015F7D4A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exadel.Forecast.Api", "Api\Exadel.Forecast.Api.csproj", "{292729EB-E49D-4F28-AF02-DC25CA5359C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exadel.Forecast.Api", "Api\Exadel.Forecast.Api.csproj", "{292729EB-E49D-4F28-AF02-DC25CA5359C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exadel.Forecast.IdentityServer", "IdentityServer\Exadel.Forecast.IdentityServer.csproj", "{D0CC77C1-E625-458A-BAFB-C2C07C274B44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{292729EB-E49D-4F28-AF02-DC25CA5359C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{292729EB-E49D-4F28-AF02-DC25CA5359C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{292729EB-E49D-4F28-AF02-DC25CA5359C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0CC77C1-E625-458A-BAFB-C2C07C274B44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0CC77C1-E625-458A-BAFB-C2C07C274B44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0CC77C1-E625-458A-BAFB-C2C07C274B44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0CC77C1-E625-458A-BAFB-C2C07C274B44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

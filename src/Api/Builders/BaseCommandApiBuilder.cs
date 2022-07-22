@@ -1,6 +1,5 @@
 ﻿using Exadel.Forecast.BL.CommandBuilders;
 using Exadel.Forecast.BL.Interfaces;
-using System.Windows.Input;
 using ModelsConfiguration = Exadel.Forecast.Models.Interfaces;
 
 namespace Exadel.Forecast.Api.Builders
@@ -25,6 +24,7 @@ namespace Exadel.Forecast.Api.Builders
         public override void SetCityName(IEnumerable<string> cityNames)
         {
             string input = string.Join(",", cityNames);
+
             if (!CityValidator.IsValid(input))
             {
                 throw new HttpRequestException(wrongCityName, null, System.Net.HttpStatusCode.UnprocessableEntity);

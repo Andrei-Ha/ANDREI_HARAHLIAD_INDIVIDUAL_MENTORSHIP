@@ -1,24 +1,50 @@
+using Exadel.Forecast.Api.DTO;
 using Exadel.Forecast.Api.Interfaces;
 using Exadel.Forecast.Api.Jobs;
+using Exadel.Forecast.Api.Logger;
+using Exadel.Forecast.Api.Middleware;
+using Exadel.Forecast.Api.Models;
 using Exadel.Forecast.Api.Services;
 using Exadel.Forecast.BL.Interfaces;
-using Exadel.Forecast.BL.Validators;
-using Microsoft.EntityFrameworkCore;
-using ModelsInterfaces = Exadel.Forecast.Models.Interfaces;
-using ModelsConfig = Exadel.Forecast.Models.Configuration;
-using Quartz;
-using Exadel.Forecast.Api.Models;
-using Exadel.Forecast.DAL.EF;
-using Exadel.Forecast.Api.Logger;
-using Exadel.Forecast.Api.DTO;
-using Exadel.Forecast.Api.Middleware;
 using Exadel.Forecast.BL.Models;
+using Exadel.Forecast.BL.Validators;
+using Exadel.Forecast.DAL.EF;
+using Microsoft.EntityFrameworkCore;
+using ModelsConfig = Exadel.Forecast.Models.Configuration;
+using ModelsInterfaces = Exadel.Forecast.Models.Interfaces;
+using Quartz;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+// accepts any access token issued by identity server
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.RequireHttpsMetadata = false;
+
+        options.Authority = "https://localhost:7205";
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = false
+        };
+    });
+
+// adds an authorization policy to make sure the token is for scope 'api1'
+builder.Services.AddAuthorization(options =>
+{ 
+    options.AddPolicy("ApiScope", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim("scope", "Exadel.Forecast.Api");
+    });
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -72,6 +98,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
