@@ -31,7 +31,7 @@ namespace Exadel.Forecast.ConsoleApp.CommandBuilders
 
             if (int.TryParse(input, out int value) && _forecastNumberValidator.IsValid(value))
             {
-                _amountOfDays = value;
+                AmountOfDays = value;
             }
             else
             {
@@ -45,7 +45,7 @@ namespace Exadel.Forecast.ConsoleApp.CommandBuilders
             SetWeatherProvider(ForecastApi.WeatherBit);
             SetNumberOfForecastDaysByUser();
             SetCityNameByUser();
-            return Task.FromResult(new WeatherCommand(_cityName, Configuration, _amountOfDays));
+            return Task.FromResult(new WeatherCommand(CityName, Configuration, AmountOfDays));
         }
     }
 }

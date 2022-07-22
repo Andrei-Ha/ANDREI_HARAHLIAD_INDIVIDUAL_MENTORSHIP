@@ -32,13 +32,13 @@ namespace Exadel.Forecast.BL.Commands
         public async Task<List<DebugModel<ForecastModel>>> GetResultAsync()
         {
 
-            CancellationTokenSource source = new CancellationTokenSource();
+            CancellationTokenSource source = new();
             source.CancelAfter(_configuration.ExecutionTime);
             CancellationToken token = source.Token;
 
             var forecastRepository = _configuration.GetDefaultForecastApi();
             string[] cityNames = _cityNames.Split(',').Select(p => p.Trim()).ToArray();
-            List<Task<DebugModel<ForecastModel>>> tasksList = new List<Task<DebugModel<ForecastModel>>>();
+            List<Task<DebugModel<ForecastModel>>> tasksList = new();
 
             foreach (var cityName in cityNames)
             {

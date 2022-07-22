@@ -8,26 +8,36 @@ namespace Exadel.Forecast.Api.Controllers
     [Route("api/[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private readonly IForecastService _forecastService;
-        private readonly ICurrentService _currentService;
+        private readonly IWeatherService<WeatherForecastDTO, ForecastQueryDTO> _forecastService;
+        private readonly IWeatherService<CurrentWeatherDTO, CurrentQueryDTO> _currentService;
+        private readonly IWeatherService<WeatherHistoryDTO, HistoryQueryDTO> _historyService;
 
-        public WeatherForecastController(IForecastService forecastService, ICurrentService currentService)
+        public WeatherForecastController(
+            IWeatherService<WeatherForecastDTO, ForecastQueryDTO> forecastService,
+            IWeatherService<CurrentWeatherDTO, CurrentQueryDTO> currentService,
+            IWeatherService<WeatherHistoryDTO, HistoryQueryDTO> historyService)
         {
             _forecastService = forecastService;
             _currentService = currentService;
-
+            _historyService = historyService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery]ForecastQueryDTO forecastQueryDTO)
         {
-            return Ok(await _forecastService.GetForecast(forecastQueryDTO));
+            return Ok(await _forecastService.Get(forecastQueryDTO));
         }
 
         [HttpGet("current")]
         public async Task<IActionResult> GetCurrent([FromQuery]CurrentQueryDTO currentQueryDTO)
         {
-            return Ok(await _currentService.GetCurrent(currentQueryDTO));
+            return Ok(await _currentService.Get(currentQueryDTO));
+        }
+
+        [HttpGet("history")]
+        public async Task<IActionResult> GetHistory([FromQuery] HistoryQueryDTO historyQueryDTO)
+        {
+            return Ok(await _historyService.Get(historyQueryDTO));
         }
     }
 }

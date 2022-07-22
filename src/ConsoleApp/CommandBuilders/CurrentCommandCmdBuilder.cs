@@ -21,7 +21,7 @@ namespace Exadel.Forecast.ConsoleApp.CommandBuilders
         {
             SetWeatherProviderByUser();
             SetCityNameByUser();
-            return Task.FromResult(new WeatherCommand(_cityName, Configuration, _amountOfDays));
+            return Task.FromResult(new WeatherCommand(CityName, Configuration, AmountOfDays));
         }
     }
 }

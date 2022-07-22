@@ -15,9 +15,13 @@ namespace Exadel.Forecast.DAL.Models.Weatherapi
         public ForecastModel UpdateForecastModel(ForecastModel forecastModel)
         {
             forecastModel.City = Location.Name;
-            forecastModel.Current.Temperature = Current.TempC;
-            forecastModel.Current.Date = DateTimeOffset.FromUnixTimeSeconds(Current.LastUpdatedEpoch).DateTime;
-            List<DayModel> dayList = new List<DayModel>();
+            if (Current != null)
+            {
+                forecastModel.Current.Temperature = Current.TempC;
+                forecastModel.Current.Date = DateTimeOffset.FromUnixTimeSeconds(Current.LastUpdatedEpoch).DateTime;
+            }
+            List<DayModel> dayList = new();
+            List<CurrentModel> historyList = new();
             foreach (var day in Forecast.Forecastday)
             {
                 dayList.Add(new DayModel()
@@ -27,9 +31,19 @@ namespace Exadel.Forecast.DAL.Models.Weatherapi
                     MaxTemperature = day.Day.MaxTempC,
                     MinTemperature = day.Day.MinTempC
                 });
+
+                foreach(var hour in day.hour)
+                {
+                    historyList.Add(new CurrentModel() 
+                    { 
+                        Date = DateTimeOffset.FromUnixTimeSeconds(hour.DateEpoch).DateTime,
+                        Temperature = hour.TempC 
+                    });
+                }
             }
 
             forecastModel.Days = dayList;
+            forecastModel.History = historyList;
 
             return forecastModel;
         }

@@ -7,5 +7,6 @@ namespace Exadel.Forecast.DAL.Models.Weatherapi
         [JsonProperty("date_epoch")]
         public int DateEpoch { get; set; }
         public Day Day { get; set; }
+        public Hour[] hour { get; set; }
     }
 }

@@ -9,7 +9,7 @@ using ModelsInterfaces = Exadel.Forecast.Models.Interfaces;
 
 namespace Exadel.Forecast.Api.Services
 {
-    public class ForecastService : IForecastService
+    public class ForecastService : IWeatherService<WeatherForecastDTO, ForecastQueryDTO>
     {
         private readonly IMapper _mapper;
         private readonly ModelsInterfaces.IConfiguration _configuration;
@@ -25,7 +25,7 @@ namespace Exadel.Forecast.Api.Services
             _cityValidator = cityValidator;
         }
 
-        public async Task<IEnumerable<WeatherForecastDTO>> GetForecast(ForecastQueryDTO queryDTO)
+        public async Task<IEnumerable<WeatherForecastDTO>> Get(ForecastQueryDTO queryDTO)
         {
             var forecastNumberValidator = new ForecastNumberValidator(_configuration.MinAmountOfDays, _configuration.MaxAmountOfDays);
             var commandBuilder = new ForecastCommandApiBuilder(_configuration, _cityValidator, queryDTO, forecastNumberValidator);

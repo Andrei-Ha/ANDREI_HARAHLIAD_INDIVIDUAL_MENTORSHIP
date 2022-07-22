@@ -1,5 +1,4 @@
 ﻿using Exadel.Forecast.Api.DTO;
-using Exadel.Forecast.BL.CommandBuilders;
 using Exadel.Forecast.BL.Commands;
 using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.Models.Configuration;
@@ -8,7 +7,7 @@ using ModelsConfiguration = Exadel.Forecast.Models.Interfaces;
 
 namespace Exadel.Forecast.Api.Builders
 {
-    public class ForecastCommandApiBuilder : BaseCommandBuilder
+    public class ForecastCommandApiBuilder : BaseCommandApiBuilder<WeatherCommand>
     {
         private readonly ForecastQueryDTO _queryDTO;
         private readonly IValidator<int> _forecastNumberValidator;
@@ -25,24 +24,24 @@ namespace Exadel.Forecast.Api.Builders
 
         private void SetNumberOfForecastDays(int amountOfDays) 
         {
-            if (!_forecastNumberValidator.IsValid(_amountOfDays))
+            if (!_forecastNumberValidator.IsValid(AmountOfDays))
             {
                 // Loger: wrong number
-                _amountOfDays = Configuration.MinAmountOfDays;
+                throw new HttpRequestException($"The number of forecast days must be" +
+                $" between {Configuration.MinAmountOfDays} and {Configuration.MaxAmountOfDays}!", null, System.Net.HttpStatusCode.UnprocessableEntity);
             }
             else
             {
-                _amountOfDays = amountOfDays;
+                AmountOfDays = amountOfDays;
             }
         }
-
 
         public override Task<WeatherCommand> BuildCommand()
         {
             SetWeatherProvider(ForecastApi.WeatherBit);
             SetCityName(string.Join(",", _queryDTO.Cities));
             SetNumberOfForecastDays(_queryDTO.Days);
-            return Task.FromResult(new WeatherCommand(_cityName, Configuration, _amountOfDays));
+            return Task.FromResult(new WeatherCommand(CityName, Configuration, AmountOfDays));
         }
     }
 }

@@ -4,7 +4,7 @@ using Exadel.Forecast.BL.Interfaces;
 
 namespace Exadel.Forecast.Api.Strategies
 {
-    public class ForecastStrategy
+    public class ForecastStrategy : IWeatherStrategy<IEnumerable<WeatherForecastDTO>>
     {
         private readonly IMapper _mapper;
 
