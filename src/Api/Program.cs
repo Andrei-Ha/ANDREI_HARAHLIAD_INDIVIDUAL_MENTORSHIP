@@ -27,7 +27,7 @@ builder.Services.AddAuthentication("Bearer")
     {
         options.RequireHttpsMetadata = false;
 
-        options.Authority = "https://localhost:7205";
+        options.Authority = builder.Configuration["IdentityServer:Url"];
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
