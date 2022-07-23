@@ -38,10 +38,11 @@ builder.Services.AddAuthentication("Bearer")
 // adds an authorization policy to make sure the token is for scope 'api1'
 builder.Services.AddAuthorization(options =>
 { 
-    options.AddPolicy("ApiScope", policy =>
+    options.AddPolicy("PostmanUser", policy =>
     {
         policy.RequireAuthenticatedUser();
-        policy.RequireClaim("scope", "Exadel.Forecast.Api");
+        policy.RequireClaim("scope", "postman");
+        policy.RequireRole("User");
     });
 });
 

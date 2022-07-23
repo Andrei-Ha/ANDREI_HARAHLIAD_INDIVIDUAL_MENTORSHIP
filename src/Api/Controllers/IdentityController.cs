@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Exadel.Forecast.Api.Controllers
 {
     [Route("identity")]
-    [Authorize(Policy = "ApiScope")]
+    [Authorize(Policy = "PostmanUser")]
     public class IdentityController : ControllerBase
     {
         public IActionResult Get()
