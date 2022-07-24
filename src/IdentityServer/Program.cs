@@ -1,14 +1,33 @@
 using Exadel.Forecast.IdentityServer;
 using Exadel.Forecast.IdentityServer.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
+
+var migrationAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
+
 builder.Services.AddIdentityServer()
-    .AddInMemoryIdentityResources(Config.IdentityResources)
-    .AddInMemoryApiScopes(Config.ApiScopes)
-    .AddInMemoryClients(Config.Clients)
     .AddTestUsers(TestUsers.Users)
-    .AddDeveloperSigningCredential();
+    .AddConfigurationStore(options =>
+    {
+        options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
+            sql => sql.MigrationsAssembly(migrationAssembly));
+    })
+    .AddOperationalStore(options =>
+    {
+        options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
+            sql => sql.MigrationsAssembly(migrationAssembly));
+    });
+
+//builder.Services.AddIdentityServer()
+//    .AddInMemoryIdentityResources(Config.IdentityResources)
+//    .AddInMemoryApiScopes(Config.ApiScopes)
+//    .AddInMemoryClients(Config.Clients)
+//    .AddTestUsers(TestUsers.Users)
+//    .AddDeveloperSigningCredential();
 
 var app = builder.Build();
 
