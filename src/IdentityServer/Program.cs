@@ -1,4 +1,3 @@
-using Exadel.Forecast.IdentityServer;
 using Exadel.Forecast.IdentityServer.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -20,16 +19,12 @@ builder.Services.AddIdentityServer()
     {
         options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
             sql => sql.MigrationsAssembly(migrationAssembly));
-    });
-
-//builder.Services.AddIdentityServer()
-//    .AddInMemoryIdentityResources(Config.IdentityResources)
-//    .AddInMemoryApiScopes(Config.ApiScopes)
-//    .AddInMemoryClients(Config.Clients)
-//    .AddTestUsers(TestUsers.Users)
-//    .AddDeveloperSigningCredential();
+    })
+    .AddDeveloperSigningCredential();
 
 var app = builder.Build();
+
+SeedData.InitializeDatabase(app);
 
 app.UseDeveloperExceptionPage();
 
