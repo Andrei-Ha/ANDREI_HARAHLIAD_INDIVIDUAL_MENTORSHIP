@@ -1,11 +1,13 @@
 using Exadel.Forecast.Api.DTO;
 using Exadel.Forecast.Api.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Exadel.Forecast.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class WeatherForecastController : ControllerBase
     {
         private readonly IWeatherService<WeatherForecastDTO, ForecastQueryDTO> _forecastService;
@@ -35,6 +37,7 @@ namespace Exadel.Forecast.Api.Controllers
         }
 
         [HttpGet("history")]
+        [Authorize(Policy = "PostmanUser")]
         public async Task<IActionResult> GetHistory([FromQuery] HistoryQueryDTO historyQueryDTO)
         {
             return Ok(await _historyService.Get(historyQueryDTO));
