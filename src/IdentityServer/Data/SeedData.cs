@@ -10,7 +10,10 @@ namespace Exadel.Forecast.IdentityServer.Data
 {
     public static class SeedData
     {
-        public static void InitializeDatabase(IApplicationBuilder app)
+        private const string UserRole = "User";
+        private const string AdminRole = "Admin";
+
+        public static async Task InitializeDatabase(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
@@ -48,7 +51,24 @@ namespace Exadel.Forecast.IdentityServer.Data
                 }
 
                 var userMgr = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                var alice = userMgr.FindByNameAsync("alice").Result;
+                var roleMgr = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                var adminRole = await roleMgr.FindByNameAsync(AdminRole);
+
+                if (adminRole == null)
+                {
+                    await roleMgr.CreateAsync(new IdentityRole(AdminRole));
+                }
+
+                var userRole = await roleMgr.FindByNameAsync(UserRole);
+
+                if (userRole == null)
+                {
+                    await roleMgr.CreateAsync(new IdentityRole(UserRole));
+                }
+
+
+                var alice = await userMgr.FindByNameAsync("alice");
                 if (alice == null)
                 {
                     alice = new ApplicationUser
@@ -57,19 +77,21 @@ namespace Exadel.Forecast.IdentityServer.Data
                         Email = "AliceSmith@email.com",
                         EmailConfirmed = true,
                     };
-                    var result = userMgr.CreateAsync(alice, "Pass123$").Result;
+                    var result = await userMgr.CreateAsync(alice, "Pass123$");
                     if (!result.Succeeded)
                     {
                         throw new Exception(result.Errors.First().Description);
                     }
 
-                    result = userMgr.AddClaimsAsync(alice, new Claim[]{
-                            new Claim(JwtClaimTypes.Role, "Admin"),
+                    var res = await userMgr.AddToRoleAsync(alice, AdminRole);
+
+                    result = await userMgr.AddClaimsAsync(alice, new Claim[]{
                             new Claim(JwtClaimTypes.Name, "Alice Smith"),
                             new Claim(JwtClaimTypes.GivenName, "Alice"),
                             new Claim(JwtClaimTypes.FamilyName, "Smith"),
                             new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                        }).Result;
+                        });
+
                     if (!result.Succeeded)
                     {
                         throw new Exception(result.Errors.First().Description);
@@ -81,7 +103,7 @@ namespace Exadel.Forecast.IdentityServer.Data
                     Console.WriteLine("alice already exists");
                 }
 
-                var bob = userMgr.FindByNameAsync("bob").Result;
+                var bob = await userMgr.FindByNameAsync("bob");
                 if (bob == null)
                 {
                     bob = new ApplicationUser
@@ -90,20 +112,24 @@ namespace Exadel.Forecast.IdentityServer.Data
                         Email = "BobSmith@email.com",
                         EmailConfirmed = true
                     };
-                    var result = userMgr.CreateAsync(bob, "Pass123$").Result;
+
+                    var result = await userMgr.CreateAsync(bob, "Pass123$");
+
                     if (!result.Succeeded)
                     {
                         throw new Exception(result.Errors.First().Description);
                     }
 
-                    result = userMgr.AddClaimsAsync(bob, new Claim[]{
-                            new Claim(JwtClaimTypes.Role, "User"),
+                    var res = await userMgr.AddToRoleAsync(bob, UserRole);
+
+                    result = await userMgr.AddClaimsAsync(bob, new Claim[]{
                             new Claim(JwtClaimTypes.Name, "Bob Smith"),
                             new Claim(JwtClaimTypes.GivenName, "Bob"),
                             new Claim(JwtClaimTypes.FamilyName, "Smith"),
                             new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
                             new Claim("location", "somewhere")
-                        }).Result;
+                        });
+
                     if (!result.Succeeded)
                     {
                         throw new Exception(result.Errors.First().Description);

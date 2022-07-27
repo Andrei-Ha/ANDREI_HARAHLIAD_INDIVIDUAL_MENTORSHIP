@@ -33,7 +33,7 @@ builder.Services.AddIdentityServer()
 
 var app = builder.Build();
 
-SeedData.InitializeDatabase(app);
+await SeedData.InitializeDatabase(app);
 
 app.UseDeveloperExceptionPage();
 
