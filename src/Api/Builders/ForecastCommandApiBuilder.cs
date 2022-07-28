@@ -24,7 +24,7 @@ namespace Exadel.Forecast.Api.Builders
 
         private void SetNumberOfForecastDays(int amountOfDays) 
         {
-            if (!_forecastNumberValidator.IsValid(AmountOfDays))
+            if (!_forecastNumberValidator.IsValid(amountOfDays))
             {
                 // Loger: wrong number
                 throw new HttpRequestException($"The number of forecast days must be" +
