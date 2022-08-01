@@ -1,6 +1,6 @@
 using Exadel.Forecast.Api.DTO;
 using Exadel.Forecast.Api.Interfaces;
-using Exadel.Forecast.DAL.Models;
+using Exadel.Forecast.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -46,7 +46,7 @@ namespace Exadel.Forecast.Api.Controllers
 
         [HttpGet("subscribtion")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Subscription([FromQuery] Subscription statisticDTO)
+        public async Task<IActionResult> Subscription([FromQuery] SubscriptionModel statisticDTO)
         {
             return Ok();
         }
