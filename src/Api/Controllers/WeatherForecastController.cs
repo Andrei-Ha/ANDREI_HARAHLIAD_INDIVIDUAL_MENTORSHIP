@@ -1,5 +1,6 @@
 using Exadel.Forecast.Api.DTO;
 using Exadel.Forecast.Api.Interfaces;
+using Exadel.Forecast.DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,6 +42,13 @@ namespace Exadel.Forecast.Api.Controllers
         public async Task<IActionResult> GetHistory([FromQuery] HistoryQueryDTO historyQueryDTO)
         {
             return Ok(await _historyService.Get(historyQueryDTO));
+        }
+
+        [HttpGet("subscribtion")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Subscription([FromQuery] Subscription statisticDTO)
+        {
+            return Ok();
         }
     }
 }
