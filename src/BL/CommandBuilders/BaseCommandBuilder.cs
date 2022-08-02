@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Exadel.Forecast.BL.CommandBuilders
 {
-    public abstract class BaseCommandBuilder<TCommand> : ICommandBuilder<TCommand>
-        where TCommand : ICommand
+    public abstract class BaseCommandBuilder<TCommand> : IForecastCommandBuilder<TCommand>
+        where TCommand : IForecastCommand
     {
         protected IConfiguration Configuration;
         protected IValidator<string> CityValidator;

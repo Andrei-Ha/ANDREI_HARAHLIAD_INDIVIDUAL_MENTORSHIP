@@ -15,7 +15,7 @@ namespace Exadel.Forecast.BL.Strategies
         {
         }
 
-        public override async Task<string> Execute(ICommand weatherCommand)
+        public override async Task<string> Execute(IForecastCommand weatherCommand)
         {
             var debugForecastModelList = await weatherCommand.GetResultAsync();
             StringBuilder sb = new StringBuilder();
