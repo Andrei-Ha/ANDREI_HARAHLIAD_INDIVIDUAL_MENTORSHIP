@@ -18,8 +18,8 @@ namespace Exadel.Forecast.ConsoleApp
         static async Task Main(string[] args)
         {
             InitConfiguration();
-            ICommandBuilder<WeatherCommand> commandBuilder;
-            ICommand command;
+            IForecastCommandBuilder<WeatherCommand> commandBuilder;
+            IForecastCommand command;
             IWeatherStrategy<string> strategy;
             string output = string.Empty;
             string input = string.Empty;

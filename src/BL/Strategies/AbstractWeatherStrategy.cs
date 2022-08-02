@@ -35,6 +35,6 @@ namespace Exadel.Forecast.BL.Strategies
             }
         }
 
-        public abstract Task<TResponse> Execute(ICommand weatherCommand);
+        public abstract Task<TResponse> Execute(IForecastCommand weatherCommand);
     }
 }

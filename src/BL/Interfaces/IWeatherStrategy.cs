@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 namespace Exadel.Forecast.BL.Interfaces
 {
     //public interface IWeatherStrategy<TCommand, TResponse> 
-    //    where TCommand : ICommand
+    //    where TCommand : IForecastCommand
     //{
     //    Task<TResponse> Execute(TCommand command);
     //}
 
     public interface IWeatherStrategy<TResponse>
     {
-        Task<TResponse> Execute(ICommand weatherCommand);
+        Task<TResponse> Execute(IForecastCommand weatherCommand);
     }
 }

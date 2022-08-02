@@ -5,7 +5,7 @@ using ModelsConfiguration = Exadel.Forecast.Models.Interfaces;
 namespace Exadel.Forecast.Api.Builders
 {
     public abstract class BaseCommandApiBuilder<TCommand> : BaseCommandBuilder<TCommand>
-        where TCommand : BL.Interfaces.ICommand
+        where TCommand : BL.Interfaces.IForecastCommand
     {
         const string wrongCityName = "An invalid city name was entered!";
 

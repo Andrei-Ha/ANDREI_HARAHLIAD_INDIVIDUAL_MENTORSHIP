@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Exadel.Forecast.BL.Commands
 {
-    public class HistoryCommand : ICommand
+    public class HistoryCommand : IForecastCommand
     {
         private readonly IConfiguration _configuration;
         private readonly List<string> _cityList;

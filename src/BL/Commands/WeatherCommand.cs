@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Exadel.Forecast.BL.Commands
 {
-    public class WeatherCommand : ICommand
+    public class WeatherCommand : IForecastCommand
     {
         private readonly IConfiguration _configuration;
         private readonly string _cityNames;

@@ -6,6 +6,8 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllersWithViews();
+
 var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
@@ -31,12 +33,25 @@ builder.Services.AddIdentityServer()
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDeveloperSigningCredential();
 
+builder.Services.AddAuthentication("Bearer").AddLocalApi();
+
 var app = builder.Build();
 
 await SeedData.InitializeDatabase(app);
 
 app.UseDeveloperExceptionPage();
 
+app.UseRouting();
+
 app.UseIdentityServer();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapDefaultControllerRoute();
+});
 
 app.Run();
