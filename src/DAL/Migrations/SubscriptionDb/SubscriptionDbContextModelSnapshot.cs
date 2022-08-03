@@ -32,6 +32,9 @@ namespace Exadel.Forecast.DAL.Migrations.SubscriptionDb
                     b.Property<string>("Cities")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Hours")
                         .HasColumnType("int");
 

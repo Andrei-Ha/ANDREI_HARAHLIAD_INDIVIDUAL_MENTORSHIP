@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Exadel.Forecast.DAL.Migrations.SubscriptionDb
 {
     [DbContext(typeof(SubscriptionDbContext))]
-    [Migration("20220801124441_InitSubscript")]
+    [Migration("20220803083547_InitSubscript")]
     partial class InitSubscript
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace Exadel.Forecast.DAL.Migrations.SubscriptionDb
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Cities")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Hours")

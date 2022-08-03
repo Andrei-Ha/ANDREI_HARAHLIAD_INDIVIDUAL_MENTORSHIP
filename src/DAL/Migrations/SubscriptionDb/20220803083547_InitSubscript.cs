@@ -15,6 +15,7 @@ namespace Exadel.Forecast.DAL.Migrations.SubscriptionDb
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Cities = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Hours = table.Column<int>(type: "int", nullable: false)
                 },
