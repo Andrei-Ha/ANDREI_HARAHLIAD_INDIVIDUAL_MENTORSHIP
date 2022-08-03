@@ -28,11 +28,11 @@ namespace Exadel.Forecast.DAL.Services
             return JsonConvert.DeserializeObject<T>(strModel);
         }
 
-        public async Task<T> GetModelAsync()
+        public async Task<T> GetModelAsync(CancellationToken token = default)
         {
             try
             {
-                return await Get();
+                return await Get(token);
             }
             catch (Exception ex)
             {
