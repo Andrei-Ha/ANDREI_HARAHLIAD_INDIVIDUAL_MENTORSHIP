@@ -69,6 +69,7 @@ builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 builder.Services.Configure<CitiesSet>(builder.Configuration.GetSection("CitiesSet"));
 
 builder.Services.AddSingleton<OptionsHandler>();
+builder.Services.AddScoped<SubscriptionHandler>();
 
 builder.Services.AddScoped<IWeatherService<WeatherForecastDTO, ForecastQueryDTO>, ForecastService>();
 builder.Services.AddScoped<IWeatherService<CurrentWeatherDTO, CurrentQueryDTO>, CurrentService>();
