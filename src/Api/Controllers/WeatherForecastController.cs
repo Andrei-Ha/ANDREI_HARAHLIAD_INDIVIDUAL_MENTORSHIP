@@ -41,7 +41,7 @@ namespace Exadel.Forecast.Api.Controllers
         }
 
         [HttpGet("history")]
-        [Authorize(Policy = "PostmanUser")]
+        //[Authorize(Policy = "PostmanUser")]
         public async Task<IActionResult> GetHistory([FromQuery] HistoryQueryDTO historyQueryDTO)
         {
             return Ok(await _historyService.Get(historyQueryDTO));

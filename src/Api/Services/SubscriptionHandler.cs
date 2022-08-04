@@ -27,7 +27,7 @@ namespace Exadel.Forecast.Api.Services
             ITrigger trigger;
 
             // todo Intervals can be moved to the config
-            var intervals = new List<int>() { 1, 3, 12, 24};
+            var intervals = new List<int>() {/* 1, 3, */12, 24};
 
             foreach (int hours in intervals)
             {

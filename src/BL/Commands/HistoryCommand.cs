@@ -108,7 +108,12 @@ namespace Exadel.Forecast.BL.Commands
                 {
                     Model = new ForecastModel() 
                     { 
-                        City = cityName, History = historyList.Distinct().OrderBy(d => d.Date).ToList() 
+                        City = cityName,
+                        History = historyList
+                            .Where(h => h.Date >= _startDate && h.Date <= _endDate)
+                            .Distinct()
+                            .OrderBy(d => d.Date)
+                            .ToList() 
                     } 
                 });
             }

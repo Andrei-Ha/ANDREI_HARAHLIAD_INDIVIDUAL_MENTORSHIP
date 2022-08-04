@@ -1,8 +1,10 @@
 ﻿using Exadel.Forecast.Api.DTO;
 using Exadel.Forecast.Api.Interfaces;
 using Exadel.Forecast.DAL.EF;
+using Exadel.Forecast.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
+using System.Text;
 
 namespace Exadel.Forecast.Api.Jobs
 {
@@ -26,15 +28,48 @@ namespace Exadel.Forecast.Api.Jobs
             _historyService = historyService;
         }
 
-        private async Task Func(int hours)
+        private async Task<string> GetReport(SubscriptionModel model)
+        {
+            StringBuilder sb = new();
+            sb.AppendLine($"The report was generated: {DateTime.Now:dd.MM.yyyy HH:mm:ss}. Period: for the last {model.Hours} hours");
+            var historyQuery = new HistoryQueryDTO()
+            {
+                Cities = model.Cities,
+                StartDateTime = DateTime.Now.AddHours(-model.Hours),
+                EndDateTime = DateTime.Now,
+            };
+            var weatherHistoryDTOs = await _historyService.Get(historyQuery);
+
+            if(weatherHistoryDTOs != null && weatherHistoryDTOs.Any())
+            {
+                double avgTemerature = default;
+                foreach (var weatherHistoryDTO in weatherHistoryDTOs)
+                {
+                    if (weatherHistoryDTO.History.Any())
+                    {
+                        avgTemerature = weatherHistoryDTO.History.Average(t => t.Temperature);
+                        sb.AppendLine($"{weatherHistoryDTO.City} average temperature: {string.Format("{0:F1}", avgTemerature)} °C.");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{weatherHistoryDTO.City}: no statistics.");
+                    }
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        private async Task SendReports(int hours)
         {
             var subscriptions = await _subscriptionDbContext.SubscriptionModels.Where(p => p.Hours == hours).ToListAsync();
-
+            string report = string.Empty;
             if (subscriptions.Any())
             {
                 foreach (var subscription in subscriptions)
                 {
-                    Console.WriteLine($"sent report to {subscription.Email}, hours: {subscription.Hours}");
+                    report = await GetReport(subscription);
+                    Console.WriteLine($"Send report to {subscription.Email} {Environment.NewLine}" + report);
                 }
             }
 
@@ -48,10 +83,8 @@ namespace Exadel.Forecast.Api.Jobs
 
             if (arr.Length > 1 && int.TryParse(arr[1], out int hours))
             {
-                await Func(hours);
+                await SendReports(hours);
             }
-            
-
         }
     }
 }
