@@ -7,13 +7,16 @@ namespace Exadel.Forecast.Api.Services
     {
         private readonly ISchedulerFactory _schedulerFactory;
         private readonly ILogger<SubscriptionHandler> _logger;
+        private readonly IConfiguration _configuration;
 
         public SubscriptionHandler(
             ISchedulerFactory schedulerFactory,
-            ILogger<SubscriptionHandler> logger)
+            ILogger<SubscriptionHandler> logger,
+            IConfiguration configuration)
         {
             _schedulerFactory = schedulerFactory;
             _logger = logger;
+            _configuration = configuration;
         }
 
         public async Task AddTriggersToSendStatisticJobToSchedulerAsync()
@@ -26,8 +29,7 @@ namespace Exadel.Forecast.Api.Services
             List<ITrigger> list = new();
             ITrigger trigger;
 
-            // todo Intervals can be moved to the config
-            var intervals = new List<int>() {/* 1, 3, */12, 24};
+            var intervals = _configuration.GetSection("ReportsIntervals").Get<List<int>>();
 
             foreach (int hours in intervals)
             {

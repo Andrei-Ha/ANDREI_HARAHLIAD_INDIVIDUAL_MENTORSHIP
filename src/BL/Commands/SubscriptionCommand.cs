@@ -19,11 +19,12 @@ namespace Exadel.Forecast.BL.Commands
         private readonly string _userId;
         private readonly List<string> _cities;
         private readonly int _hours;
-        private readonly string repositoryUrl = "https://localhost:7205/users";
+        private readonly string _usersRepositoryUrl;
 
-        public SubscriptionCommand(SubscriptionDbContext dbContext, string userId, List<string> cities, int hours)
+        public SubscriptionCommand(SubscriptionDbContext dbContext, string usersRepositoryUrl, string userId, List<string> cities, int hours)
         {
             _dbContext = dbContext;
+            _usersRepositoryUrl = usersRepositoryUrl;
             _userId = userId;
             _cities = cities;
             _hours = hours;
@@ -31,7 +32,7 @@ namespace Exadel.Forecast.BL.Commands
 
         public async Task<string> GetResultAsync()
         {
-            var usersRepository = new UsersRepository(repositoryUrl);
+            var usersRepository = new UsersRepository(_usersRepositoryUrl);
             var users = await usersRepository.GetUsersAsync(_userId);
 
             if(users == null || users.Count == 0)

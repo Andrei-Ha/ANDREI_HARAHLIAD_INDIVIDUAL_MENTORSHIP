@@ -69,6 +69,7 @@ namespace Exadel.Forecast.Api.Jobs
                 foreach (var subscription in subscriptions)
                 {
                     report = await GetReport(subscription);
+                    // todo In this place we need to use the Sender service!
                     Console.WriteLine($"Send report to {subscription.Email} {Environment.NewLine}" + report);
                 }
             }
