@@ -4,6 +4,7 @@ using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.BL.Validators;
 using Exadel.Forecast.DAL.EF;
 using Exadel.Forecast.Domain.Models;
+using ModelsConfiguration = Exadel.Forecast.Models.Interfaces;
 
 namespace Exadel.Forecast.Api.Services
 {
@@ -11,9 +12,12 @@ namespace Exadel.Forecast.Api.Services
     {
         public readonly SubscriptionDbContext _dbContext;
         private readonly IValidator<string> _idValidator;
-        private readonly IConfiguration _configuration;
+        private readonly ModelsConfiguration.IConfiguration _configuration;
 
-        public SubscriptionService(SubscriptionDbContext dbContext, IValidator<string> idValidator, IConfiguration configuration)
+        public SubscriptionService(
+            SubscriptionDbContext dbContext,
+            IValidator<string> idValidator,
+            ModelsConfiguration.IConfiguration configuration)
         {
             _dbContext = dbContext;
             _idValidator = idValidator;
@@ -22,11 +26,10 @@ namespace Exadel.Forecast.Api.Services
 
         public async Task<IEnumerable<string>> Get(SubscriptionModel query)
         {
-            var validPeriodList =  _configuration.GetSection("ReportsIntervals").Get<List<int>>();
-            var usersRepositoryUrl = $"{_configuration.GetValue<string>("IdentityServer:Url")}/users";
+            var validPeriodList =  _configuration.ReportsIntervals;
             validPeriodList.Add(0);
             var commandBuilder = new SubscriptionCommandApiBuilder(
-                _dbContext, usersRepositoryUrl, query, _idValidator, new ListMembership(validPeriodList));
+                _dbContext, _configuration, query, _idValidator, new ListMembershipValidator(validPeriodList));
             var subscriptionCommand = commandBuilder.BuildCommand().Result;
             var str = await subscriptionCommand.GetResultAsync();
             return new List<string>() { str };

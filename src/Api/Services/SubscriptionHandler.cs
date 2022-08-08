@@ -1,4 +1,5 @@
 ﻿using Exadel.Forecast.Api.Jobs;
+using ModelsConfiguration = Exadel.Forecast.Models.Interfaces;
 using Quartz;
 
 namespace Exadel.Forecast.Api.Services
@@ -7,12 +8,12 @@ namespace Exadel.Forecast.Api.Services
     {
         private readonly ISchedulerFactory _schedulerFactory;
         private readonly ILogger<SubscriptionHandler> _logger;
-        private readonly IConfiguration _configuration;
+        private readonly ModelsConfiguration.IConfiguration _configuration;
 
         public SubscriptionHandler(
             ISchedulerFactory schedulerFactory,
             ILogger<SubscriptionHandler> logger,
-            IConfiguration configuration)
+            ModelsConfiguration.IConfiguration configuration)
         {
             _schedulerFactory = schedulerFactory;
             _logger = logger;
@@ -29,7 +30,7 @@ namespace Exadel.Forecast.Api.Services
             List<ITrigger> list = new();
             ITrigger trigger;
 
-            var intervals = _configuration.GetSection("ReportsIntervals").Get<List<int>>();
+            var intervals = _configuration.ReportsIntervals;
 
             foreach (int hours in intervals)
             {

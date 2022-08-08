@@ -3,32 +3,33 @@ using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.BL.Validators;
 using Exadel.Forecast.DAL.EF;
 using Exadel.Forecast.Domain.Models;
+using ModelsConfiguration = Exadel.Forecast.Models.Interfaces;
 
 namespace Exadel.Forecast.Api.Builders
 {
     public class SubscriptionCommandApiBuilder : ISubscriptionCommandBuilder
     {
         private readonly SubscriptionDbContext _dbContext;
-        private readonly string _usersRepositoryUrl;
+        private readonly ModelsConfiguration.IConfiguration _configuration;
         private readonly SubscriptionModel _subscriptionModel;
         private readonly IValidator<string> _idValidator;
-        private readonly IValidator<int> _listMembership;
+        private readonly IValidator<int> _listMembershipValidator;
         private string _userId = string.Empty;
         private List<string> _cities = new();
         private int _hours;
 
         public SubscriptionCommandApiBuilder(
             SubscriptionDbContext dbContext,
-            string usersRepositoryUrl,
+            ModelsConfiguration.IConfiguration configuration,
             SubscriptionModel subscriptionModel,
             IValidator<string> idValidator,
-            IValidator<int> listMembership)
+            IValidator<int> listMembershipValidator)
         {
             _dbContext = dbContext;
-            _usersRepositoryUrl = usersRepositoryUrl;
+            _configuration = configuration;
             _subscriptionModel = subscriptionModel;
             _idValidator = idValidator;
-            _listMembership = listMembership;
+            _listMembershipValidator = listMembershipValidator;
         }
 
         private void SetUserId()
@@ -47,7 +48,7 @@ namespace Exadel.Forecast.Api.Builders
 
         private void SetHours()
         {
-            if (!_listMembership.IsValid(_subscriptionModel.Hours))
+            if (!_listMembershipValidator.IsValid(_subscriptionModel.Hours))
             {
                 throw new HttpRequestException("Wrong value of Hours!", null, System.Net.HttpStatusCode.UnprocessableEntity);
             }
@@ -60,7 +61,7 @@ namespace Exadel.Forecast.Api.Builders
             SetUserId();
             SetCities();
             SetHours();
-            return Task.FromResult(new SubscriptionCommand(_dbContext, _usersRepositoryUrl, _userId, _cities, _hours));
+            return Task.FromResult(new SubscriptionCommand(_dbContext, _configuration, _userId, _cities, _hours));
         }
     }
 }
