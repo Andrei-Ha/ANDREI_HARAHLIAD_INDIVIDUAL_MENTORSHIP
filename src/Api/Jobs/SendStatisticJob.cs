@@ -11,19 +11,16 @@ namespace Exadel.Forecast.Api.Jobs
     public class SendStatisticJob : IJob
     {
         private readonly ILogger<SendStatisticJob> _logger;
-        private readonly SubscriptionDbContext _subscriptionDbContext;
         public readonly WeatherDbContext _weatherDbContext;
         private readonly IWeatherService<WeatherHistoryDTO, HistoryQueryDTO> _historyService;
 
         public SendStatisticJob(
             ILogger<SendStatisticJob> logger,
-            SubscriptionDbContext subscriptionDbContext,
             WeatherDbContext weatherDbContext,
             IWeatherService<WeatherHistoryDTO,
             HistoryQueryDTO> historyService)
         {
             _logger = logger;
-            _subscriptionDbContext = subscriptionDbContext;
             _weatherDbContext = weatherDbContext;
             _historyService = historyService;
         }
@@ -62,7 +59,7 @@ namespace Exadel.Forecast.Api.Jobs
 
         private async Task SendReports(int hours)
         {
-            var subscriptions = await _subscriptionDbContext.SubscriptionModels.Where(p => p.Hours == hours).ToListAsync();
+            var subscriptions = await _weatherDbContext.SubscriptionModels.Where(p => p.Hours == hours).ToListAsync();
             string report = string.Empty;
             if (subscriptions.Any())
             {

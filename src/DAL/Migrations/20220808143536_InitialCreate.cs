@@ -10,6 +10,22 @@ namespace Exadel.Forecast.DAL.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "SubscriptionModels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Cities = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Hours = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubscriptionModels", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CurrentModel",
                 columns: table => new
                 {
@@ -96,6 +112,9 @@ namespace Exadel.Forecast.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "DayModel");
+
+            migrationBuilder.DropTable(
+                name: "SubscriptionModels");
 
             migrationBuilder.DropTable(
                 name: "ForecastModels");

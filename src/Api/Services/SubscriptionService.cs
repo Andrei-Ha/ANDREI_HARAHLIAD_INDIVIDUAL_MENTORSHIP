@@ -10,12 +10,12 @@ namespace Exadel.Forecast.Api.Services
 {
     public class SubscriptionService : IWeatherService<string, SubscriptionModel>
     {
-        public readonly SubscriptionDbContext _dbContext;
+        public readonly WeatherDbContext _dbContext;
         private readonly IValidator<string> _idValidator;
         private readonly ModelsConfiguration.IConfiguration _configuration;
 
         public SubscriptionService(
-            SubscriptionDbContext dbContext,
+            WeatherDbContext dbContext,
             IValidator<string> idValidator,
             ModelsConfiguration.IConfiguration configuration)
         {

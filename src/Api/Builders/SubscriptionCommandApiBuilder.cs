@@ -9,7 +9,7 @@ namespace Exadel.Forecast.Api.Builders
 {
     public class SubscriptionCommandApiBuilder : ISubscriptionCommandBuilder
     {
-        private readonly SubscriptionDbContext _dbContext;
+        private readonly WeatherDbContext _dbContext;
         private readonly ModelsConfiguration.IConfiguration _configuration;
         private readonly SubscriptionModel _subscriptionModel;
         private readonly IValidator<string> _idValidator;
@@ -19,7 +19,7 @@ namespace Exadel.Forecast.Api.Builders
         private int _hours;
 
         public SubscriptionCommandApiBuilder(
-            SubscriptionDbContext dbContext,
+            WeatherDbContext dbContext,
             ModelsConfiguration.IConfiguration configuration,
             SubscriptionModel subscriptionModel,
             IValidator<string> idValidator,

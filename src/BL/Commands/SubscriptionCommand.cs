@@ -16,14 +16,14 @@ namespace Exadel.Forecast.BL.Commands
 {
     public class SubscriptionCommand : ICommand<string>
     {
-        private readonly SubscriptionDbContext _dbContext;
+        private readonly WeatherDbContext _dbContext;
         private readonly string _userId;
         private readonly List<string> _cities;
         private readonly int _hours;
         private readonly ModelsConfiguration.IConfiguration _configuration;
 
         public SubscriptionCommand(
-            SubscriptionDbContext dbContext,
+            WeatherDbContext dbContext,
             ModelsConfiguration.IConfiguration configuration,
             string userId,
             List<string> cities,
