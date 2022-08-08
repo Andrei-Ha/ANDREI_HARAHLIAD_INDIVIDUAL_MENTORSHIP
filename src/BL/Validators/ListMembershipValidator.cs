@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Exadel.Forecast.BL.Validators
 {
-    public class ListMembership : IValidator<int>
+    public class ListMembershipValidator : IValidator<int>
     {
         private readonly List<int> _list;
-        public ListMembership(IEnumerable<int> list)
+        public ListMembershipValidator(IEnumerable<int> list)
         {
             _list = list.ToList();
         }
