@@ -2,6 +2,7 @@
 using Exadel.Forecast.DAL.Repositories;
 using Exadel.Forecast.Models.Interfaces;
 using System;
+using System.Collections.Generic;
 
 namespace Exadel.Forecast.Models.Configuration
 {
@@ -28,6 +29,10 @@ namespace Exadel.Forecast.Models.Configuration
         public bool DebugInfo { get; set; }
 
         public int ExecutionTime { get; set; }
+
+        public List<int> ReportsIntervals { get; set; }
+
+        public string UsersEndpointUrl { get; set; }
 
         public void SetDefaultForecastApi(ForecastApi forecastApi)
         {

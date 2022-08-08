@@ -3,13 +3,14 @@ using Exadel.Forecast.DAL.EF;
 using Exadel.Forecast.DAL.Repositories;
 using Exadel.Forecast.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
+using ModelsConfiguration = Exadel.Forecast.Models.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System;
 
 namespace Exadel.Forecast.BL.Commands
 {
@@ -19,12 +20,17 @@ namespace Exadel.Forecast.BL.Commands
         private readonly string _userId;
         private readonly List<string> _cities;
         private readonly int _hours;
-        private readonly string _usersRepositoryUrl;
+        private readonly ModelsConfiguration.IConfiguration _configuration;
 
-        public SubscriptionCommand(SubscriptionDbContext dbContext, string usersRepositoryUrl, string userId, List<string> cities, int hours)
+        public SubscriptionCommand(
+            SubscriptionDbContext dbContext,
+            ModelsConfiguration.IConfiguration configuration,
+            string userId,
+            List<string> cities,
+            int hours)
         {
             _dbContext = dbContext;
-            _usersRepositoryUrl = usersRepositoryUrl;
+            _configuration = configuration;
             _userId = userId;
             _cities = cities;
             _hours = hours;
@@ -32,7 +38,7 @@ namespace Exadel.Forecast.BL.Commands
 
         public async Task<string> GetResultAsync()
         {
-            var usersRepository = new UsersRepository(_usersRepositoryUrl);
+            var usersRepository = new UsersRepository(_configuration.UsersEndpointUrl);
             var users = await usersRepository.GetUsersAsync(_userId);
 
             if(users == null || users.Count == 0)
