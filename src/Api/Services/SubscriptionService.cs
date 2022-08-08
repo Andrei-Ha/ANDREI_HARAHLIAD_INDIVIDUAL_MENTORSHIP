@@ -23,9 +23,10 @@ namespace Exadel.Forecast.Api.Services
         public async Task<IEnumerable<string>> Get(SubscriptionModel query)
         {
             var validPeriodList =  _configuration.GetSection("ReportsIntervals").Get<List<int>>();
+            var usersRepositoryUrl = $"{_configuration.GetValue<string>("IdentityServer:Url")}/users";
             validPeriodList.Add(0);
             var commandBuilder = new SubscriptionCommandApiBuilder(
-                _dbContext, "https://localhost:7205/users", query, _idValidator, new ListMembership(validPeriodList));
+                _dbContext, usersRepositoryUrl, query, _idValidator, new ListMembership(validPeriodList));
             var subscriptionCommand = commandBuilder.BuildCommand().Result;
             var str = await subscriptionCommand.GetResultAsync();
             return new List<string>() { str };
