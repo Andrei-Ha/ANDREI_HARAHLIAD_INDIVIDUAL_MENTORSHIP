@@ -1,4 +1,5 @@
 ﻿using Exadel.Forecast.DAL.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Exadel.Forecast.DAL.Interfaces
 {
     public interface IUsersRepository
     {
-        Task<List<UserModel>> GetUsersAsync(string id);
+        Task<List<IdentityUser>> GetUsersAsync(string id);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Exadel.Forecast.DAL.Interfaces;
 using Exadel.Forecast.DAL.Models;
 using Exadel.Forecast.DAL.Services;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +19,10 @@ namespace Exadel.Forecast.DAL.Repositories
             _url = url;
         }
 
-        public async Task<List<UserModel>> GetUsersAsync(string id = "")
+        public async Task<List<IdentityUser>> GetUsersAsync(string id = "")
         {
             string webUrl = _url + $"?id={id}";
-            var requestSender = new RequestSender<List<UserModel>>(webUrl);
+            var requestSender = new RequestSender<List<IdentityUser>>(webUrl);
 
             return await requestSender.GetModelAsync();
         }
