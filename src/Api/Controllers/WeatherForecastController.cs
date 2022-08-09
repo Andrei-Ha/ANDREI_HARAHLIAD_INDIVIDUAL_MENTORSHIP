@@ -14,13 +14,13 @@ namespace Exadel.Forecast.Api.Controllers
         private readonly IWeatherService<WeatherForecastDTO, ForecastQueryDTO> _forecastService;
         private readonly IWeatherService<CurrentWeatherDTO, CurrentQueryDTO> _currentService;
         private readonly IWeatherService<WeatherHistoryDTO, HistoryQueryDTO> _historyService;
-        private readonly IWeatherService<string, SubscriptionModel> _subscriptionService;
+        private readonly IWeatherService<bool, SubscriptionModel> _subscriptionService;
 
         public WeatherForecastController(
             IWeatherService<WeatherForecastDTO, ForecastQueryDTO> forecastService,
             IWeatherService<CurrentWeatherDTO, CurrentQueryDTO> currentService,
             IWeatherService<WeatherHistoryDTO, HistoryQueryDTO> historyService,
-            IWeatherService<string, SubscriptionModel> subscriptionService)
+            IWeatherService<bool, SubscriptionModel> subscriptionService)
         {
             _forecastService = forecastService;
             _currentService = currentService;
@@ -51,7 +51,8 @@ namespace Exadel.Forecast.Api.Controllers
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Subscription([FromQuery] SubscriptionModel statisticDTO)
         {
-            return Ok(await _subscriptionService.Get(statisticDTO));
+            var result = await _subscriptionService.Get(statisticDTO);
+            return Ok(result.FirstOrDefault() ? "subscribed" : "unsubscribed");
         }
     }
 }

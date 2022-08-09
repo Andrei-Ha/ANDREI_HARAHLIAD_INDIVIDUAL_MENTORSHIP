@@ -14,7 +14,7 @@ using System;
 
 namespace Exadel.Forecast.BL.Commands
 {
-    public class SubscriptionCommand : ICommand<string>
+    public class SubscriptionCommand : ICommand<bool>
     {
         private readonly WeatherDbContext _dbContext;
         private readonly string _userId;
@@ -36,7 +36,7 @@ namespace Exadel.Forecast.BL.Commands
             _hours = hours;
         }
 
-        public async Task<string> GetResultAsync()
+        public async Task<bool> GetResultAsync()
         {
             var usersRepository = new UsersRepository(_configuration.UsersEndpointUrl);
             var users = await usersRepository.GetUsersAsync(_userId);
@@ -47,7 +47,7 @@ namespace Exadel.Forecast.BL.Commands
             }
 
             var user = users[0];
-            var response = "unsubscribed";
+            bool response = false;
             var subscription = await _dbContext.SubscriptionModels.FirstOrDefaultAsync(p => p.UserId == _userId) ;
 
             if (subscription != null)
@@ -64,7 +64,7 @@ namespace Exadel.Forecast.BL.Commands
                     Cities = _cities,
                     Hours = _hours
                 });
-                response = "subscribed";
+                response = true;
             }
 
             await _dbContext.SaveChangesAsync();

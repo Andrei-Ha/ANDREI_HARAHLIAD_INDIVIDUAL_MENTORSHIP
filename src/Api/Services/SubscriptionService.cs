@@ -8,7 +8,7 @@ using ModelsConfiguration = Exadel.Forecast.Models.Interfaces;
 
 namespace Exadel.Forecast.Api.Services
 {
-    public class SubscriptionService : IWeatherService<string, SubscriptionModel>
+    public class SubscriptionService : IWeatherService<bool, SubscriptionModel>
     {
         public readonly WeatherDbContext _dbContext;
         private readonly IValidator<string> _idValidator;
@@ -24,7 +24,7 @@ namespace Exadel.Forecast.Api.Services
             _configuration = configuration;
         }
 
-        public async Task<IEnumerable<string>> Get(SubscriptionModel query)
+        public async Task<IEnumerable<bool>> Get(SubscriptionModel query)
         {
             var validPeriodList =  _configuration.ReportsIntervals;
             validPeriodList.Add(0);
@@ -32,7 +32,7 @@ namespace Exadel.Forecast.Api.Services
                 _dbContext, _configuration, query, _idValidator, new ListMembershipValidator(validPeriodList));
             var subscriptionCommand = commandBuilder.BuildCommand().Result;
             var str = await subscriptionCommand.GetResultAsync();
-            return new List<string>() { str };
+            return new List<bool>() { str };
         }
     }
 }
