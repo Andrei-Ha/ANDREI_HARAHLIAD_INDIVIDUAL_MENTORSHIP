@@ -1,5 +1,6 @@
 using Exadel.Forecast.Api.DTO;
 using Exadel.Forecast.Api.Interfaces;
+using Exadel.Forecast.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,21 +8,24 @@ namespace Exadel.Forecast.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class WeatherForecastController : ControllerBase
     {
         private readonly IWeatherService<WeatherForecastDTO, ForecastQueryDTO> _forecastService;
         private readonly IWeatherService<CurrentWeatherDTO, CurrentQueryDTO> _currentService;
         private readonly IWeatherService<WeatherHistoryDTO, HistoryQueryDTO> _historyService;
+        private readonly IWeatherService<bool, SubscriptionModel> _subscriptionService;
 
         public WeatherForecastController(
             IWeatherService<WeatherForecastDTO, ForecastQueryDTO> forecastService,
             IWeatherService<CurrentWeatherDTO, CurrentQueryDTO> currentService,
-            IWeatherService<WeatherHistoryDTO, HistoryQueryDTO> historyService)
+            IWeatherService<WeatherHistoryDTO, HistoryQueryDTO> historyService,
+            IWeatherService<bool, SubscriptionModel> subscriptionService)
         {
             _forecastService = forecastService;
             _currentService = currentService;
             _historyService = historyService;
+            _subscriptionService = subscriptionService;
         }
 
         [HttpGet]
@@ -37,10 +41,18 @@ namespace Exadel.Forecast.Api.Controllers
         }
 
         [HttpGet("history")]
-        [Authorize(Policy = "PostmanUser")]
+        //[Authorize(Policy = "PostmanUser")]
         public async Task<IActionResult> GetHistory([FromQuery] HistoryQueryDTO historyQueryDTO)
         {
             return Ok(await _historyService.Get(historyQueryDTO));
+        }
+
+        [HttpGet("subscription")]
+        //[Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Subscription([FromQuery] SubscriptionModel statisticDTO)
+        {
+            var result = await _subscriptionService.Get(statisticDTO);
+            return Ok(result.FirstOrDefault() ? "subscribed" : "unsubscribed");
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Exadel.Forecast.BL.Strategies
         {
         }
 
-        public override async Task<string> Execute(ICommand command)
+        public override async Task<string> Execute(IForecastCommand command)
         {
             //some additional validation
             var debugForecastModelList = await command.GetResultAsync();

@@ -9,11 +9,12 @@ using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.BL.Models;
 using Exadel.Forecast.BL.Validators;
 using Exadel.Forecast.DAL.EF;
+using Exadel.Forecast.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ModelsConfig = Exadel.Forecast.Models.Configuration;
 using ModelsInterfaces = Exadel.Forecast.Models.Interfaces;
 using Quartz;
-using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +36,6 @@ builder.Services.AddAuthentication("Bearer")
         };
     });
 
-// adds an authorization policy to make sure the token is for scope 'api1'
 builder.Services.AddAuthorization(options =>
 { 
     options.AddPolicy("PostmanUser", policy =>
@@ -68,10 +68,12 @@ builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 builder.Services.Configure<CitiesSet>(builder.Configuration.GetSection("CitiesSet"));
 
 builder.Services.AddSingleton<OptionsHandler>();
+builder.Services.AddScoped<SubscriptionHandler>();
 
 builder.Services.AddScoped<IWeatherService<WeatherForecastDTO, ForecastQueryDTO>, ForecastService>();
 builder.Services.AddScoped<IWeatherService<CurrentWeatherDTO, CurrentQueryDTO>, CurrentService>();
 builder.Services.AddScoped<IWeatherService<WeatherHistoryDTO, HistoryQueryDTO>, HistoryService>();
+builder.Services.AddScoped<IWeatherService<bool, SubscriptionModel>, SubscriptionService>();
 builder.Services.AddScoped<IValidator<string>, CityValidator>();
 builder.Services.AddScoped<IValidator<TimeInterval>, TimeIntervalValidator>();
 

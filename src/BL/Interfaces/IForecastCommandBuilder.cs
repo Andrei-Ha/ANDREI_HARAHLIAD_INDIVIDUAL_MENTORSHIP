@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Exadel.Forecast.BL.Interfaces
 {
-    public interface ICommandBuilder<TCommand> where TCommand : ICommand
+    public interface IForecastCommandBuilder<TCommand> where TCommand : IForecastCommand
     {
         Task<TCommand> BuildCommand();
     }

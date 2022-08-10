@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Exadel.Forecast.DAL.Migrations
 {
     [DbContext(typeof(WeatherDbContext))]
-    [Migration("20220713174639_InitialCreate")]
+    [Migration("20220808143536_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -97,6 +97,31 @@ namespace Exadel.Forecast.DAL.Migrations
                     b.HasIndex("CurrentId");
 
                     b.ToTable("ForecastModels");
+                });
+
+            modelBuilder.Entity("Exadel.Forecast.Domain.Models.SubscriptionModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Cities")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Hours")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SubscriptionModels");
                 });
 
             modelBuilder.Entity("Exadel.Forecast.Domain.Models.CurrentModel", b =>

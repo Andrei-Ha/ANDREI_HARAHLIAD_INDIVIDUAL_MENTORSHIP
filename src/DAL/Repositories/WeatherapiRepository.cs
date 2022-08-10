@@ -45,7 +45,7 @@ namespace Exadel.Forecast.DAL.Repositories
         {
             List<Task<DebugModel<ForecastModel>>> tasksList = new();
             startDate = startDate.Date >= DateTime.Now.Date.AddDays(-5) ? startDate : DateTime.Now.Date.AddDays(-5);
-            endDate = endDate.Date < DateTime.Now.Date ? endDate : DateTime.Now.Date.AddDays(-1);
+            endDate = endDate.Date < DateTime.Now.Date ? endDate : DateTime.Now.Date;
 
             while (startDate.Date <= endDate.Date)
             {

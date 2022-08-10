@@ -1,14 +1,12 @@
-﻿using Exadel.Forecast.DAL.Models;
-using Exadel.Forecast.Domain.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Exadel.Forecast.BL.Interfaces
 {
-    public interface ICommand
+    public interface ICommand<T>
     {
-        Task<List<DebugModel<ForecastModel>>> GetResultAsync();
+        Task<T> GetResultAsync();
     }
 }
