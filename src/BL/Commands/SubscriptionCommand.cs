@@ -1,4 +1,5 @@
-﻿using Exadel.Forecast.BL.Interfaces;
+﻿using AutoMapper;
+using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.DAL.EF;
 using Exadel.Forecast.DAL.Repositories;
 using Exadel.Forecast.Domain.Models;
@@ -11,6 +12,8 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System;
+using Exadel.Forecast.DAL.Models;
+using IdentityModel.Client;
 
 namespace Exadel.Forecast.BL.Commands
 {
@@ -21,6 +24,7 @@ namespace Exadel.Forecast.BL.Commands
         private readonly List<string> _cities;
         private readonly int _hours;
         private readonly ModelsConfiguration.IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
         public SubscriptionCommand(
             WeatherDbContext dbContext,
@@ -34,11 +38,16 @@ namespace Exadel.Forecast.BL.Commands
             _userId = userId;
             _cities = cities;
             _hours = hours;
+            var conf = new MapperConfiguration(cfg => cfg.CreateMap<ClientCredentialsRequest, ClientCredentialsTokenRequest>());
+            _mapper = conf.CreateMapper();
         }
 
         public async Task<bool> GetResultAsync()
         {
-            var usersRepository = new UsersRepository(_configuration.UsersEndpointUrl);
+            var usersRepository = new UsersRepository(
+                url: _configuration.UsersEndpointUrl,
+                clientCredentialsRequest: _mapper.Map<ClientCredentialsTokenRequest>(_configuration.ClientCredential));
+
             var users = await usersRepository.GetUsersAsync(_userId);
 
             if(users == null || users.Count == 0)

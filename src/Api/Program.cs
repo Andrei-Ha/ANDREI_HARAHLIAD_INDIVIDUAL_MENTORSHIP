@@ -9,12 +9,12 @@ using Exadel.Forecast.BL.Interfaces;
 using Exadel.Forecast.BL.Models;
 using Exadel.Forecast.BL.Validators;
 using Exadel.Forecast.DAL.EF;
+using Exadel.Forecast.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ModelsConfig = Exadel.Forecast.Models.Configuration;
 using ModelsInterfaces = Exadel.Forecast.Models.Interfaces;
 using Quartz;
-using Microsoft.IdentityModel.Tokens;
-using Exadel.Forecast.Domain.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
